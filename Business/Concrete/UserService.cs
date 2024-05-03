@@ -114,9 +114,10 @@ namespace Business.Concrete
                 Name = dto.Name
                 
             };
-            (getUser.PasswordHash, getUser.PasswordSalt) = HashingHelper.CreatePassword(dto.Password);
+
+            (update.PasswordHash, update.PasswordSalt) = HashingHelper.CreatePassword(dto.Password);
             update.UpdatedDate =DateTime.Now;
-            await _repo.UpdateAsync(getUser);
+            await _repo.UpdateAsync(update);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
     }
