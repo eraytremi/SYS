@@ -30,10 +30,10 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("CreatedBy")
+                    b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("DeletedBy")
@@ -68,10 +68,10 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("CreatedBy")
+                    b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("DeletedBy")
@@ -82,6 +82,10 @@ namespace DataAccess.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("UpdatedBy")
                         .HasColumnType("bigint");
@@ -105,10 +109,10 @@ namespace DataAccess.Migrations
                     b.Property<double>("Count")
                         .HasColumnType("float");
 
-                    b.Property<long>("CreatedBy")
+                    b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("DeletedBy")
@@ -161,10 +165,10 @@ namespace DataAccess.Migrations
                     b.Property<double>("Count")
                         .HasColumnType("float");
 
-                    b.Property<long>("CreatedBy")
+                    b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("DeletedBy")
@@ -208,10 +212,10 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("CreatedBy")
+                    b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("DeletedBy")
@@ -238,6 +242,58 @@ namespace DataAccess.Migrations
                     b.ToTable("Suppliers");
                 });
 
+            modelBuilder.Entity("Entity.SysModel.SupplierProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("DeletedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SupplierName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("SupplierProduct");
+                });
+
             modelBuilder.Entity("Entity.User", b =>
                 {
                     b.Property<int>("Id")
@@ -246,10 +302,10 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("CreatedBy")
+                    b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<long?>("DeletedBy")
@@ -304,6 +360,25 @@ namespace DataAccess.Migrations
                     b.HasOne("Entity.SysModel.Category", null)
                         .WithMany("Products")
                         .HasForeignKey("CategoryId");
+                });
+
+            modelBuilder.Entity("Entity.SysModel.SupplierProduct", b =>
+                {
+                    b.HasOne("Entity.SysModel.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.SysModel.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("Entity.SysModel.Category", b =>

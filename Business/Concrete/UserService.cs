@@ -50,9 +50,10 @@ namespace Business.Concrete
             {
                 return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "yetki yok!");
             }
+            
             getUser.DeletedDate = DateTime.UtcNow;
             getUser.IsActive = false;
-            await _repo.DeleteAsync(getUser);
+            await _repo.UpdateAsync(getUser);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
@@ -82,6 +83,7 @@ namespace Business.Concrete
 
         public async Task<ApiResponse<GetUser>> LoginUser(LoginDto dto)
         {
+          
             var getUser = await _repo.GetAsync(p => p.Mail == dto.Mail);
             if (getUser==null)
             {                   

@@ -1,4 +1,5 @@
 ﻿using Entity;
+using Entity.Dtos.User;
 using Entity.SysModel;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,6 +23,7 @@ namespace Repository.Contexts
         public DbSet<Offer> Offers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<SupplierProduct> SupplierProduct { get; set; }
 
     }
 }

@@ -18,7 +18,24 @@ namespace Business.Extensions
             services.AddSingleton<IUserRepository,UserRepository>();
             services.AddSingleton<IUserService,UserService>();
 
-          
+            services.AddSingleton<IProductRepository, ProductRepository>();
+            services.AddSingleton<IProductService, ProductService>();
+
+            services.AddSingleton<ICategoryRepository, CategoryRepository>();
+            services.AddSingleton<ICategoryService, CategoryService>();
+
+            services.AddSingleton<IUserRoleRepository, UserRoleRepository>();
+            services.AddSingleton<IUserRoleService, UserRoleService>();
+
+            services.AddSingleton<IRoleRepository, RoleRepository>();
+            services.AddSingleton<IRoleService, RoleService>();
+
+            services.AddSingleton<ISupplierRepository, SupplierRepository>();
+            services.AddSingleton<ISupplierService, SupplierService>();
+
+            services.AddSingleton<ISupplierProductRepository, SupplierProductRepository>();
+            services.AddSingleton<ISupplierProductService, SupplierProductService>();
+
         }
     }
 }

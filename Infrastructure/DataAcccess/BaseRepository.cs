@@ -38,7 +38,8 @@ namespace Infrastructure.DataAcccess
         {
             using var context = new TContext();
             IQueryable<TEntity> dbSet = context.Set<TEntity>();
-            return await dbSet.SingleOrDefaultAsync(expression);
+            var a =  await dbSet.SingleOrDefaultAsync(expression);
+            return a;
         }
 
         public async Task<TEntity> GetByIdAsync(TEntityId entityId)
