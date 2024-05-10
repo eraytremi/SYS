@@ -61,7 +61,7 @@ namespace Business.Concrete
                 return ApiResponse<List<GetSupplier>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
-            var getList =  await _repo.GetAllAsync();
+            var getList =  await _repo.GetAllAsync(p=>p.IsActive==true);
             var list =  new List<GetSupplier>();
 
             foreach (var item in getList)
@@ -89,7 +89,8 @@ namespace Business.Concrete
             {
                 UpdatedBy = currentUserId,
                 UpdatedDate = DateTime.Now,
-                Name = supplier.Name
+                Name = supplier.Name,
+                Id= supplier.Id
             };
 
             await   _repo.UpdateAsync(update);

@@ -29,7 +29,7 @@ namespace API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddSupplier(AddSupplier dto)
+        public async Task<IActionResult> AddSupplier([FromBody] AddSupplier dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.AddSupplierAsync(dto, currentUserId.GetValueOrDefault());
@@ -37,14 +37,14 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateSupplier(UpdateSupplier dto)
+        public async Task<IActionResult> UpdateSupplier([FromBody] UpdateSupplier dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.UpdateSupplierAsync(dto, currentUserId.GetValueOrDefault());
             return SendResponse(response);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSupplier(int id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);

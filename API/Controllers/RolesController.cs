@@ -32,7 +32,7 @@ namespace API.Controllers
        
 
         [HttpPost]
-        public async Task<IActionResult> AddRole(AddRole dto)
+        public async Task<IActionResult> AddRole([FromBody] AddRole dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.AddRole(dto, currentUserId.GetValueOrDefault());
@@ -40,7 +40,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateRole(UpdateRole dto)
+        public async Task<IActionResult> UpdateRole([FromBody]UpdateRole dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.UpdateRoleAsync(dto, currentUserId.GetValueOrDefault());
@@ -48,7 +48,7 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteRole(int id)
+        public async Task<IActionResult> DeleteRole([FromQuery]int id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.DeleteRole(id, currentUserId.GetValueOrDefault());

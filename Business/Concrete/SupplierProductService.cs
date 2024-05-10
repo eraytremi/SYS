@@ -74,7 +74,7 @@ namespace Business.Concrete
             }
 
             var list = new List<GetSupplierProduct>();
-            var getList = await _repo.GetAllAsync();
+            var getList = await _repo.GetAllAsync(p => p.IsActive == true);
 
             foreach (var item in getList)
             {

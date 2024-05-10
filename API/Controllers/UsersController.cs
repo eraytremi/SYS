@@ -28,7 +28,7 @@ namespace API.Controllers
             return SendResponse(response);
         }   
         [HttpPost("login")]
-        public async Task<IActionResult> Login (LoginDto loginDto)
+        public async Task<IActionResult> Login ([FromBody]LoginDto loginDto)
         {           
             var response = await _service.LoginUser(loginDto);
             var claims = new List<Claim>() {
@@ -41,7 +41,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterUser(RegisterDto dto)
+        public async Task<IActionResult> RegisterUser([FromBody]RegisterDto dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response =  await _service.AddUser(dto, currentUserId.GetValueOrDefault());

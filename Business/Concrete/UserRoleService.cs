@@ -66,7 +66,7 @@ namespace Business.Concrete
                 return ApiResponse<List<GetUserRole>>.Fail(StatusCodes.Status400BadRequest, "yetki yok!");
             }
             
-            var getUserRoleList = await _repo.GetAllAsync();
+            var getUserRoleList = await _repo.GetAllAsync(p => p.IsActive == true);
 
             var userRoleList =  new List<GetUserRole>();
            

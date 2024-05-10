@@ -29,7 +29,7 @@ namespace API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddUserRole(AddUserRole dto)
+        public async Task<IActionResult> AddUserRole([FromBody]AddUserRole dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.AddUserRole(dto, currentUserId.GetValueOrDefault());
@@ -37,7 +37,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUserRole(UpdateUserRole dto)
+        public async Task<IActionResult> UpdateUserRole([FromBody] UpdateUserRole dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.UpdateUserRoleAsync(dto, currentUserId.GetValueOrDefault());
@@ -45,7 +45,7 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteRole(int id)
+        public async Task<IActionResult> DeleteRole([FromQuery]int id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.DeleteUserRole(id, currentUserId.GetValueOrDefault());

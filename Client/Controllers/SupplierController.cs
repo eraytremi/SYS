@@ -25,10 +25,56 @@ namespace Client.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostSupplier ()
+        public async Task<IActionResult> PostSupplier (PostSupplier dto)
         {
-            
-            return View();
+
+            var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
+            var response = await _httpApiService.PostDataAsync<ResponseBody<PostSupplier>>("/Suppliers", JsonSerializer.Serialize(dto), token.Token);
+            if (response.StatusCode==201)
+            {
+                return Json(new { IsSuccess = true, Message = "Başarıyla Kaydedildi", response.Data });
+
+            }
+            else
+            {
+                return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
+
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateSupplier(UpdateSupplier dto)
+        {
+            var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
+            var response = await _httpApiService.PutDataAsync<ResponseBody<UpdateSupplier>>("/Suppliers", JsonSerializer.Serialize(dto), token.Token);
+            if(response.StatusCode==200)
+            {
+                return Json(new { IsSuccess = true, Message = "Başarıyla Güncellendi", response.Data });
+
+            }
+
+            else
+            {
+                return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
+
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteSupplier(int id)
+        {
+            var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
+            var response = await _httpApiService.DeleteDataAsync<ResponseBody<NoContent>>($"/Suppliers/{id}", token.Token);
+
+            if (response.StatusCode==200)
+            {
+                return Json(new { IsSuccess = true, Message = "Başarıyla Silindi", response.Data });
+            }
+            else
+            {
+                return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
+
+            }
         }
     }
 }

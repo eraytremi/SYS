@@ -63,14 +63,14 @@ namespace Business.Concrete
         }
 
         public async Task<ApiResponse<List<GetProduct>>> GetProductAsync(int currentUserId)
-        {
+        {   
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
             {
                 return ApiResponse<List<GetProduct>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
-            var getList =  await _repo.GetAllAsync();
+            var getList =  await _repo.GetAllAsync(p => p.IsActive == true);
             var list =  new List<GetProduct>();
 
             foreach (var item in getList)

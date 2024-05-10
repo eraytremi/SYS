@@ -33,7 +33,7 @@ namespace API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddCategory(AddCategory dto)
+        public async Task<IActionResult> AddCategory([FromBody]AddCategory dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.AddCategory(dto, currentUserId.GetValueOrDefault());
@@ -41,7 +41,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCategory(UpdateCategory dto)
+        public async Task<IActionResult> UpdateCategory([FromBody]UpdateCategory dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.UpdateCategoryAsync(dto, currentUserId.GetValueOrDefault());
@@ -49,7 +49,7 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProduct([FromQuery]int id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.DeleteCategory(id, currentUserId.GetValueOrDefault());

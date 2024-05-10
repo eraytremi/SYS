@@ -65,7 +65,7 @@ namespace Business.Concrete
                 return ApiResponse<List<GetCategory>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
-            var getList = await _repo.GetAllAsync();
+            var getList = await _repo.GetAllAsync(p => p.IsActive == true);
             var list = new List<GetCategory>();
             foreach (var item in getList)
             {
@@ -93,7 +93,8 @@ namespace Business.Concrete
             {
                 UpdatedBy = currentUserId,
                 CreatedDate = DateTime.Now,
-                Name = updateRole.Name
+                Name = updateRole.Name,
+                Id = updateRole.Id
             };
             await _repo.UpdateAsync(update);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);

@@ -31,7 +31,7 @@ namespace API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddSupplierProduct(PostSupplierProduct dto)
+        public async Task<IActionResult> AddSupplierProduct([FromBody] PostSupplierProduct dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.AddSupplierProduct(dto, currentUserId.GetValueOrDefault());
@@ -39,7 +39,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateSupplierProduct(UpdateSupplierProduct dto)
+        public async Task<IActionResult> UpdateSupplierProduct([FromBody]UpdateSupplierProduct dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.UpdateSupplierProductAsync(dto, currentUserId.GetValueOrDefault());
@@ -47,7 +47,7 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProduct([FromQuery]int id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.DeleteSupplierProductAsync(id, currentUserId.GetValueOrDefault());
