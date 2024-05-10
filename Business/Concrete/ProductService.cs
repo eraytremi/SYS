@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
 using DataAccess.Repositories.Abstract;
+using Entity.Dtos.Category;
 using Entity.Dtos.Product;
+using Entity.Dtos.Supplier;
 using Entity.SysModel;
 using Infrastructure.Utilities.Responses;
 using Microsoft.AspNetCore.Http;
@@ -16,10 +18,14 @@ namespace Business.Concrete
     {
         private readonly IProductRepository _repo;
         private readonly IUserRepository _userRepository;
-        public ProductService(IProductRepository repo, IUserRepository userRepository)
+        private readonly ISupplierRepository _supplierRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        public ProductService(IProductRepository repo, IUserRepository userRepository, ICategoryRepository categoryRepository, ISupplierRepository supplierRepository)
         {
             _repo = repo;
             _userRepository = userRepository;
+            _categoryRepository = categoryRepository;
+            _supplierRepository = supplierRepository;
         }
 
         public async Task<ApiResponse<NoData>> AddProductAsync(AddProduct product, int currentUserId)
@@ -38,9 +44,15 @@ namespace Business.Concrete
                 IsActive = true,
                 Name = product.Name,
                 Description = product.Description,
-                Unit = product.Unit
+                Unit = product.Unit,
+                CategoryId = product.CategoryId,
+                SupplierId = product.SupplierId,
+                Price = product.Price,
+                SeriNo = product.SeriNo
+                
             };
             await _repo.InsertAsync(add);
+            
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
         }
 
@@ -57,7 +69,6 @@ namespace Business.Concrete
             getById.IsActive = false;
             getById.DeletedDate= DateTime.Now;
             getById.DeletedBy = currentUserId;
-
             await _repo.UpdateAsync(getById);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
@@ -70,20 +81,35 @@ namespace Business.Concrete
                 return ApiResponse<List<GetProduct>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
-            var getList =  await _repo.GetAllAsync(p => p.IsActive == true);
-            var list =  new List<GetProduct>();
-
-            foreach (var item in getList)
-            {
-                var add = new GetProduct
-                {
-                    Count = item.Count,
-                    Description = item.Description,
-                    Id = item.Id,
-                    Name = item.Name
-                };
-                list.Add(add);  
-            }
+            var query = from product in await _repo.GetAllAsync()
+                        join supplier in await _supplierRepository.GetAllAsync()
+                        on product.Id equals supplier.Id
+                        join category in await _categoryRepository.GetAllAsync()
+                        on product.Id equals category.Id
+                        where product.IsActive == true
+                        select new GetProduct
+                        {
+                            Id = product.Id,
+                            Name = product.Name,
+                            Description = product.Description,
+                            Count = product.Count,
+                            Price = product.Price,
+                            SeriNo = product.SeriNo,
+                            Unit = product.Unit,
+                            CategoryId = product.CategoryId,
+                            SupplierId = product.SupplierId,
+                            GetCategory = new GetCategory
+                            {
+                                Id = category.Id,
+                                Name = category.Name
+                            },
+                            GetSupplier = new GetSupplier
+                            {
+                                Name = supplier.Name,
+                                Id = supplier.Id
+                            }
+                        };
+            var list =  query.ToList();
 
             return ApiResponse<List<GetProduct>>.Success(StatusCodes.Status200OK,list);
         }
@@ -101,7 +127,15 @@ namespace Business.Concrete
                 Count = updateProduct.Count,
                 Description = updateProduct.Description,
                 Id = updateProduct.Id,
-                Name = updateProduct.Name
+                Name = updateProduct.Name,
+                CategoryId= updateProduct.CategoryId,
+                Unit=updateProduct.Unit,
+                Price = updateProduct.Price,
+                SupplierId = updateProduct.SupplierId,
+                SeriNo=updateProduct.SeriNo,
+                UpdatedBy = currentUserId,
+                UpdatedDate=DateTime.Now
+
             };
              
             await _repo.UpdateAsync(update);

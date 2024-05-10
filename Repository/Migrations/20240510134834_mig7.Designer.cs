@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Contexts;
 
@@ -11,9 +12,11 @@ using Repository.Contexts;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(SysContext))]
-    partial class SysContextModelSnapshot : ModelSnapshot
+    [Migration("20240510134834_mig7")]
+    partial class mig7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,128 +99,6 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsActive = false,
-                            Name = "Meyve"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsActive = false,
-                            Name = "Sebze"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsActive = false,
-                            Name = "Et Ürünleri"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsActive = false,
-                            Name = "Süt Ürünleri"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IsActive = false,
-                            Name = "Tatlılar"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IsActive = false,
-                            Name = "Kahvaltılıklar"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            IsActive = false,
-                            Name = "Deniz Ürünleri"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            IsActive = false,
-                            Name = "Kuru Yemişler"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            IsActive = false,
-                            Name = "İçecekler"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            IsActive = false,
-                            Name = "Baharatlar"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            IsActive = false,
-                            Name = "Saklama Kabı"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            IsActive = false,
-                            Name = "Kahve"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            IsActive = false,
-                            Name = "Çay"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            IsActive = false,
-                            Name = "Dondurma"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            IsActive = false,
-                            Name = "Kuruyemiş"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            IsActive = false,
-                            Name = "Atıştırmalık"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            IsActive = false,
-                            Name = "Un ve Unlu Mamüller"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            IsActive = false,
-                            Name = "Pasta"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            IsActive = false,
-                            Name = "Pilavlık ve Bulgur"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            IsActive = false,
-                            Name = "Konserve ve Salça"
-                        });
                 });
 
             modelBuilder.Entity("Entity.SysModel.Offer", b =>

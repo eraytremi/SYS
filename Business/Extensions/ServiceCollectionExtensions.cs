@@ -33,8 +33,6 @@ namespace Business.Extensions
             services.AddSingleton<ISupplierRepository, SupplierRepository>();
             services.AddSingleton<ISupplierService, SupplierService>();
 
-            services.AddSingleton<ISupplierProductRepository, SupplierProductRepository>();
-            services.AddSingleton<ISupplierProductService, SupplierProductService>();
 
         }
     }
