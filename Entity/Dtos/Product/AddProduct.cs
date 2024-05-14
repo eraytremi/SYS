@@ -9,6 +9,8 @@ namespace Entity.Dtos.Product
 {
     public class AddProduct
     {
+        public int WareHouseId { get; set; }
+
         public int SupplierId { get; set; }
         public int CategoryId { get; set; }
         public string SeriNo { get; set; }     

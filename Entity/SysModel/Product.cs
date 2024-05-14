@@ -11,15 +11,17 @@ namespace Entity.SysModel
     {
         public int CategoryId { get; set; }
         public int SupplierId { get; set; }
+        public int WareHouseId { get; set; }
         public string? SeriNo { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public double Count { get; set; }
         public decimal Price { get; set; }
         public Unit Unit { get; set; }
         [ForeignKey("SupplierId")]
         public Supplier Supplier { get; set; }
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
+        [ForeignKey("WareHouseId")]
+        public WareHouse WareHouse { get; set; }
     }
 }

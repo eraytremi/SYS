@@ -1,5 +1,6 @@
-using PurchasingSystem.Web.ApiServices.Implementations;
-using PurchasingSystem.Web.ApiServices.Interfaces;
+using Client;
+using Client.ApiServices.Implementations;
+using Client.ApiServices.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

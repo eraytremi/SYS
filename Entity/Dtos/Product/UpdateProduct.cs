@@ -11,6 +11,7 @@ namespace Entity.Dtos.Product
     public class UpdateProduct
     {
         public long Id { get; set; }
+        public int WareHouseId { get; set; }
         public int CategoryId { get; set; }
         public int SupplierId { get; set; }
         public string? SeriNo { get; set; }

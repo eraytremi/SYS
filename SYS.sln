@@ -15,6 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{D3F9767F-DB54-4257-99DF-D63645E51E85}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevExtreme NuGet.config", "DevExtreme NuGet.config", "{0B49286F-8E71-4F8F-9AF6-DFE4E8DDE94D}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.config = NuGet.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientDvx", "ClientDvx\ClientDvx.csproj", "{721AB2F4-BDEA-4017-8744-A44475F9C245}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +52,10 @@ Global
 		{D3F9767F-DB54-4257-99DF-D63645E51E85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3F9767F-DB54-4257-99DF-D63645E51E85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3F9767F-DB54-4257-99DF-D63645E51E85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{721AB2F4-BDEA-4017-8744-A44475F9C245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{721AB2F4-BDEA-4017-8744-A44475F9C245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{721AB2F4-BDEA-4017-8744-A44475F9C245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{721AB2F4-BDEA-4017-8744-A44475F9C245}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

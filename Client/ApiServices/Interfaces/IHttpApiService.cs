@@ -1,4 +1,4 @@
-﻿namespace PurchasingSystem.Web.ApiServices.Interfaces
+﻿namespace Client.ApiServices.Interfaces
 {
     public interface IHttpApiService
     {

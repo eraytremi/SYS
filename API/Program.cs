@@ -14,7 +14,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddBusinessServices();
 builder.Services.AddWebApiServices(builder.Configuration);
 builder.Services.AddAuthServices(builder.Configuration);
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.WithOrigins("https://localhost:53853")
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

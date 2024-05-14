@@ -1,12 +1,14 @@
-﻿using Client.Models;
+﻿using Client.ApiServices.Interfaces;
+using Client.Filters;
+using Client.Models;
 using Client.Models.Dtos;
 using Client.Models.Dtos.Supplier;
 using Microsoft.AspNetCore.Mvc;
-using PurchasingSystem.Web.ApiServices.Interfaces;
 using System.Text.Json;
 
 namespace Client.Controllers
 {
+    [SessionAspect]
     public class SupplierController : Controller
     {
         private readonly IHttpApiService _httpApiService;

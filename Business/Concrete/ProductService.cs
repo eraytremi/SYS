@@ -40,7 +40,6 @@ namespace Business.Concrete
             {
                 CreatedBy = currentUserId,
                 CreatedDate = DateTime.Now,
-                Count = product.Count,
                 IsActive = true,
                 Name = product.Name,
                 Description = product.Description,
@@ -91,8 +90,7 @@ namespace Business.Concrete
                         {
                             Id = product.Id,
                             Name = product.Name,
-                            Description = product.Description,
-                            Count = product.Count,
+                            Description = product.Description,                           
                             Price = product.Price,
                             SeriNo = product.SeriNo,
                             Unit = product.Unit,
@@ -124,7 +122,7 @@ namespace Business.Concrete
 
             var update = new Product
             {
-                Count = updateProduct.Count,
+                
                 Description = updateProduct.Description,
                 Id = updateProduct.Id,
                 Name = updateProduct.Name,

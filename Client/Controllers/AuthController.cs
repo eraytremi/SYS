@@ -1,7 +1,8 @@
-﻿using Client.Models;
+﻿using Client.ApiServices.Interfaces;
+using Client.Models;
 using Client.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using PurchasingSystem.Web.ApiServices.Interfaces;
+
 using System.Text.Json;
 
 namespace Client.Controllers

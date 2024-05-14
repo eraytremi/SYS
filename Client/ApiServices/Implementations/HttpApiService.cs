@@ -1,10 +1,10 @@
-﻿using Microsoft.Net.Http.Headers;
-using PurchasingSystem.Web.ApiServices.Interfaces;
+﻿using Client.ApiServices.Interfaces;
+using Microsoft.Net.Http.Headers;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-namespace PurchasingSystem.Web.ApiServices.Implementations
+namespace Client.ApiServices.Implementations
 {
     public class HttpApiService : IHttpApiService
     {

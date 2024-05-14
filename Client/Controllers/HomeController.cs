@@ -1,9 +1,11 @@
-﻿using Client.Models;
+﻿using Client.Filters;
+using Client.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Client.Controllers
 {
+    [SessionAspect]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
