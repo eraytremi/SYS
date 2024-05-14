@@ -12,8 +12,8 @@ using Repository.Contexts;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(SysContext))]
-    [Migration("20240514113328_mig23")]
-    partial class mig23
+    [Migration("20240514141937_mig2")]
+    partial class mig2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

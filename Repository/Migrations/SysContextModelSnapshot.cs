@@ -651,7 +651,7 @@ namespace DataAccess.Migrations
                     b.HasOne("Entity.SysModel.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");

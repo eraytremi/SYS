@@ -29,23 +29,12 @@ namespace Repository.Contexts
         public DbSet<StockMovement> StockMovements { get; set; }
         public DbSet<StockStatus> StockStatuses { get; set; }
 
-
+    
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<StockMovement>()
-               .HasOne(sm => sm.Product)
-               .WithMany()
-               .HasForeignKey(sm => sm.ProductId)
-               .OnDelete(DeleteBehavior.Restrict);
-
-
-
-
-
-
             var enumConverter = new EnumToStringConverter<Unit>();
-
+         
             modelBuilder.Entity<Product>()
                 .Property(p => p.Unit)
                 .HasConversion(enumConverter);
@@ -72,7 +61,7 @@ namespace Repository.Contexts
                 new Category { Id = 18, Name = "Pasta" },
                 new Category { Id = 19, Name = "Pilavlık ve Bulgur" },
                 new Category { Id = 20, Name = "Konserve ve Salça" },
-
+   
             };
             foreach (var category in categories)
             {

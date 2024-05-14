@@ -12,8 +12,8 @@ using Repository.Contexts;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(SysContext))]
-    [Migration("20240514112416_mig22")]
-    partial class mig22
+    [Migration("20240514141646_mig")]
+    partial class mig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -430,14 +430,9 @@ namespace DataAccess.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("WareHouseId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("WareHouseId");
 
                     b.ToTable("StockStatuses");
                 });
@@ -673,15 +668,7 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entity.SysModel.WareHouse", "WareHouse")
-                        .WithMany()
-                        .HasForeignKey("WareHouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Product");
-
-                    b.Navigation("WareHouse");
                 });
 
             modelBuilder.Entity("Entity.UserRole", b =>

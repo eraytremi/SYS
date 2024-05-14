@@ -10,6 +10,6 @@ namespace Entity.SysModel
     public class WareHouse:BaseEntity<int>
     {
         public string Name { get; set; }
-     
+      
     }
 }

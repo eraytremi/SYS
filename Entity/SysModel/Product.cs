@@ -21,7 +21,7 @@ namespace Entity.SysModel
         public Supplier Supplier { get; set; }
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
-        [ForeignKey("WareHouseId")]
+        
         public WareHouse WareHouse { get; set; }
     }
 }
