@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories.Concrete
 {
-    public class WareHouseRepository:BaseRepository<WareHouse,int,SysContext>,IWareHouseRepository
+    public class StockMovementRepository:BaseRepository<StockMovement,long,SysContext>,IStockMovementRepository
     {
     }
 }

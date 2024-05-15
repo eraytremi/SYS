@@ -4,9 +4,10 @@ $(document).ready(function () {
     $("#postSupplier").click(function () {
         var formDataObject =
         {
-            Name: $("#supplierName").val()
+            Name: $("#supplierName").val(),
+            Description: $("#description").val()
         };
-
+        console.log(formDataObject)
         if ($("#supplierName").val().length > 0) {
             $.ajax({
                 url: "/Supplier/PostSupplier",
@@ -44,13 +45,14 @@ $(document).ready(function () {
         // Güncellenecek tedarikçinin Id'sini ve yeni adýný al
         var supplierId = $("#updatedSupplierId").val();
         var newName = $("#updatedSupplierName").val();
-
+        var description = $("updatedDescription").val();
         // Form verilerini kontrol et
         if (newName.length > 0) {
             // Form verilerini bir JavaScript nesnesi olarak oluþtur
             var formDataObject = {
                 Id: supplierId,
-                Name: newName
+                Name: newName,
+                Description: description
             };
             // AJAX isteði gönder
             $.ajax({

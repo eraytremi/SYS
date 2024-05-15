@@ -17,7 +17,7 @@ namespace Client.Controllers
         {
             _httpApiService = httpApiService;
         }
-                        
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -27,12 +27,12 @@ namespace Client.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostSupplier (PostSupplier dto)
+        public async Task<IActionResult> PostSupplier(PostSupplier dto)
         {
 
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             var response = await _httpApiService.PostDataAsync<ResponseBody<PostSupplier>>("/Suppliers", JsonSerializer.Serialize(dto), token.Token);
-            if (response.StatusCode==201)
+            if (response.StatusCode == 201)
             {
                 return Json(new { IsSuccess = true, Message = "Başarıyla Kaydedildi", response.Data });
 
@@ -49,7 +49,7 @@ namespace Client.Controllers
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             var response = await _httpApiService.PutDataAsync<ResponseBody<UpdateSupplier>>("/Suppliers", JsonSerializer.Serialize(dto), token.Token);
-            if(response.StatusCode==200)
+            if (response.StatusCode == 200)
             {
                 return Json(new { IsSuccess = true, Message = "Başarıyla Güncellendi", response.Data });
 
@@ -68,7 +68,7 @@ namespace Client.Controllers
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             var response = await _httpApiService.DeleteDataAsync<ResponseBody<NoContent>>($"/Suppliers/{id}", token.Token);
 
-            if (response.StatusCode==200)
+            if (response.StatusCode == 200)
             {
                 return Json(new { IsSuccess = true, Message = "Başarıyla Silindi", response.Data });
             }

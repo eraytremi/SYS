@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories.Abstract
 {
-    public interface IWareHouseRepository:IBaseRepository<WareHouse,int>
+    public interface IStockMovementRepository:IBaseRepository<StockMovement,long>
     {
     }
 }

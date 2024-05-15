@@ -30,7 +30,8 @@ namespace Business.Concrete
                 CreatedBy = currentUserId,
                 CreatedDate = DateTime.Now,
                 Name = supplier.Name,
-                IsActive=true
+                IsActive=true,
+                Description = supplier.Description
             };
 
             await _repo.InsertAsync(add);

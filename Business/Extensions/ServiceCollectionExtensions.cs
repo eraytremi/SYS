@@ -33,7 +33,14 @@ namespace Business.Extensions
             services.AddSingleton<ISupplierRepository, SupplierRepository>();
             services.AddSingleton<ISupplierService, SupplierService>();
 
+            services.AddSingleton<IStockMovementService, StockMovementService>();
+            services.AddSingleton<IStockMovementRepository, StockMovementRepository>();
 
+            services.AddSingleton<IStockStatusRepository, StockStatusRepository>();
+            services.AddSingleton<IStockStatusService, StockStatusService>();
+
+            services.AddSingleton<IWareHouseService, WareHouseService>();
+            services.AddSingleton<IWareHouseRepository, WareHouseRepository>();
         }
     }
 }
