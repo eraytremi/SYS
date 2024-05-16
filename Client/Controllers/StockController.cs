@@ -3,6 +3,7 @@ using Client.Filters;
 using Client.Models;
 using Client.Models.Dtos;
 using Client.Models.Dtos.Product;
+using Client.Models.Dtos.StockStatus;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -18,9 +19,13 @@ namespace Client.Controllers
             _httpApiService = httpApiService;
         }
 
-        public IActionResult Index()
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
+            var response = await _httpApiService.GetDataAsync<ResponseBody<GetStockStatus>>("/StockStatus", token.Token);
+            return Ok(response);
         }
 
         public async Task<IActionResult> Post(PostProduct dto)

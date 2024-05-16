@@ -3,6 +3,7 @@ using DataAccess.Repositories.Abstract;
 using Entity.Dtos.Category;
 using Entity.Dtos.Product;
 using Entity.Dtos.Supplier;
+using Entity.Dtos.WareHouse;
 using Entity.SysModel;
 using Infrastructure.Utilities.Responses;
 using Microsoft.AspNetCore.Http;
@@ -20,12 +21,14 @@ namespace Business.Concrete
         private readonly IUserRepository _userRepository;
         private readonly ISupplierRepository _supplierRepository;
         private readonly ICategoryRepository _categoryRepository;
-        public ProductService(IProductRepository repo, IUserRepository userRepository, ICategoryRepository categoryRepository, ISupplierRepository supplierRepository)
+        private readonly IWareHouseRepository _warehouseRepository;
+        public ProductService(IProductRepository repo, IUserRepository userRepository, ICategoryRepository categoryRepository, ISupplierRepository supplierRepository, IWareHouseRepository warehouseRepository)
         {
             _repo = repo;
             _userRepository = userRepository;
             _categoryRepository = categoryRepository;
             _supplierRepository = supplierRepository;
+            _warehouseRepository = warehouseRepository;
         }
 
         public async Task<ApiResponse<NoData>> AddProductAsync(AddProduct product, int currentUserId)
@@ -35,7 +38,10 @@ namespace Business.Concrete
             {
                 return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
-
+            if (!Enum.TryParse(product.Unit, out Unit unitEnum))
+            {
+                return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Geçersiz birim değeri");
+            }
             var add = new Product
             {
                 CreatedBy = currentUserId,
@@ -43,15 +49,15 @@ namespace Business.Concrete
                 IsActive = true,
                 Name = product.Name,
                 Description = product.Description,
-                Unit = product.Unit,
                 CategoryId = product.CategoryId,
                 SupplierId = product.SupplierId,
+                WareHouseId = product.WareHouseId,
                 Price = product.Price,
-                SeriNo = product.SeriNo
-                
+                Unit = unitEnum
+
             };
             await _repo.InsertAsync(add);
-            
+
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
         }
 
@@ -66,50 +72,61 @@ namespace Business.Concrete
             var getById = await _repo.GetByIdAsync(id);
 
             getById.IsActive = false;
-            getById.DeletedDate= DateTime.Now;
+            getById.DeletedDate = DateTime.Now;
             getById.DeletedBy = currentUserId;
             await _repo.UpdateAsync(getById);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
         public async Task<ApiResponse<List<GetProduct>>> GetProductAsync(int currentUserId)
-        {   
+        {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
             {
                 return ApiResponse<List<GetProduct>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
-            var query = from product in await _repo.GetAllAsync()
-                        join supplier in await _supplierRepository.GetAllAsync()
-                        on product.Id equals supplier.Id
-                        join category in await _categoryRepository.GetAllAsync()
-                        on product.Id equals category.Id
-                        where product.IsActive == true
-                        select new GetProduct
-                        {
-                            Id = product.Id,
-                            Name = product.Name,
-                            Description = product.Description,                           
-                            Price = product.Price,
-                            SeriNo = product.SeriNo,
-                            Unit = product.Unit,
-                            CategoryId = product.CategoryId,
-                            SupplierId = product.SupplierId,
-                            GetCategory = new GetCategory
-                            {
-                                Id = category.Id,
-                                Name = category.Name
-                            },
-                            GetSupplier = new GetSupplier
-                            {
-                                Name = supplier.Name,
-                                Id = supplier.Id
-                            }
-                        };
-            var list =  query.ToList();
+           
+            var getListProduct = await _repo.GetAllAsync();
+            var list = new List<GetProduct>();
+            foreach (var item in getListProduct)
+            {
+                var getSupplier = await _supplierRepository.GetByIdAsync(item.SupplierId);
+                var getCategory = await _categoryRepository.GetByIdAsync(item.CategoryId);
+                var getWareHouse = await _warehouseRepository.GetByIdAsync(item.WareHouseId);
 
-            return ApiResponse<List<GetProduct>>.Success(StatusCodes.Status200OK,list);
+               
+                var add = new GetProduct
+                {
+                    Id = item.Id,
+                    CategoryId = item.CategoryId,
+                    WareHouseId = item.WareHouseId,
+                    SupplierId=item.SupplierId,
+                    Name = item.Name,
+                    Price = item.Price,
+                    Unit = ConvertUnitEnumToString(item.Unit),
+                    Description = item.Description,
+                    GetCategory = new GetCategory
+                    {
+                        Id=getCategory.Id,
+                        Name=getCategory.Name
+                    },
+
+                    GetWareHouse = new GetWareHouse
+                    {
+                        Id=getWareHouse.Id,
+                        Name=getWareHouse.Name
+                    },
+                    GetSupplier = new GetSupplier
+                    {
+                        Id=getSupplier.Id,
+                        Name=getSupplier.Name
+                    }
+                };
+                list.Add(add);
+            }   
+
+            return ApiResponse<List<GetProduct>>.Success(StatusCodes.Status200OK, list);
         }
 
         public async Task<ApiResponse<NoData>> UpdateProductAsync(UpdateProduct updateProduct, int currentUserId)
@@ -122,22 +139,39 @@ namespace Business.Concrete
 
             var update = new Product
             {
-                
+
                 Description = updateProduct.Description,
                 Id = updateProduct.Id,
                 Name = updateProduct.Name,
-                CategoryId= updateProduct.CategoryId,
-                Unit=updateProduct.Unit,
+                CategoryId = updateProduct.CategoryId,
+                Unit = updateProduct.Unit,
                 Price = updateProduct.Price,
                 SupplierId = updateProduct.SupplierId,
-                SeriNo=updateProduct.SeriNo,
                 UpdatedBy = currentUserId,
-                UpdatedDate=DateTime.Now
+                UpdatedDate = DateTime.Now
 
             };
-             
+
             await _repo.UpdateAsync(update);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
+
+        public  string ConvertUnitEnumToString(Unit unit)
+        {
+           
+            switch (unit)
+            {
+                case Unit.Kg:
+                    return "Kilogram";
+                case Unit.Litre:
+                    return "Litre";
+                case Unit.Adet:
+                    return "Adet";
+               
+                default:
+                    return unit.ToString();
+            }
+        }
+
     }
 }

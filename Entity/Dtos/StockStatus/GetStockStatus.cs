@@ -1,4 +1,5 @@
-﻿using Entity.SysModel;
+﻿using Entity.Dtos.Product;
+using Entity.SysModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,6 +14,6 @@ namespace Entity.Dtos.StockStatus
         public long Id { get; set; }
         public long ProductId { get; set; }
         public double Quantity { get; set; }
-
+        public GetProduct GetProduct { get; set; }
     }
 }

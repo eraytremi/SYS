@@ -9,7 +9,6 @@ namespace Entity.SysModel
         public double Quantity { get; set; }
         public DateTime Date { get; set; }
         public string SourceDestination { get; set; }
-        
         public Product Product { get; set; }
         
     }
