@@ -28,8 +28,8 @@
                                 <thead>
                                     <tr>
                                         <th><i class="fa fa-bullhorn"></i> Id</th>
-                                        <th class="hidden-phone"><i class="fa fa-question-circle"></i> Tedarikçi İsmi</th>
-                                        <th class="hidden-phone"><i class="fa fa-question-circle"></i> Açıklama</th>
+                                        <th class="hidden-phone">   <i class="fa fa-question-circle"></i> Tedarikçi İsmi</th>
+                                        <th ><i class="fa fa-question-circle"></i> Açıklama</th>
 
                                         <th></th>
                                     </tr>
@@ -49,14 +49,14 @@
                                     }
                                 </tbody>
                             </table>
-                        </div><
-                    </div><!-- /col-md-12 -->
+                        </div>
+                    </div><!-- /col-m   d-12 -->
                 </div><!-- /row -->
             </section><! --/wrapper -->
         </section><!-- /MAIN CONTENT -->
     </section>
 
-    //addModal
+
     <div id="addSupplierModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addSupplierModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -83,7 +83,7 @@
         </div><!-- /.modal-dialog -->
     </div>
 
-    //updateModal
+    
     <div id="updateSupplierModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateSupplierModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -122,7 +122,7 @@
     <script src="~/assets/js/jquery.nicescroll.js" type="text/javascript"></script>
     <script src="~/assets/js/common-scripts.js"></script>
     <script src="path/to/sweetalert.min.js"></script>
-    <script src="~/js/supplier.js"></script>
+    <script src="~/js/supplier.js"></script>    
 
 
     <script>
@@ -133,9 +133,10 @@
 
         $(document).on('click', '#openUpdateSupplierModal', function () {
             var selectedSupplierName = $(this).closest('tr').find('td:eq(1)').text();
-            var supplierId = $(this).attr('supplierId'); 
+            var supplierId = $(this).attr('supplierId');
+            var selectedDescription = $(this).closest('tr').find('td:eq(2)').text(); 
             $('#updatedSupplierName').val(selectedSupplierName);
-            $('#updatedDescription').val(updatedDescription);
+            $('#updatedDescription').val(selectedDescription); 
             $('#updatedSupplierId').val(supplierId);
             $('#updateSupplierModal').modal('show');
         });

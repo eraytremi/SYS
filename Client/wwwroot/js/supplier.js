@@ -2,6 +2,7 @@
 
 $(document).ready(function () {
     $("#postSupplier").click(function () {
+        console.log($("#description").val())
         var formDataObject =
         {
             Name: $("#supplierName").val(),
@@ -42,10 +43,10 @@ $(document).ready(function () {
 
 
     $("#updateSupplier").click(function () {
-        // Güncellenecek tedarikçinin Id'sini ve yeni adýný al
         var supplierId = $("#updatedSupplierId").val();
         var newName = $("#updatedSupplierName").val();
-        var description = $("updatedDescription").val();
+        var description = $("#updatedDescription").val(); // Buradaki seçiciyi güncelledik
+
         // Form verilerini kontrol et
         if (newName.length > 0) {
             // Form verilerini bir JavaScript nesnesi olarak oluþtur
@@ -87,6 +88,7 @@ $(document).ready(function () {
             });
         }
     });
+
     $('.btnDelete').click(function () {
         var id = $(this).attr('supplierId');
 

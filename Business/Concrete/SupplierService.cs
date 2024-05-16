@@ -70,7 +70,8 @@ namespace Business.Concrete
                 var add = new GetSupplier
                 {
                     Id = item.Id,
-                    Name = item.Name
+                    Name = item.Name,
+                    Description=item.Description
                 };
                 list.Add(add);
             }
@@ -91,7 +92,9 @@ namespace Business.Concrete
                 UpdatedBy = currentUserId,
                 UpdatedDate = DateTime.Now,
                 Name = supplier.Name,
-                Id= supplier.Id
+                Id= supplier.Id,
+                Description = supplier.Description,
+                IsActive=true
             };
 
             await   _repo.UpdateAsync(update);

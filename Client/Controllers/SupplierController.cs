@@ -35,12 +35,10 @@ namespace Client.Controllers
             if (response.StatusCode == 201)
             {
                 return Json(new { IsSuccess = true, Message = "Başarıyla Kaydedildi", response.Data });
-
             }
             else
             {
                 return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
-
             }
         }
 
