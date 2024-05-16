@@ -24,8 +24,8 @@ namespace Client.Controllers
         public async Task<IActionResult> Index()
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var response = await _httpApiService.GetDataAsync<ResponseBody<GetStockStatus>>("/StockStatus", token.Token);
-            return Ok(response);
+            var response = await _httpApiService.GetDataAsync<ResponseBody<List<GetStockStatus>>>("/StockStatuses", token.Token);
+            return Ok(response.Data);
         }
 
         public async Task<IActionResult> Post(PostProduct dto)
@@ -35,12 +35,10 @@ namespace Client.Controllers
             if (response.StatusCode == 201)
             {
                 return Json(new { IsSuccess = true, Message = "Başarıyla Kaydedildi", response.Data });
-
             }
             else
             {
                 return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
-
             }
         }
     }

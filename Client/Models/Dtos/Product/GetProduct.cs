@@ -1,8 +1,8 @@
-﻿using Entity.Dtos.Category;
-using Entity.Dtos.Supplier;
-using Entity.Dtos.WareHouse;
+﻿using Client.Models.Dtos.Category;
+using Client.Models.Dtos.Supplier;
+using Client.Models.Dtos.WareHouse;
 
-namespace Entity.Dtos.Product
+namespace Client.Models.Dtos.Product
 {
     public class GetProduct
     {
