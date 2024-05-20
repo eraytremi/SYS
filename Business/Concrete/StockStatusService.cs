@@ -2,6 +2,7 @@
 using DataAccess.Repositories.Abstract;
 using Entity.Dtos.Category;
 using Entity.Dtos.Product;
+using Entity.Dtos.StockMovement;
 using Entity.Dtos.StockStatus;
 using Entity.Dtos.Supplier;
 using Entity.Dtos.WareHouse;
@@ -19,7 +20,8 @@ namespace Business.Concrete
         private readonly IWareHouseRepository _warehouseRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ISupplierRepository _supplierRepository;
-        public StockStatusService(IStockStatusRepository stockStatusRepository, IUserRepository userRepository, IProductRepository productRepository, IWareHouseRepository warehouseRepository, ICategoryRepository categoryRepository, ISupplierRepository supplierRepository)
+        private readonly IStockMovementService _stockMovementService;
+        public StockStatusService(IStockStatusRepository stockStatusRepository, IUserRepository userRepository, IProductRepository productRepository, IWareHouseRepository warehouseRepository, ICategoryRepository categoryRepository, ISupplierRepository supplierRepository, IStockMovementService stockMovementService)
         {
             _stockStatusRepository = stockStatusRepository;
             _userRepository = userRepository;
@@ -27,6 +29,7 @@ namespace Business.Concrete
             _warehouseRepository = warehouseRepository;
             _categoryRepository = categoryRepository;
             _supplierRepository = supplierRepository;
+            _stockMovementService = stockMovementService;
         }
 
         public async Task<ApiResponse<NoData>> AddAsync(PostStockStatus postStockStatus, int currentUserId)
@@ -43,11 +46,22 @@ namespace Business.Concrete
                 CreatedDate = DateTime.Now,
                 IsActive = true,
                 ProductId = postStockStatus.ProductId,
-                Quantity = postStockStatus.Quantity
-
             };
-
+            if (add.ProductId==postStockStatus.ProductId)
+            {
+                add.Quantity += postStockStatus.Quantity;
+            }
             await _stockStatusRepository.InsertAsync(add);
+
+            var postStockMovement = new PostStockMovement
+            {
+                IsEntry = true,
+                ProductId = postStockStatus.ProductId,
+                Quantity = postStockStatus.Quantity
+                
+            };
+            await _stockMovementService.AddAsync(postStockMovement,currentUserId);
+
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
 
         }

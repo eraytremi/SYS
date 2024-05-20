@@ -1,6 +1,5 @@
-﻿
-@using Client.Models.Dtos.StockStatus
-@model List<GetStockStatus>
+﻿@using Client.Models.Dtos.StockMovement
+@model List<GetStockMovement>
 
 <section id="container">
     <section id="main-content">
@@ -18,8 +17,11 @@
                                 <tr>
                                     <th><i class="fa fa-bullhorn"></i> Id</th>
                                     <th class="hidden-phone">   <i class="fa fa-question-circle"></i> Ürün İsmi</th>
-                                    <th><i class="fa fa-question-circle"></i> Depo Adı</th>
-                                    <th><i class="fa fa-question-circle"></i> Miktar</th>                                   
+                                    <th><i class="fa fa-question-circle"></i> Giriş/Çıkış</th>
+                                    <th><i class="fa fa-question-circle"></i> Miktar</th>
+                                    <th><i class="fa fa-question-circle"></i> Tarih</th>
+                                    <th><i class="fa fa-question-circle"></i> Kaynak/Hedef</th>
+
                                     <th></th>
                                 </tr>
                             </thead>
@@ -29,14 +31,17 @@
                                     <tr>
                                         <td>@item.Id</td>
                                         <td>@item.GetProduct.Name</td>
-                                        <td>@item.GetProduct.GetWareHouse.Name</td>
+                                        <td>@(item.IsEntry==true ? "Giriş" : "Çıkış")</td>
                                         <td>@item.Quantity @item.GetProduct.Unit</td>
+                                        <td>@item.Date</td>
+                                        <td>@item.SourceDestination</td>
                                         <td>
                                             <button id="openUpdateSupplierModal" class="btn btn-primary btn-md" supplierId="@item.Id"><i class="fa fa-pencil"></i></button>
                                             <button data-bs-toggle="modal" class="btnDelete btn btn-danger btn-md" supplierId="@item.Id"><i class="fa fa-trash-o "></i></button>
                                         </td>
                                     </tr>
                                 }
+
                             </tbody>
                         </table>
                     </div>

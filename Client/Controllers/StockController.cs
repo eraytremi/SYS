@@ -25,7 +25,7 @@ namespace Client.Controllers
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             var response = await _httpApiService.GetDataAsync<ResponseBody<List<GetStockStatus>>>("/StockStatuses", token.Token);
-            return Ok(response.Data);
+            return View(response.Data);
         }
 
         public async Task<IActionResult> Post(PostProduct dto)

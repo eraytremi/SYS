@@ -101,6 +101,7 @@ namespace Business.Concrete
                     IsEntry = item.IsEntry,
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
+                    SourceDestination=item.SourceDestination,
                     GetProduct = new GetProduct
                     {
                         Id = getProduct.Id,
