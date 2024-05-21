@@ -28,10 +28,11 @@ namespace Client.Controllers
             return View(response.Data);
         }
 
-        public async Task<IActionResult> Post(PostProduct dto)
+        [HttpPost]
+        public async Task<IActionResult> Post(PostStockStatus dto)
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var response = await _httpApiService.PostDataAsync<ResponseBody<PostProduct>>("/Products", JsonSerializer.Serialize(dto), token.Token);
+            var response = await _httpApiService.PostDataAsync<ResponseBody<PostStockStatus>>("/StockStatuses", JsonSerializer.Serialize(dto), token.Token);
             if (response.StatusCode == 201)
             {
                 return Json(new { IsSuccess = true, Message = "Başarıyla Kaydedildi", response.Data });
@@ -39,6 +40,39 @@ namespace Client.Controllers
             else
             {
                 return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateStockStatus dto)
+        {
+            var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
+            var response = await _httpApiService.PutDataAsync<ResponseBody<UpdateStockStatus>>("/StockStatuses", JsonSerializer.Serialize(dto), token.Token);
+            if (response.StatusCode == 200)
+            {
+                return Json(new { IsSuccess = true, Message = "Başarıyla Kaydedildi", response.Data });
+            }
+            else
+            {
+                return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
+            }
+        }
+
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
+            var response = await _httpApiService.DeleteDataAsync<ResponseBody<NoContent>>($"/StockStatuses/{id}", token.Token);
+
+            if (response.StatusCode == 200)
+            {
+                return Json(new { IsSuccess = true, Message = "Başarıyla Silindi", response.Data });
+            }
+            else
+            {
+                return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
+
             }
         }
     }

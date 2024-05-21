@@ -40,27 +40,46 @@ namespace Business.Concrete
                 return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
-            var add = new StockStatus
+            var a = await _stockStatusRepository.GetAsync(p => p.ProductId == postStockStatus.ProductId);
+
+            var anyProduct = _productRepository.GetAsync(p => p.Id == postStockStatus.ProductId);
+            if (anyProduct==null)
             {
-                CreatedBy = currentUserId,
-                CreatedDate = DateTime.Now,
-                IsActive = true,
-                ProductId = postStockStatus.ProductId,
-            };
-            if (add.ProductId==postStockStatus.ProductId)
-            {
-                add.Quantity += postStockStatus.Quantity;
+                return ApiResponse<NoData>.Fail(StatusCodes.Status404NotFound, "Ürün kayıtlı değil. Önce ürünü kaydetmeniz  gerekiyor!");
             }
-            await _stockStatusRepository.InsertAsync(add);
+
+            if (a != null)
+            {
+                a.Quantity += postStockStatus.Quantity;  
+                a.UpdatedBy=currentUserId;
+                a.UpdatedDate = DateTime.Now;
+                a.IsActive = false;
+                await _stockStatusRepository.UpdateAsync(a);
+            }
+            else
+            {
+                var stockStatus = new StockStatus
+                {
+                    Quantity = postStockStatus.Quantity,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = currentUserId,
+                    ProductId = postStockStatus.ProductId,
+                    IsActive = true,
+
+                };
+                await _stockStatusRepository.InsertAsync(stockStatus);
+            }
+
 
             var postStockMovement = new PostStockMovement
             {
                 IsEntry = true,
                 ProductId = postStockStatus.ProductId,
-                Quantity = postStockStatus.Quantity
-                
+                Quantity = postStockStatus.Quantity,
+                Destination = postStockStatus.Destination,
+                Source = postStockStatus.Source
             };
-            await _stockMovementService.AddAsync(postStockMovement,currentUserId);
+            await _stockMovementService.AddAsync(postStockMovement, currentUserId);
 
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
 
@@ -150,7 +169,8 @@ namespace Business.Concrete
             {
                 Id = updateStockStatus.Id,
                 ProductId = updateStockStatus.ProductId,
-                Quantity = updateStockStatus.Quantity,
+                Quantity = updateStockStatus.Quantity
+                
             };
 
             await _stockStatusRepository.UpdateAsync(update);

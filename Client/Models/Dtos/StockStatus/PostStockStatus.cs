@@ -3,7 +3,9 @@
     public class PostStockStatus
     {
         public long ProductId { get; set; }
-        public int WareHouseId { get; set; }
         public double Quantity { get; set; }
+        public string Source { get; set; }
+        public string Destination { get; set; }
+
     }
 }

@@ -12,6 +12,7 @@ namespace Entity.Dtos.StockMovement
         public bool IsEntry { get; set; }
         public double Quantity { get; set; }
         public DateTime Date { get; set; }
-        public string SourceDestination { get; set; }
+        public string Source { get; set; }
+        public string Destination { get; set; }
     }
 }

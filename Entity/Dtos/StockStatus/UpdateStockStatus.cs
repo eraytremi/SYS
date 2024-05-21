@@ -13,6 +13,7 @@ namespace Entity.Dtos.StockStatus
         public long Id { get; set; }
         public long ProductId { get; set; }
         public double Quantity { get; set; }
-     
+        
+
     }
 }

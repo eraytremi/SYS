@@ -40,7 +40,8 @@ namespace Business.Concrete
                     ProductId = postStockMovement.ProductId,
                     Quantity = postStockMovement.Quantity,
                     IsEntry = true,
-                    SourceDestination = postStockMovement.SourceDestination,
+                    Source = postStockMovement.Source,
+                    Destination = postStockMovement.Destination,
                     Date = DateTime.Now
                 };
                 await _repository.InsertAsync(add);
@@ -55,7 +56,8 @@ namespace Business.Concrete
                 ProductId = postStockMovement.ProductId,
                 Date = DateTime.Now,
                 IsEntry = false,
-                SourceDestination = postStockMovement.SourceDestination,
+                Source = postStockMovement.Source,
+                Destination = postStockMovement.Destination,
                 Quantity = postStockMovement.Quantity
 
             };
@@ -101,7 +103,8 @@ namespace Business.Concrete
                     IsEntry = item.IsEntry,
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
-                    SourceDestination=item.SourceDestination,
+                    Destination=item.Destination,
+                    Source=item.Source,
                     GetProduct = new GetProduct
                     {
                         Id = getProduct.Id,

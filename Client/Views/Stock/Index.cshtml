@@ -32,8 +32,8 @@
                                         <td>@item.GetProduct.GetWareHouse.Name</td>
                                         <td>@item.Quantity @item.GetProduct.Unit</td>
                                         <td>
-                                            <button id="openUpdateSupplierModal" class="btn btn-primary btn-md" supplierId="@item.Id"><i class="fa fa-pencil"></i></button>
-                                            <button data-bs-toggle="modal" class="btnDelete btn btn-danger btn-md" supplierId="@item.Id"><i class="fa fa-trash-o "></i></button>
+                                            <button id="openUpdateStockModal" class="btn btn-primary btn-md" stockId="@item.Id"><i class="fa fa-pencil"></i></button>
+                                            <button data-bs-toggle="modal" class="btnDelete btn btn-danger btn-md" stockId="@item.Id"><i class="fa fa-trash-o "></i></button>
                                         </td>
                                     </tr>
                                 }
@@ -45,3 +45,136 @@
         </section><! --/wrapper -->
     </section><!-- /MAIN CONTENT -->
 </section>
+
+<div id="addStockModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addStockModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Yeni Kayıt Ekle</h4>
+            </div>
+            <div class="modal-body">
+                <form id="newRecordForm">
+                    <div class="form-group">
+                        <label for="productName">Ürün İsmi:</label>
+                        <select class="form-control" id="productId" name="productId">
+                            <option value="2">Ürünü Seçiniz</option>
+                            @foreach (var item in Model)
+                            {
+                                <option value="@item.ProductId">@item.GetProduct.Name</option>
+                            }
+
+
+                        </select>
+
+                        <label for="quantity">Miktar:</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity">
+
+                        <label for="unit">Birim:</label>
+                        <select class="form-control" id="unit" name="unit">
+                            <option value="kg">Kilogram (kg)</option>
+                            <option value="meter">Metre (m)</option>
+                            <option value="m3">Metreküp (m³)</option>
+                        </select>
+
+                        <label for="destination">Hedef:</label>
+                        <input type="text" class="form-control" id="destination" name="destination">
+
+                        <label for="source">Kaynak:</label>
+                        <input type="text" class="form-control" id="source" name="source">
+
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Stoğa Giriş mi Yoksa Çıkış mı yapılıyor?</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="stockAction" id="entry" value="true">
+                            <label class="form-check-label" for="entry">
+                                Giriş
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="stockAction" id="out" value="false">
+                            <label class="form-check-label" for="out">
+                                Çıkış
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="postStock">Kaydet</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+<div id="updateStockModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateStockModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Kaydı Güncelle</h4>
+            </div>
+            <div class="modal-body">
+                <form id="updateRecordForm">
+                    <input type="hidden" id="updatedStockId" name="updatedStockId" value="">
+
+                    <div class="form-group">
+                        <label for="updatedProductName">Ürün Adı:</label>
+                        <select class="form-control" id="updatedProductId" name="updatedProductId">
+                            <option value="2">Ürünü Seçiniz</option>
+                            @foreach (var item in Model)
+                            {
+                                <option value="@item.ProductId">@item.GetProduct.Name</option>
+                            }
+
+
+                        </select>
+
+                        <label for="updatedQuantity">Miktar:</label>
+                        <input type="number" class="form-control" id="updatedQuantity" name="updatedQuantity">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="updateStock">Güncelle</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+
+<script src="~/assets/js/jquery.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script class="include" type="text/javascript" src="~/assets/js/jquery.dcjqaccordion.2.7.js"></script>
+<script src="~/assets/js/jquery.scrollTo.min.js"></script>
+<script src="~/assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+<script src="~/assets/js/common-scripts.js"></script>
+<script src="path/to/sweetalert.min.js"></script>
+<script src="~/js/stock.js"></script>
+
+<script>
+
+    document.getElementById('openAddModalBtn').addEventListener('click', function () {
+        $('#addStockModal').modal('show');
+    });
+
+    $(document).on('click', '#openUpdateStockModal', function () {
+        var selectedProductName = $(this).closest('tr').find('td:eq(1)').text();
+        var stockId = $(this).attr('stockId');
+        var selectedQuantity = $(this).closest('tr').find('td:eq(3)').text().split(' ')[0]; // Quantity and unit might be together
+
+        $('#updatedProductName').val(selectedProductName);
+        $('#updatedQuantity').val(selectedQuantity);
+        $('#updatedStockId').val(stockId);
+        $('#updateStockModal').modal('show');
+    });
+
+</script>
