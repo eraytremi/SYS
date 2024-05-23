@@ -53,6 +53,30 @@ namespace Business.Concrete
 
         }
 
+        public async Task<ApiResponse<List<GetUserRole>>> GetByIdAsync(int id, int currentUserId)
+        {
+            var getUser = await _userRepository.GetByIdAsync(currentUserId);
+            if (getUser == null)
+            {
+                return ApiResponse<List<GetUserRole>>.Fail(StatusCodes.Status400BadRequest, "yetki yok!");
+            }
+
+            var getUserRoles  =  await _repo.GetAllAsync(p=>p.UserId==currentUserId);
+            var list = new List<GetUserRole>();
+            foreach (var getUserRole in getUserRoles)
+            {
+                var userRole = new GetUserRole
+                {
+                    Id = id,
+                    RoleId = getUserRole.RoleId,
+                    UserId = getUserRole.UserId
+                };
+                list.Add(userRole);
+            }
+            
+            return ApiResponse<List<GetUserRole>>.Success(StatusCodes.Status200OK, list);
+        }
+
         public async Task<ApiResponse<List<GetUserRole>>> GetUserRolesAsync(int currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);

@@ -16,6 +16,7 @@ namespace Entity.Dtos.StockMovement
         public DateTime Date { get; set; }
         public string Source { get; set; }
         public string Destination { get; set; }
+        public int StatusType { get; set; }
         public GetProduct GetProduct { get; set; }
     }
 }

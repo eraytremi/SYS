@@ -7,7 +7,7 @@ namespace Client.Controllers
         public IActionResult Index()
         {
             HttpContext.Session.Clear();
-            return Ok();
+            return RedirectToAction("Index","Aut");
         }
     }
 }

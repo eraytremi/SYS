@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entity.Dtos.StockStatus
 {
-    public class PostStockStatus
+    public class PostStock
     {
         public long ProductId { get; set; }
         public double Quantity { get; set; }

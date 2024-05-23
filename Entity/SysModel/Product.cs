@@ -16,9 +16,8 @@ namespace Entity.SysModel
         public string Description { get; set; }
         public decimal Price { get; set; }
         public Unit Unit { get; set; } 
-        public Supplier Supplier { get; set; }  
+        public List<Supplier> Supplier { get; set; }  
         public Category Category { get; set; }
-        [ForeignKey("WareHouseId")]
         public WareHouse WareHouse { get; set; }
     }
 }

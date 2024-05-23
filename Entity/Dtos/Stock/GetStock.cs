@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Entity.Dtos.StockStatus
 {
-    public class GetStockStatus
+    public class GetStock
     {
         public long Id { get; set; }
         public long ProductId { get; set; }

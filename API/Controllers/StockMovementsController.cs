@@ -50,5 +50,31 @@ namespace API.Controllers
             return SendResponse(response);
         }
 
+        [HttpGet("waitingStatuses")]
+        public async Task<IActionResult> WaitingStatus()
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.WaitingStatuses(currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+
+        }
+
+        [HttpDelete("ApproveStatus/{id}")]
+        public async Task<IActionResult> ApproveStatus([FromRoute]int id)
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.ApproveStatus(id,currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+
+        }
+
+        [HttpDelete("RejectStatus/{id}")]
+        public async Task<IActionResult> RejectStatus([FromRoute] int id)
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.RejectStatus(id, currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+
+        }
     }
 }

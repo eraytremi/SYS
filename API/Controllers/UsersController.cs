@@ -14,10 +14,12 @@ namespace API.Controllers
     {
         private readonly IUserService _service;
         private readonly IConfiguration _configuration;
-        public UsersController(IUserService service, IConfiguration configuration)
+        private readonly IUserRoleService _userRoleService;
+        public UsersController(IUserService service, IConfiguration configuration, IUserRoleService userRoleService)
         {
             _service = service;
             _configuration = configuration;
+            _userRoleService = userRoleService;
         }
 
         [HttpGet]
@@ -33,9 +35,14 @@ namespace API.Controllers
             var response = await _service.LoginUser(loginDto);
             var claims = new List<Claim>() {
                 new Claim(JwtRegisteredClaimNames.NameId, response.Data.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                
             };
-            var accessToken = new JwtGenerator(_configuration).CreateAccessToken(claims);
+
+            var roles = await _userRoleService.GetByIdAsync(response.Data.Id, response.Data.Id);
+            var roleId = roles.Data.Select(p => p.RoleId).ToList();
+
+            var accessToken = new JwtGenerator(_configuration).CreateAccessToken(claims,roleId);
             response.Data.Token = accessToken.Token;
             return SendResponse(response);
         }

@@ -27,7 +27,7 @@ namespace Repository.Contexts
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<WareHouse> WareHouses { get; set; }
         public DbSet<StockMovement> StockMovements { get; set; }
-        public DbSet<StockStatus> StockStatuses { get; set; }
+        public DbSet<Stock> StockStatuses { get; set; }
 
     
         protected override void OnModelCreating(ModelBuilder modelBuilder)

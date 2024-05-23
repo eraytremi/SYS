@@ -2,7 +2,8 @@
 using Client.Models;
 using Client.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
-
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace Client.Controllers
@@ -26,6 +27,15 @@ namespace Client.Controllers
         public async Task<IActionResult> Index(LoginModel loginModel)
         {
             var response = await _httpApiService.PostDataAsync<ResponseBody<UserGetDto>>("/Users/Login", JsonSerializer.Serialize(loginModel));
+
+            var jwtHandler = new JwtSecurityTokenHandler();
+            var jwtToken = jwtHandler.ReadJwtToken(response.Data.Token);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
+
+            if (roleClaim != null)
+            {
+                HttpContext.Session.SetString("UserRole", roleClaim.Value);
+            }
 
             if (response.StatusCode==200)
             {

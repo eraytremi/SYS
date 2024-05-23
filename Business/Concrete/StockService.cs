@@ -12,16 +12,16 @@ using Microsoft.AspNetCore.Http;
 
 namespace Business.Concrete
 {
-    public class StockStatusService : IStockStatusService
+    public class StockService : IStockService
     {
-        private readonly IStockStatusRepository _stockStatusRepository;
+        private readonly IStockRepository _stockStatusRepository;
         private readonly IUserRepository _userRepository;
         private readonly IProductRepository _productRepository;
         private readonly IWareHouseRepository _warehouseRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ISupplierRepository _supplierRepository;
         private readonly IStockMovementService _stockMovementService;
-        public StockStatusService(IStockStatusRepository stockStatusRepository, IUserRepository userRepository, IProductRepository productRepository, IWareHouseRepository warehouseRepository, ICategoryRepository categoryRepository, ISupplierRepository supplierRepository, IStockMovementService stockMovementService)
+        public StockService(IStockRepository stockStatusRepository, IUserRepository userRepository, IProductRepository productRepository, IWareHouseRepository warehouseRepository, ICategoryRepository categoryRepository, ISupplierRepository supplierRepository, IStockMovementService stockMovementService)
         {
             _stockStatusRepository = stockStatusRepository;
             _userRepository = userRepository;
@@ -32,7 +32,7 @@ namespace Business.Concrete
             _stockMovementService = stockMovementService;
         }
 
-        public async Task<ApiResponse<NoData>> AddAsync(PostStockStatus postStockStatus, int currentUserId)
+        public async Task<ApiResponse<NoData>> AddAsync(PostStock postStockStatus, int currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -43,22 +43,22 @@ namespace Business.Concrete
             var a = await _stockStatusRepository.GetAsync(p => p.ProductId == postStockStatus.ProductId);
 
             var anyProduct = _productRepository.GetAsync(p => p.Id == postStockStatus.ProductId);
-            if (anyProduct==null)
+            if (anyProduct == null)
             {
-                return ApiResponse<NoData>.Fail(StatusCodes.Status404NotFound, "Ürün kayıtlı değil. Önce ürünü kaydetmeniz  gerekiyor!");
+                return ApiResponse<NoData>.Fail(StatusCodes.Status404NotFound, "Ürün kayıtlı değil. Önce ürünü kaydetmeniz gerekiyor!");
             }
 
             if (a != null)
             {
-                a.Quantity += postStockStatus.Quantity;  
-                a.UpdatedBy=currentUserId;
+                a.Quantity += postStockStatus.Quantity;
+                a.UpdatedBy = currentUserId;
                 a.UpdatedDate = DateTime.Now;
-                a.IsActive = false;
+                a.IsActive = true;
                 await _stockStatusRepository.UpdateAsync(a);
             }
             else
             {
-                var stockStatus = new StockStatus
+                var stockStatus = new Stock
                 {
                     Quantity = postStockStatus.Quantity,
                     CreatedDate = DateTime.Now,
@@ -101,32 +101,32 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<ApiResponse<List<GetStockStatus>>> GetAllAsync(int currentUserId)
+        public async Task<ApiResponse<List<GetStock>>> GetAllAsync(int currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
             {
-                return ApiResponse<List<GetStockStatus>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
+                return ApiResponse<List<GetStock>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
             var getList = await _stockStatusRepository.GetAllAsync();
-            var list = new List<GetStockStatus>();
-           
+            var list = new List<GetStock>();
+
             foreach (var item in getList)
             {
                 var getProduct = await _productRepository.GetByIdAsync(item.ProductId);
                 var getWareHouseId = await _warehouseRepository.GetByIdAsync((int)getProduct.WareHouseId);
                 var getCategoryById = await _categoryRepository.GetByIdAsync(getProduct.CategoryId);
-                var getSupplierById = await  _supplierRepository.GetByIdAsync(getProduct.SupplierId);
-                var add = new GetStockStatus
+                var getSupplierById = await _supplierRepository.GetByIdAsync(getProduct.SupplierId);
+                var add = new GetStock
                 {
                     Id = item.Id,
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
                     GetProduct = new GetProduct
                     {
-                        Id=item.ProductId,
-                        WareHouseId=getProduct.WareHouseId,
+                        Id = item.ProductId,
+                        WareHouseId = getProduct.WareHouseId,
                         Name = getProduct.Name,
                         Price = getProduct.Price,
                         SupplierId = getProduct.SupplierId,
@@ -144,9 +144,9 @@ namespace Business.Concrete
                             Description = getSupplierById.Description,
                             Name = getSupplierById.Name
                         },
-                        GetCategory= new GetCategory
+                        GetCategory = new GetCategory
                         {
-                            Id= getCategoryById.Id,
+                            Id = getCategoryById.Id,
                             Name = getCategoryById.Name
                         }
                     }
@@ -154,10 +154,10 @@ namespace Business.Concrete
                 list.Add(add);
             }
 
-            return ApiResponse<List<GetStockStatus>>.Success(StatusCodes.Status200OK, list);
+            return ApiResponse<List<GetStock>>.Success(StatusCodes.Status200OK, list);
         }
 
-        public async Task<ApiResponse<NoData>> UpdateAsync(UpdateStockStatus updateStockStatus, int currentUserId)
+        public async Task<ApiResponse<NoData>> UpdateAsync(UpdateStock updateStockStatus, int currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -165,12 +165,12 @@ namespace Business.Concrete
                 return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
-            var update = new StockStatus
+            var update = new Stock
             {
                 Id = updateStockStatus.Id,
                 ProductId = updateStockStatus.ProductId,
                 Quantity = updateStockStatus.Quantity
-                
+
             };
 
             await _stockStatusRepository.UpdateAsync(update);
@@ -193,5 +193,7 @@ namespace Business.Concrete
             }
         }
 
+
     }
+
 }

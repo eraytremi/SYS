@@ -10,7 +10,7 @@ namespace Entity.SysModel
         public DateTime Date { get; set; }
         public string Source { get; set; }
         public string Destination { get; set; }
-
+        public StatusType StatusType { get; set; }
         public Product Product { get; set; }
         
     } 

@@ -37,6 +37,11 @@ namespace Business.Concrete
             {
                 return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Geçersiz birim değeri");
             }
+            var getProduct =  await _repo.GetAsync  (p=>p.IsActive==true && p.Name==product.Name && p.SupplierId==product.SupplierId);
+            if (getProduct != null)
+            {
+                return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Bu ürün bu tedarikçide kayıtlı zaten!");
+            }
             var add = new Product
             {
                 CreatedBy = currentUserId,
@@ -51,6 +56,7 @@ namespace Business.Concrete
                 Unit = unitEnum
 
             };
+            
             await _repo.InsertAsync(add);
 
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);

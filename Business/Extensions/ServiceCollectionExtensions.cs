@@ -36,8 +36,8 @@ namespace Business.Extensions
             services.AddSingleton<IStockMovementService, StockMovementService>();
             services.AddSingleton<IStockMovementRepository, StockMovementRepository>();
 
-            services.AddSingleton<IStockStatusRepository, StockStatusRepository>();
-            services.AddSingleton<IStockStatusService, StockStatusService>();
+            services.AddSingleton<IStockRepository, StockRepository>();
+            services.AddSingleton<IStockService, StockService>();
 
             services.AddSingleton<IWareHouseService, WareHouseService>();
             services.AddSingleton<IWareHouseRepository, WareHouseRepository>();

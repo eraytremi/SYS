@@ -9,11 +9,11 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StockStatusesController : BaseController
+    public class StocksController : BaseController
     {
-        private readonly IStockStatusService _stockStatusService;
+        private readonly IStockService _stockStatusService;
         private readonly IConfiguration _configuration;
-        public StockStatusesController(IStockStatusService stockStatusService, IConfiguration configuration)
+        public StocksController(IStockService stockStatusService, IConfiguration configuration)
         {
             _stockStatusService = stockStatusService;
             _configuration = configuration;
@@ -29,7 +29,7 @@ namespace API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] PostStockStatus dto)
+        public async Task<IActionResult> Add([FromBody] PostStock dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _stockStatusService.AddAsync(dto, currentUserId.GetValueOrDefault());
@@ -37,7 +37,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateStockStatus dto)
+        public async Task<IActionResult> Update([FromBody] UpdateStock dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _stockStatusService.UpdateAsync(dto, currentUserId.GetValueOrDefault());

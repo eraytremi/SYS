@@ -15,5 +15,12 @@ namespace Business.Abstract
         Task<ApiResponse<NoData>> AddAsync(PostStockMovement postStockMovement, int currentUserId);
         Task<ApiResponse<NoData>> DeleteAsync(int id, int currentUserId);
         Task<ApiResponse<NoData>> UpdateAsync(UpdateStockMovement updateStockMovement, int currentUserId);
+        Task<ApiResponse<NoData>> RejectStatus(int id,int currentUserId);
+        Task<ApiResponse<NoData>> ApproveStatus(int id, int currentUserId);
+        Task<ApiResponse<List<GetStockMovement>>> AprroveStatuses(int currentUserId);
+        Task<ApiResponse<List<GetStockMovement>>> RejectedStatuses(int currentUserId);
+        Task<ApiResponse<List<GetStockMovement>>> WaitingStatuses(int currentUserId);
+
+
     }
 }

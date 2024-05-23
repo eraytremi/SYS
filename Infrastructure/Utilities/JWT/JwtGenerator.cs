@@ -21,13 +21,20 @@ namespace Infrastructure.Utilities.JWT
 
         }
 
-        public AccessToken CreateAccessToken(List<Claim> claims = null)
+        public AccessToken CreateAccessToken(List<Claim> claims = null,List<int> roles=null)
         {
             _expiration = DateTime.Now.AddDays(_tokenOptions.TokenExpiration);
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenOptions.SecurityKey));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+            if (roles!=null && roles.Any())
+            {
+                foreach (var role in roles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+                }
+            }
             var jwt = CreateJwtSecurityToken(_tokenOptions, signingCredentials, claims);
 
             var jwtHandler = new JwtSecurityTokenHandler();

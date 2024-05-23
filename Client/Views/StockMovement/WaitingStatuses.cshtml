@@ -8,7 +8,6 @@
                 <div class="col-md-12">
                     <div class="content-panel">
                         <div class="header-container">
-                         
                         </div>
                         <table class="table table-striped table-advance table-hover">
                             <thead>
@@ -29,14 +28,17 @@
                                     <tr>
                                         <td>@item.Id</td>
                                         <td>@item.GetProduct.Name</td>
-                                        <td>@(item.IsEntry==true ? "Giriş" : "Çıkış")</td>
+                                        <td>@(item.IsEntry == true ? "Giriş" : "Çıkış")</td>
                                         <td>@item.Quantity @item.GetProduct.Unit</td>
                                         <td>@item.Date</td>
                                         <td>@item.Source</td>
                                         <td>@item.Destination</td>
-                                    </tr>
+                                        <td>
+                                            <button data-bs-toggle="modal" class="btnApprove btn-primary btn-md" stockMovementId="@item.Id"><i class="fa fa-check"></i></button>
+                                            <button data-bs-toggle="modal" class="btnReject btn btn-danger btn-md" stockMovementId="@item.Id"><i class="fa fa-trash-o "></i></button>
+                                        </td>
+                                    </tr>                              
                                 }
-
                             </tbody>
                         </table>
                     </div>
@@ -46,5 +48,5 @@
     </section><!-- /MAIN CONTENT -->
 </section>
 
-
+<script src="~/js/stockstatus.js"></script>
 

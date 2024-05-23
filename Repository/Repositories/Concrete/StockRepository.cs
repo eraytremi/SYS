@@ -1,6 +1,7 @@
 ﻿using DataAccess.Repositories.Abstract;
 using Entity.SysModel;
 using Infrastructure.DataAcccess;
+using Infrastructure.Utilities.Responses;
 using Repository.Contexts;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,8 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories.Concrete
 {
-    public class StockStatusRepository:BaseRepository<StockStatus,long,SysContext>,IStockStatusRepository
+    public class StockRepository : BaseRepository<Stock, long, SysContext>, IStockRepository
     {
+      
     }
 }
