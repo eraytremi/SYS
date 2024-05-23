@@ -17,7 +17,7 @@ function approveStatu(id) {
         if (result.isConfirmed) {
             $.ajax({
                 url: '/StockMovement/Approve/' + id,
-                method: 'DELETE',
+                method: 'POST',
                 dataType: 'json',
                 success: function (response) {
                     if (response.isSuccess) {
