@@ -16,28 +16,28 @@ namespace Client.ApiServices.Implementations
             _configuration = configuration;
         }
 
-        public async Task<T> DeleteDataAsync<T>(string endPoint, string token = null)
-        {
-            var client = _httpClientFactory.CreateClient();
-            var requestMessage = new HttpRequestMessage()
+            public async Task<T> DeleteDataAsync<T>(string endPoint, string token = null)
             {
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri($"{_configuration["ServiceUrl:BaseAddress"]}{endPoint}"),
-                Headers = { { HeaderNames.Accept, "application/json" } }
-            };
+                var client = _httpClientFactory.CreateClient();
+                var requestMessage = new HttpRequestMessage()
+                {
+                    Method = HttpMethod.Delete,
+                    RequestUri = new Uri($"{_configuration["ServiceUrl:BaseAddress"]}{endPoint}"),
+                    Headers = { { HeaderNames.Accept, "application/json" } }
+                };
 
-            if (!string.IsNullOrEmpty(token))
-            {
-                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                if (!string.IsNullOrEmpty(token))
+                {
+                    requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
+                var responseMessage = await client.SendAsync(requestMessage);
+                var jsonResponse = await responseMessage.Content.ReadAsStringAsync();
+                var response = JsonSerializer.Deserialize<T>(jsonResponse,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+                return response;
             }
-
-            var responseMessage = await client.SendAsync(requestMessage);
-            var jsonResponse = await responseMessage.Content.ReadAsStringAsync();
-            var response = JsonSerializer.Deserialize<T>(jsonResponse,
-                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-
-            return response;
-        }
 
         public async Task<T> GetDataAsync<T>(string endPoint, string token = null)
         {

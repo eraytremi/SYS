@@ -50,6 +50,7 @@ namespace API.Controllers
             return SendResponse(response);
         }
 
+        //bekleyen onayları listeler
         [HttpGet("waitingStatuses")]
         public async Task<IActionResult> WaitingStatus()
         {
@@ -59,7 +60,31 @@ namespace API.Controllers
 
         }
 
-        [HttpDelete("ApproveStatus/{id}")]
+        //kabul edilmiş onayları listeler
+        [HttpGet("approvedStatuses")]
+        public async Task<IActionResult> ApprovedStatuses()
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.AprrovedStatuses(currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+
+        }
+
+
+
+        //red edilmiş onayları listeler
+        [HttpGet("rejectedStatuses")]
+        public async Task<IActionResult> RejectedStatuses()
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.RejectedStatuses(currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+
+        }
+
+
+        //status'u onaylar
+        [HttpDelete("approvestatus/{id}")]
         public async Task<IActionResult> ApproveStatus([FromRoute]int id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
@@ -68,7 +93,8 @@ namespace API.Controllers
 
         }
 
-        [HttpDelete("RejectStatus/{id}")]
+        //status'u red eder
+        [HttpDelete("rejectstatus/{id}")]
         public async Task<IActionResult> RejectStatus([FromRoute] int id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);

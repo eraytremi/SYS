@@ -16,7 +16,8 @@ namespace DataAccess.Repositories.Concrete
     {
         public async Task<List<StockMovement>> ApprovedStatus()
         {
-            return await GetAllAsync(p=>p.StatusType==StatusType.Onaylanan);
+            var a=  await GetAllAsync(p=>p.StatusType==StatusType.Onaylanan);
+            return a;
         }
 
         public async Task<List<StockMovement>> RejectedStatus()

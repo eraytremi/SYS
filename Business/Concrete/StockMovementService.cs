@@ -197,7 +197,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<ApiResponse<List<GetStockMovement>>> AprroveStatuses(int currentUserId)
+        public async Task<ApiResponse<List<GetStockMovement>>> AprrovedStatuses(int currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -209,22 +209,38 @@ namespace Business.Concrete
             var list = new List<GetStockMovement>();
             foreach (var item in getApprove)
             {
+                var getProduct = await _productRepository.GetByIdAsync(item.ProductId);
+                var getWareHouse = await _wareHouseRepository.GetByIdAsync(getProduct.WareHouseId);
                 var add = new GetStockMovement
                 {
-                    Id = item.Id,
                     Date = DateTime.Now,
-                    Destination = item.Destination,
+                    Id = item.Id,
                     IsEntry = item.IsEntry,
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
-                    Source = item.Source
+                    Destination = item.Destination,
+                    Source = item.Source,
+                    GetProduct = new GetProduct
+                    {
+                        Id = getProduct.Id,
+                        Name = getProduct.Name,
+                        Description = getProduct.Description,
+                        Price = getProduct.Price,
+                        Unit = ConvertUnitEnumToString(getProduct.Unit),
+                        GetWareHouse = new GetWareHouse
+                        {
+                            Id = getWareHouse.Id,
+                            Name = getWareHouse.Name
+                        }
+                    }
                 };
                 list.Add(add);
+
+              
             }
-
             return ApiResponse<List<GetStockMovement>>.Success(StatusCodes.Status200OK, list);
-        }
 
+        }
         public async Task<ApiResponse<List<GetStockMovement>>> RejectedStatuses(int currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
@@ -264,7 +280,7 @@ namespace Business.Concrete
             var list = new List<GetStockMovement>();
             foreach (var item in waiting)
             {
-                var product=await _productRepository.GetByIdAsync(item.ProductId);
+                var product = await _productRepository.GetByIdAsync(item.ProductId);
                 var add = new GetStockMovement
                 {
                     Date = item.Date,
@@ -274,9 +290,9 @@ namespace Business.Concrete
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
                     Source = item.Source,
-                    GetProduct=new GetProduct
+                    GetProduct = new GetProduct
                     {
-                        Name= product.Name     
+                        Name = product.Name
                     }
                 };
                 list.Add(add);

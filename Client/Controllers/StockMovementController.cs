@@ -21,7 +21,7 @@ namespace Client.Controllers
         public async Task<IActionResult> Index()
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var response =  await _httpApiService.GetDataAsync<ResponseBody<List<GetStockMovement>>>("/StockMovements", token.Token);
+            var response =  await _httpApiService.GetDataAsync<ResponseBody<List<GetStockMovement>>>("/StockMovements/approvedStatuses", token.Token);
             return View(response.Data);
         }
 
@@ -33,11 +33,11 @@ namespace Client.Controllers
             return View(response.Data);
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Approve(int id)
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var response = await _httpApiService.DeleteDataAsync<ResponseBody<NoContent>>($"/StockMovements/approveStatus/{id}", token.Token);
+            var response = await _httpApiService.DeleteDataAsync<ResponseBody<NoContent>>($"/StockMovements/ApproveStatus/{id}", token.Token);
             if (response.StatusCode == 200)
             {
                 return Json(new { IsSuccess = true, Message = "Başarıyla Onaylandı", response.Data });
@@ -49,11 +49,11 @@ namespace Client.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpGet]
         public async Task<IActionResult> Reject(int id)
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var response = await _httpApiService.DeleteDataAsync<ResponseBody<NoContent>>($"/StockMovements/rejectStatus/{id}", token.Token);
+            var response = await _httpApiService.DeleteDataAsync<ResponseBody<NoContent>>($"/StockMovements/RejectStatus/{id}", token.Token);
             if (response.StatusCode == 200)
             {
                 return Json(new { IsSuccess = true, Message = "Başarıyla Reddedildi", response.Data });
