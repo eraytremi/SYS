@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Product Barcode Scanner";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <input type="text" id="barcodeInput" placeholder="Scan barcode" autofocus />
+</div>
+
+<div id="productInfo" style="display:none;">
+    <h3>Product Information</h3>
+    <p><strong>Name:</strong> <span id="productName"></span></p>
+    <p><strong>Description:</strong> <span id="productDescription"></span></p>
+    <p><strong>Price:</strong> <span id="productPrice"></span></p>
+</div>

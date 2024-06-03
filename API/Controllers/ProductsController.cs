@@ -31,6 +31,14 @@ namespace API.Controllers
         }
 
 
+        [HttpPost("getProductsByBarcode")]
+        public async Task<IActionResult> GetProductByBarcode(string barcode)
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.GetProductByBarcode(barcode,currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddProduct([FromBody]AddProduct dto)
         {
@@ -47,8 +55,8 @@ namespace API.Controllers
             return SendResponse(response);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteProduct([FromQuery]int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteProduct(long id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.DeleteProductAsync(id, currentUserId.GetValueOrDefault());

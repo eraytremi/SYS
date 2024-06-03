@@ -14,6 +14,7 @@ namespace Business.Abstract
         Task<ApiResponse<NoData>> AddAsync(PostStock postStockStatus, int currentUserId);
         Task<ApiResponse<NoData>> DeleteAsync(int id, int currentUserId);
         Task<ApiResponse<NoData>> UpdateAsync(UpdateStock updateStockStatus, int currentUserId);
+        Task<ApiResponse<NoData>> SellProductAsync(PostStock postStockStatus, int currentUserId);
 
 
 

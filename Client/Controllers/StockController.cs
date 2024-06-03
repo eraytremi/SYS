@@ -4,6 +4,7 @@ using Client.Models;
 using Client.Models.Dtos;
 using Client.Models.Dtos.Product;
 using Client.Models.Dtos.StockStatus;
+using Client.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -24,8 +25,16 @@ namespace Client.Controllers
         public async Task<IActionResult> Index()
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var response = await _httpApiService.GetDataAsync<ResponseBody<List<GetStockStatus>>>("/Stocks", token.Token);
-            return View(response.Data);
+            var stockStatus = await _httpApiService.GetDataAsync<ResponseBody<List<GetStockStatus>>>("/Stocks", token.Token);
+            var product = await _httpApiService.GetDataAsync<ResponseBody<List<GetProduct>>>("/Products", token.Token);
+
+            var response = new ProductStockVm
+            {
+                GetProducts = product.Data,
+                GetStockStatuses = stockStatus.Data
+            };
+
+            return View(response);
         }
 
         [HttpPost]
@@ -33,6 +42,7 @@ namespace Client.Controllers
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             var response = await _httpApiService.PostDataAsync<ResponseBody<PostStockStatus>>("/Stocks", JsonSerializer.Serialize(dto), token.Token);
+
             if (response.StatusCode == 201)
             {
                 return Json(new { IsSuccess = true, Message = "Başarıyla Kaydedildi", response.Data });

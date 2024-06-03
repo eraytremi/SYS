@@ -1,4 +1,5 @@
 ﻿using DataAccess.Repositories.Abstract;
+using Entity.Dtos.Product;
 using Entity.SysModel;
 using Infrastructure.DataAcccess;
 using Repository.Contexts;
@@ -12,5 +13,6 @@ namespace DataAccess.Repositories.Concrete
 {
     public class ProductRepository:BaseRepository<Product,long,SysContext>,IProductRepository
     {
+       
     }
 }

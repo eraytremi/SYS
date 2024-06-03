@@ -1,6 +1,6 @@
 ﻿
-@using Client.Models.Dtos.StockStatus
-@model List<GetStockStatus>
+@using Client.Models.ViewModels
+@model ProductStockVm
 
 <section id="container">
     <section id="main-content">
@@ -24,7 +24,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model)
+                                @foreach (var item in Model.GetStockStatuses)
                                 {
                                     <tr>
                                         <td>@item.Id</td>
@@ -59,9 +59,9 @@
                         <label for="productName">Ürün İsmi:</label>
                         <select class="form-control" id="productId" name="productId">
                             <option value="2">Ürünü Seçiniz</option>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.GetProducts)
                             {
-                                <option value="@item.ProductId">@item.GetProduct.Name</option>
+                                <option value="@item.Id">@item.Name</option>
                             }
 
 
@@ -121,9 +121,9 @@
                         <label for="updatedProductName">Ürün Adı:</label>
                         <select class="form-control" id="updatedProductId" name="updatedProductId">
                             <option value="2">Ürünü Seçiniz</option>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.GetProducts)
                             {
-                                <option value="@item.ProductId">@item.GetProduct.Name</option>
+                                <option value="@item.Id">@item.Name</option>
                             }
 
 

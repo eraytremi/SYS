@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using DataAccess.Repositories.Abstract;
+using Entity;
 using Entity.Dtos.Category;
 using Entity.Dtos.Product;
 using Entity.Dtos.StockMovement;
@@ -54,6 +55,7 @@ namespace Business.Concrete
                 a.UpdatedBy = currentUserId;
                 a.UpdatedDate = DateTime.Now;
                 a.IsActive = true;
+                
                 await _stockStatusRepository.UpdateAsync(a);
             }
             else
@@ -77,7 +79,8 @@ namespace Business.Concrete
                 ProductId = postStockStatus.ProductId,
                 Quantity = postStockStatus.Quantity,
                 Destination = postStockStatus.Destination,
-                Source = postStockStatus.Source
+                Source = postStockStatus.Source,
+                StatusType=ConvertStatusTypeEnumToString(StatusType.Bekleyen),
             };
             await _stockMovementService.AddAsync(postStockMovement, currentUserId);
 
@@ -151,6 +154,7 @@ namespace Business.Concrete
                         }
                     }
                 };
+                
                 list.Add(add);
             }
 
@@ -193,7 +197,57 @@ namespace Business.Concrete
             }
         }
 
+        public int ConvertStatusTypeEnumToString(StatusType statusType)
+        {
 
+            switch (statusType)
+            {
+                case StatusType.Onaylanan:
+                    return 2;
+                case StatusType.Bekleyen:
+                    return 1;
+                case StatusType.Reddedilmiş:
+                    return 3;
+
+                default:
+                    return (int)statusType;
+            }
+        }
+
+        public async Task<ApiResponse<NoData>> SellProductAsync(PostStock postStockStatus, int currentUserId)
+        {
+            var getUser = await _userRepository.GetByIdAsync(currentUserId);
+            if (getUser == null)
+            {
+                return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
+            }
+
+            var getByIdProduct = await _productRepository.GetByIdAsync(postStockStatus.ProductId);
+            var getByIdStock = await _stockStatusRepository.GetByIdAsync(postStockStatus.ProductId);
+
+            if (getByIdProduct == null )
+            {
+                ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Ürün stokta yok");
+            }
+
+            if (getByIdStock.Quantity==0)
+            {
+                ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, $"Yeterli {getByIdProduct.Name} ürünü yok");
+            }
+
+            var update = new Stock
+            {
+                ProductId = postStockStatus.ProductId,
+                UpdatedBy = currentUserId,
+                UpdatedDate = DateTime.Now,
+                IsActive = true,
+                Quantity = -postStockStatus.Quantity,
+                Id = getByIdStock.Id
+            };
+
+            await _stockStatusRepository.UpdateAsync(update);
+            return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
+        }
     }
 
 }

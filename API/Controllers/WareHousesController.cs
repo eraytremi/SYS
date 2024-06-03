@@ -46,7 +46,7 @@ namespace API.Controllers
             return SendResponse(response);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromQuery] int id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);

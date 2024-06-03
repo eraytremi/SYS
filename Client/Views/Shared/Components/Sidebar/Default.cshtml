@@ -36,7 +36,7 @@
         <!--header start-->
         <header class="header black-bg">
             <div class="sidebar-toggle-box">
-                <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+                <div class="fa fa-bars tooltips" data-placement="right"></div>
             </div>
             <div class="top-menu">
                 <ul class="nav pull-right top-menu">
@@ -54,11 +54,11 @@
                 <!-- sidebar menu start-->
                 <ul class="sidebar-menu" id="nav-accordion">
 
-                    @*  <p class="centered"><a href="profile.html"><img src="assets/img/ui-sam.jpg" class="img-circle" width="60"></a></p> *@
 
                     @if (Model.RoleId == "1")
                     {
                         <h5 class="centered">Admin</h5>
+                        <h5 class="centered">@Model.UserGetDto.Name</h5>
 
                         <li class="mt">
                             <a class="active" href="/Supplier/Index">
@@ -130,6 +130,7 @@
                     @if (Model.RoleId == "2")
                     {
                         <h5 class="centered">Müdür</h5>
+                        <h5 class="centered">@Model.UserGetDto.Name</h5>
 
                         <li class="mt">
                             <a class="active" href="/Supplier/Index">
@@ -169,6 +170,19 @@
                         </li>
 
                     }
+                    @if (Model.RoleId == "3")
+                    {
+                        <h5 class="centered">Kasiyer</h5>
+                        <h5 class="centered">@Model.UserGetDto.Name</h5>
+
+                        <li class="mt">
+                            <a class="active" href="/Product/GetProductsByBarcode">
+                                <i class="fa fa-dashboard"></i>
+                                <span>Ürün</span>
+                            </a>
+                        </li>
+ 
+                    }
                 </ul>
 
             </div>
@@ -180,7 +194,7 @@
     <script src="~/assets/js/jquery.js"></script>
     <script src="~/assets/js/jquery-1.8.3.min.js"></script>
     <script src="~/assets/js/bootstrap.min.js"></script>
-    <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+    <script class="include" type="text/javascript" src="~/assets/js/jquery.dcjqaccordion.2.7.js"></script>
     <script src="~/assets/js/jquery.scrollTo.min.js"></script>
     <script src="~/assets/js/jquery.nicescroll.js" type="text/javascript"></script>
     <script src="~/assets/js/jquery.sparkline.js"></script>
@@ -189,8 +203,8 @@
     <!--common script for all pages-->
     <script src="~/assets/js/common-scripts.js"></script>
 
-    <script type="text/javascript" src="assets/js/gritter/js/jquery.gritter.js"></script>
-    <script type="text/javascript" src="assets/js/gritter-conf.js"></script>
+    <script type="text/javascript" src="~/assets/js/gritter/js/jquery.gritter.js"></script>
+    <script type="text/javascript" src="~/assets/js/gritter-conf.js"></script>
 
     <!--script for this page-->
     <script src="~/assets/js/sparkline-chart.js"></script>

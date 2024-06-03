@@ -14,7 +14,8 @@ namespace Business.Abstract
     {
         Task<ApiResponse<List<GetProduct>>> GetProductAsync(int currentUserId);
         Task<ApiResponse<NoData>> AddProductAsync(AddProduct product, int currentUserId);
-        Task<ApiResponse<NoData>> DeleteProductAsync(int id, int currentUserId);
+        Task<ApiResponse<NoData>> DeleteProductAsync(long id, int currentUserId);
         Task<ApiResponse<NoData>> UpdateProductAsync(UpdateProduct updateProduct, int currentUserId);
+        Task<ApiResponse<GetProduct>> GetProductByBarcode(string barcode,int currentUserId);
     }
 }

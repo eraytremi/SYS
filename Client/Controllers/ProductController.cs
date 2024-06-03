@@ -27,7 +27,7 @@ namespace Client.Controllers
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             var product = await _httpApiService.GetDataAsync<ResponseBody<List<GetProduct>>>("/Products", token.Token);
             var supplier = await _httpApiService.GetDataAsync<ResponseBody<List<GetSupplier>>>("/Suppliers", token.Token);
-
+            
             var wareHouse= await _httpApiService.GetDataAsync<ResponseBody<List<GetWareHouse>>>("/WareHouses", token.Token);
 
             var category = await _httpApiService.GetDataAsync<ResponseBody<List<GetCategory>>>("/Categories",token.Token);
@@ -72,8 +72,23 @@ namespace Client.Controllers
             }
         }
 
+        
+        [HttpPost]
+        public async Task<IActionResult> GetProductByBarcode(string barcode)
+        {
+            var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
+            var response = await _httpApiService.PostDataAsync<ResponseBody<GetProduct>>("/Products/getProductsByBarcode", JsonSerializer.Serialize(barcode), token.Token);
+            if (response.StatusCode == 200)
+            {
+                return Json(new { IsSuccess = true, Message = "Başarıyla Güncellendi", response.Data });
+            }
+            else
+            {
+                return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
+            }
+        }
         [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(long id)
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             var response = await _httpApiService.DeleteDataAsync<ResponseBody<NoContent>>($"/Products/{id}", token.Token);
