@@ -49,7 +49,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct([FromQuery]int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.DeleteCategory(id, currentUserId.GetValueOrDefault());

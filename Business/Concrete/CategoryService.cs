@@ -30,7 +30,8 @@ namespace Business.Concrete
                 CreatedBy = currentUserId,
                 CreatedDate = DateTime.Now,
                 Picture=category.Picture,
-                Name = category.Name
+                Name = category.Name,
+                IsActive=true
             };
             await _repo.InsertAsync(add);
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
@@ -91,7 +92,8 @@ namespace Business.Concrete
                 CreatedDate = DateTime.Now,
                 Name = updateCategory.Name,
                 Picture=updateCategory.Picture,
-                Id = updateCategory.Id
+                Id = updateCategory.Id,
+                IsActive = true
             };
             await _repo.UpdateAsync(update);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);

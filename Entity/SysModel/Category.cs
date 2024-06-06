@@ -11,5 +11,6 @@ namespace Entity.SysModel
         public string Name { get; set; }
         public string Picture { get; set; }
         public List<Product> Products { get; set; }
+
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Contexts;
 
@@ -11,9 +12,11 @@ using Repository.Contexts;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(SysContext))]
-    partial class SysContextModelSnapshot : ModelSnapshot
+    [Migration("20240606134751_mig51")]
+    partial class mig51
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

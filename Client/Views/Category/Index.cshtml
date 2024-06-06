@@ -1,0 +1,176 @@
+﻿@using Client.Models.Dtos.Category
+
+@model List<GetCategory>
+
+<section id="container">
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="row mt">
+                <div class="col-md-12">
+                    <div class="content-panel">
+                        <div class="header-container">
+                            <div class="text-right" style="margin-right: 20px;">
+                                <button id="openAddModalBtn" class="btn btn-success btn-md"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-advance table-hover">
+                            <thead>
+                                <tr>
+                                    <th><i class="fa fa-bullhorn"></i> Id</th>
+                                    <th><i class="fa fa-bullhorn"></i> Kategori Resmi</th>
+                                    <th><i class="fa fa-question-circle"></i> Kategori İsmi</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.PictureBase64))
+                                            {
+                                                <img src="data:image/jpeg;base64,@item.PictureBase64" alt="Ürün Resmi" style="width:100px;height:auto;" />
+                                            }
+                                            else
+                                            {
+                                                <span>Resim Yok</span>
+                                            }
+                                        </td>
+                                        <td>@item.Name</td>
+                                        <td>
+                                            <button id="openUpdateCategoryModal" class="btn btn-primary btn-md" categoryId="@item.Id"><i class="fa fa-pencil"></i></button>
+                                            <button data-bs-toggle="modal" class="btnDelete btn btn-danger btn-md" categoryId="@item.Id"><i class="fa fa-trash-o "></i></button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</section>
+
+<div id="addCategoryModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addCategoryModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Yeni Kayıt Ekle</h4>
+            </div>
+            <div class="modal-body">
+                <form id="newRecordForm">
+                    <div class="form-group">
+                        <label for="categoryName">Kategori İsmi:</label>
+                        <input type="text" class="form-control" id="categoryName" name="categoryName">
+                        <label for="categoryImage">Kategori Resmi:</label>
+                        <br />
+                        <input type="file" class="form-control-file" id="categoryImage" name="categoryImage" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-default" id="selectImageButton">Resim Seç</button>
+                        <span id="filePathDisplay" style="margin-left: 10px;"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="postCategory">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="updatedCategoryModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updatedCategoryModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Kategoriyi Güncelle</h4>
+            </div>
+            <div class="modal-body">
+                <form id="updateRecordForm">
+                    <input type="hidden" id="updatedCategoryId" name="updatedCategoryId" value="">
+                    <div class="form-group">
+                        <label for="updatedCategoryName">Kategori İsmi:</label>
+                        <input type="text" class="form-control" id="updatedCategoryName" name="updatedCategoryName">
+                        <label for="categoryImageUpdate">Kategori Resmi:</label>
+                        <br />
+                        <input type="file" class="form-control-file" id="categoryImageUpdate" name="categoryImageUpdate" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-default" id="selectImageUpdateButton">Resim Seç</button>
+                        <span id="filePathDisplayUpdate" style="margin-left: 10px;"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="updateCategory">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/jquery.js"></script>
+<script src="~/assets/js/bootstrap.min.js"></script>
+<script class="include" type="text/javascript" src="~/assets/js/jquery.dcjqaccordion.2.7.js"></script>
+<script src="~/assets/js/jquery.scrollTo.min.js"></script>
+<script src="~/assets/js/jquery.nicescroll.js" type="text/javascript"></script>
+<script src="~/assets/js/common-scripts.js"></script>
+<script src="path/to/sweetalert.min.js"></script>
+<script src="~/js/category.js"></script>
+
+<script>
+    document.getElementById('openAddModalBtn').addEventListener('click', function () {
+        $('#addCategoryModal').modal('show');
+    });
+
+    document.getElementById('selectImageButton').addEventListener('click', function () {
+        document.getElementById('categoryImage').click();
+    });
+
+    document.getElementById('selectImageUpdateButton').addEventListener('click', function () {
+        document.getElementById('categoryImageUpdate').click();
+    });
+
+    document.getElementById('categoryImage').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const filePathDisplay = document.getElementById('filePathDisplay');
+        if (file) {
+            const validExtensions = ['image/jpeg', 'image/png', 'image/gif'];
+            if (validExtensions.includes(file.type)) {
+                filePathDisplay.textContent = file.name;
+            } else {
+                alert('Lütfen geçerli bir resim dosyası seçin (JPEG, PNG veya GIF).');
+                event.target.value = '';
+                filePathDisplay.textContent = '';
+            }
+        } else {
+            filePathDisplay.textContent = '';
+        }
+    });
+
+    document.getElementById('categoryImageUpdate').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const filePathDisplayUpdate = document.getElementById('filePathDisplayUpdate');
+        if (file) {
+            const validExtensions = ['image/jpeg', 'image/png', 'image/gif'];
+            if (validExtensions.includes(file.type)) {
+                filePathDisplayUpdate.textContent = file.name;
+            } else {
+                alert('Lütfen geçerli bir resim dosyası seçin (JPEG, PNG veya GIF).');
+                event.target.value = '';
+                filePathDisplayUpdate.textContent = '';
+            }
+        } else {
+            filePathDisplayUpdate.textContent = '';
+        }
+    });
+
+    $(document).on('click', '#openUpdateCategoryModal', function () {
+        var selectedCategoryName = $(this).closest('tr').find('td:eq(2)').text();
+        var categoryId = $(this).attr('categoryId');
+        $('#updatedCategoryName').val(selectedCategoryName);
+        $('#updatedCategoryId').val(categoryId);
+        $('#updatedCategoryModal').modal('show');
+    });
+</script>
