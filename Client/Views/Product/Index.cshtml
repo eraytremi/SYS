@@ -19,6 +19,7 @@
                             <thead>
                                 <tr>
                                     <th><i class="fa fa-bullhorn"></i> Id</th>
+                                    <th><i class="fa fa-bullhorn"></i> Ürün Resmi</th>
                                     <th><i class="fa fa-question-circle"></i> Ürün İsmi</th>
                                     <th><i class="fa fa-question-circle"></i> Kategori</th>
                                     <th class="hidden-phone">  <i class="fa fa-question-circle"></i> Depo</th>
@@ -34,6 +35,16 @@
                                 {
                                     <tr>
                                         <td>@item.Id</td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.PictureBase64))
+                                            {
+                                                <img src="data:image/jpeg;base64,@item.PictureBase64" alt="Ürün Resmi" style="width:100px;height:auto;" />
+                                            }
+                                            else
+                                            {
+                                                <span>Resim Yok</span>
+                                            }
+                                        </td>
                                         <td>@item.Name</td>
                                         <td>@item.GetCategory.Name</td>
                                         <td>@item.GetWareHouse.Name</td>
@@ -109,10 +120,18 @@
 
                         <label for="unit">Birim:</label>
                         <select class="form-control" id="unit" name="unit">
+                            <option value="2">Birim Seçiniz</option>
                             <option value="Kg">Kilogram (kg)</option>
                             <option value="Litre">Litre (L)</option>
                             <option value="Adet">Adet </option>
                         </select>
+
+
+                        <label for="productImage">Ürün Resmi:</label>
+                        <br />
+                        <input type="file" class="form-control-file" id="productImage" name="productImage" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-default" id="selectImageButton">Resim Seç</button>
+                        <span id="filePathDisplay" style="margin-left: 10px;"></span>
                     </div>
                 </form>
             </div>
@@ -181,6 +200,13 @@
                             <option value="Litre">Litre (L)</option>
                             <option value="Adet">Adet </option>
                         </select>
+
+
+                        <label for="productImageUpdate">Ürün Resmi:</label>
+                        <br />
+                        <input type="file" class="form-control-file" id="productImageUpdate" name="productImageUpdate" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-default" id="selectImageUpdateButton">Resim Seç</button>
+                        <span id="filePathDisplayUpdate" style="margin-left: 10px;"></span>
                     </div>
                 </form>
             </div>
@@ -206,12 +232,55 @@
         $('#addProductModal').modal('show');
     });
 
-    $(document).on('click', '#openUpdateProductModal', function () {
-        var selectedProductName = $(this).closest('tr').find('td:eq(1)').text();
-        var productId = $(this).attr('productId');
-        var selectedDescription = $(this).closest('tr').find('td:eq(4)').text();
-        var selectedPrice = $(this).closest('tr').find('td:eq(5)').text();
+    document.getElementById('selectImageButton').addEventListener('click', function () {
+        document.getElementById('productImage').click();
+    });
 
+    document.getElementById('selectImageUpdateButton').addEventListener('click', function () {
+        document.getElementById('productImageUpdate').click();
+    });
+
+    document.getElementById('productImage').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const filePathDisplay = document.getElementById('filePathDisplay');
+        if (file) {
+            const validExtensions = ['image/jpeg', 'image/png', 'image/gif'];
+            if (validExtensions.includes(file.type)) {
+                filePathDisplay.textContent = file.name;
+            } else {
+                alert('Lütfen geçerli bir resim dosyası seçin (JPEG, PNG veya GIF).');
+                event.target.value = ''; // Seçimi temizle
+                filePathDisplay.textContent = ''; // Dosya yolunu temizle
+            }
+        } else {
+            filePathDisplay.textContent = ''; // Dosya yolunu temizle
+        }
+    });
+
+    document.getElementById('productImageUpdate').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const filePathDisplayUpdate = document.getElementById('filePathDisplayUpdate');
+        if (file) {
+            const validExtensions = ['image/jpeg', 'image/png', 'image/gif'];
+            if (validExtensions.includes(file.type)) {
+                filePathDisplayUpdate.textContent = file.name;
+            } else {
+                alert('Lütfen geçerli bir resim dosyası seçin (JPEG, PNG veya GIF).');
+                event.target.value = ''; // Seçimi temizle
+                filePathDisplayUpdate.textContent = ''; // Dosya yolunu temizle
+            }
+        } else {
+            filePathDisplayUpdate.textContent = ''; // Dosya yolunu temizle
+        }
+    });
+
+    $(document).on('click', '#openUpdateProductModal', function () {
+        var selectedProductName = $(this).closest('tr').find('td:eq(2)').text();
+        var productId = $(this).attr('productId');
+        var selectedDescription = $(this).closest('tr').find('td:eq(5)').text();
+        var selectedPrice = $(this).closest('tr').find('td:eq(6)').text();
+
+       
         $('#updatedProductName').val(selectedProductName);
         $('#updatedQuantity').val(selectedDescription);
         $('#updatedPrice').val(selectedPrice);

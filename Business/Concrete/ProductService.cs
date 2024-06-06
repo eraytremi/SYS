@@ -53,6 +53,7 @@ namespace Business.Concrete
                 CreatedBy = currentUserId,
                 CreatedDate = DateTime.Now,
                 IsActive = true,
+                Picture = product.Picture,
                 Name = product.Name,
                 Description = product.Description,
                 CategoryId = product.CategoryId,
@@ -78,6 +79,7 @@ namespace Business.Concrete
 
             getById.IsActive = false;
             getById.DeletedDate = DateTime.Now;
+            
             getById.DeletedBy = currentUserId;
             await _repo.UpdateAsync(getById);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
@@ -108,13 +110,15 @@ namespace Business.Concrete
                     WareHouseId = item.WareHouseId,
                     SupplierId = item.SupplierId,
                     Name = item.Name,
+                    Picture=item.Picture,
                     Price = item.Price,
                     Unit = ConvertUnitEnumToString(item.Unit),
                     Description = item.Description,
                     GetCategory = new GetCategory
                     {
                         Id = getCategory.Id,
-                        Name = getCategory.Name
+                        Name = getCategory.Name,
+                        Picture = item.Picture
                     },
 
                     GetWareHouse = new GetWareHouse
@@ -137,6 +141,7 @@ namespace Business.Concrete
         public async Task<ApiResponse<NoData>> UpdateProductAsync(UpdateProduct updateProduct, int currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
+            var existingProduct = await _repo.GetByIdAsync(updateProduct.Id);
             if (getUser == null)
             {
                 return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
@@ -144,17 +149,19 @@ namespace Business.Concrete
 
             var update = new Product
             {
-
                 Description = updateProduct.Description,
+                WareHouseId = updateProduct.WareHouseId,
                 Id = updateProduct.Id,
                 Name = updateProduct.Name,
                 CategoryId = updateProduct.CategoryId,
                 Unit = updateProduct.Unit,
+                Picture = updateProduct.Picture,
                 Price = updateProduct.Price,
                 SupplierId = updateProduct.SupplierId,
                 UpdatedBy = currentUserId,
-                UpdatedDate = DateTime.Now
-
+                UpdatedDate = DateTime.Now,
+                Barcode=existingProduct.Barcode,
+                IsActive=true
             };
 
             await _repo.UpdateAsync(update);

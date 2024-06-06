@@ -1,21 +1,29 @@
 $(document).ready(function () {
     // Event handler for posting stock
     $("#postProduct").click(function () {
-       
-        var formDataObject = {
-            Name: $("#productName").val(),
-            Unit: $("#unit").val(),
-            WareHouseId: $("#wareHouseId").val(),
-            SupplierId: $("#supplierId").val(),
-            CategoryId: $("#categoryId").val(),
-            Description: $("#description").val(),
-            Price: $("#price").val()
-        };
+
+        var formData = new FormData();
+        formData.append("Name", $("#productName").val());
+        formData.append("Unit", $("#unit").val());
+        formData.append("WareHouseId", $("#wareHouseId").val());
+        formData.append("SupplierId", $("#supplierId").val());
+        formData.append("CategoryId", $("#categoryId").val());
+        formData.append("Description", $("#description").val());
+        formData.append("Price", $("#price").val());
+
+
+        var fileInput = document.getElementById('productImage');
+        if (fileInput.files.length > 0) {
+            formData.append("Picture", fileInput.files[0]);
+            console.log("File appended: ", fileInput.files[0]);
+        }
 
         $.ajax({
             url: "/Product/Post",
             method: "POST",
-            data: formDataObject,
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function (response) {
                 if (response.isSuccess) {
                     window.location.href = "/Product/Index";
@@ -42,29 +50,31 @@ $(document).ready(function () {
 
     $("#updateProduct").click(function () {
 
-        var productId = $("#updatedProductId").val();
-        var updatedWareHouseId = $("#updatedWareHouseId").val();
-        var updatedProductName = $("#updatedProductName").val();
-        var updatedCategoryId = $("#updatedCategoryId").val();
-        var updatedSupplierId = $("#updatedSupplierId").val();
-        var updatedDescription = $("#updatedDescription").val();
-        var updatedPrice = $("#updatedPrice").val();
-        var updatedUnit = $("#updatedUnit").val();
+        var formData = new FormData();
+        formData.append("Id", $("#updatedProductId").val());
+        formData.append("Name", $("#updatedProductName").val());
+        formData.append("WareHouseId", $("#updatedWareHouseId").val());
+        formData.append("CategoryId", $("#updatedCategoryId").val());
+        formData.append("SupplierId", $("#updatedSupplierId").val());
+        formData.append("Description", $("#updatedDescription").val());
+        formData.append("Price", $("#updatedPrice").val());
+        formData.append("Unit", $("#updatedUnit").val());
 
-        var formDataObject = {
-            Id: productId,
-            Name: updatedProductName,
-            WareHouseId: updatedWareHouseId,
-            CategoryId:updatedCategoryId,
-            SupplierId: updatedSupplierId,
-            Description: updatedDescription,
-            Price: updatedPrice,
-            Unit: updatedUnit
-        };
+
+        var fileInput = document.getElementById('productImageUpdate');
+        if (fileInput.files.length > 0) {
+            formData.append("Picture", fileInput.files[0]);
+            console.log("File appended: ", fileInput.files[0]);
+        }
+
+
+
         $.ajax({
             url: "/Product/Update",
             method: "POST",
-            data: formDataObject,
+            data: formData,
+            processData: false, // Ensure jQuery doesn't process the data
+            contentType: false, // Ensure jQuery sets the content type correctly
             success: function (response) {
                 if (response.isSuccess) {
                     window.location.href = "/Product/Index";
@@ -88,9 +98,10 @@ $(document).ready(function () {
                 });
             }
         });
-
     });
+
 });
+
 
 // Event handler for deleting supplier
 $('.btnDelete').click(function () {

@@ -31,6 +31,15 @@ namespace Client.Controllers
             var wareHouse= await _httpApiService.GetDataAsync<ResponseBody<List<GetWareHouse>>>("/WareHouses", token.Token);
 
             var category = await _httpApiService.GetDataAsync<ResponseBody<List<GetCategory>>>("/Categories",token.Token);
+
+            foreach (var productItem in product.Data)
+            {
+                if (productItem.Picture != null)
+                {
+                    productItem.PictureBase64 = Convert.ToBase64String(productItem.Picture);
+                }
+            }
+
             var data = new SupplierProductWareHouseVM
             {
                 GetProducts = product.Data,
@@ -42,9 +51,17 @@ namespace Client.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(PostProduct dto)
+        public async Task<IActionResult> Post(PostProduct dto,IFormFile Picture)
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
+            if (Picture != null && Picture.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await Picture.CopyToAsync(memoryStream);
+                    dto.Picture = memoryStream.ToArray(); 
+                }
+            }
             var response = await _httpApiService.PostDataAsync<ResponseBody<PostProduct>>("/Products", JsonSerializer.Serialize(dto), token.Token);
 
             if (response.StatusCode == 201)
@@ -58,9 +75,17 @@ namespace Client.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(UpdateProduct dto)
+        public async Task<IActionResult> Update(UpdateProduct dto,IFormFile Picture)
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
+            if (Picture != null && Picture.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await Picture.CopyToAsync(memoryStream);
+                    dto.Picture = memoryStream.ToArray();
+                }
+            }
             var response = await _httpApiService.PutDataAsync<ResponseBody<UpdateProduct>>("/Products", JsonSerializer.Serialize(dto), token.Token);
             if (response.StatusCode == 200)
             {

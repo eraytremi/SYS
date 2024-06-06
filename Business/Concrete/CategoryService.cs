@@ -29,6 +29,7 @@ namespace Business.Concrete
             {
                 CreatedBy = currentUserId,
                 CreatedDate = DateTime.Now,
+                Picture=category.Picture,
                 Name = category.Name
             };
             await _repo.InsertAsync(add);
@@ -66,7 +67,8 @@ namespace Business.Concrete
                 var addList = new GetCategory
                 {
                     Id = item.Id,
-                    Name = item.Name
+                    Name = item.Name,
+                    Picture=item.Picture
                 };
                 list.Add(addList);
 
@@ -75,7 +77,7 @@ namespace Business.Concrete
             return ApiResponse<List<GetCategory>>.Success(StatusCodes.Status200OK, list);
         }
 
-        public  async Task<ApiResponse<NoData>> UpdateCategoryAsync(UpdateCategory updateRole, int currentUserId)
+        public  async Task<ApiResponse<NoData>> UpdateCategoryAsync(UpdateCategory updateCategory, int currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -87,8 +89,9 @@ namespace Business.Concrete
             {
                 UpdatedBy = currentUserId,
                 CreatedDate = DateTime.Now,
-                Name = updateRole.Name,
-                Id = updateRole.Id
+                Name = updateCategory.Name,
+                Picture=updateCategory.Picture,
+                Id = updateCategory.Id
             };
             await _repo.UpdateAsync(update);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
