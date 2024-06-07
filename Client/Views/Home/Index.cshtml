@@ -1,8 +1,28 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@* @using Client.Models.Dtos.Category
+@using Client.Models.ViewModels
+@{
+    var role = ViewData["role"] as SideBarViewModel;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@{
+    ViewData["Title"] = "Category Menu";
+    var categories = ViewData["CategoriMenu"] as List<GetCategory>;
+}
+
+@if(role.RoleId=="3")
+{
+    <h2>@ViewData["Title"]</h2>
+
+    <ul>
+        @foreach (var category in categories)
+        {
+            <li>
+                <h3>@category.Name</h3>
+                @if (category.PictureBase64 != null)
+                {
+                    <img src="data:image/png;base64,@category.PictureBase64" alt="@category.Name" />
+                }
+            </li>
+        }
+    </ul>
+} *@

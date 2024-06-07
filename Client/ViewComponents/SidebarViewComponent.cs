@@ -17,7 +17,7 @@ namespace Client.ViewComponents
                 UserGetDto = personUser,
                 RoleId = userRoleId
             };
-
+            ViewData["role"]=model;
             return View(model);
         }
     }

@@ -1,0 +1,45 @@
+﻿
+@using Client.Models.Dtos.Category
+@model List<GetCategory>
+
+<style>
+    .card {
+        
+        margin-right: 1px;
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: auto;
+    }
+
+   
+    .content-container {
+        margin-top: 60px; 
+    }
+</style>
+
+
+<div class="content-container">
+    <div class="row">
+        @foreach (var category in Model)
+        {
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="data:image/jpeg;base64,@category.PictureBase64" class="card-img-top" alt="@category.Name" />
+                        <h5 class="card-title">@category.Name</h5>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/assets/js/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        var navbarHeight = $('.header').outerHeight();
+        $('.content-container').css('margin-top', navbarHeight + 'px');
+    });
+</script>
