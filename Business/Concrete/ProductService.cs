@@ -208,8 +208,7 @@ namespace Business.Concrete
                     bitmap.SetPixel(x, y, bitMatrix[x, y] ? Color.Black : Color.White);
                 }
             }
-
-          
+         
             var barcodeDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Barcodes");
 
             if (!Directory.Exists(barcodeDir))
@@ -219,7 +218,6 @@ namespace Business.Concrete
 
             var barcodePath = Path.Combine(barcodeDir, $"{productId}.png");
             bitmap.Save(barcodePath, ImageFormat.Png);
-
             return barcodePath;
         }
 
@@ -230,7 +228,7 @@ namespace Business.Concrete
             {
                 return ApiResponse<GetProduct>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
-
+            //var barcodePath= GenerateBarcode(barcode);
             var getProduct = await _repo.GetAsync(p => p.Barcode == barcode);
             if (getProduct == null)
             {

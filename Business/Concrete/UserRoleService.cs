@@ -109,7 +109,7 @@ namespace Business.Concrete
             if (getUser == null)
             {
                 return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "yetki yok!");
-            }
+            }   
 
             var update = new UserRole
             {
