@@ -16,12 +16,14 @@ namespace Business.Concrete
         private readonly IUserRepository _userRepository;
         private readonly IProductRepository _productRepository;
         private readonly IWareHouseRepository _wareHouseRepository;
-        public StockMovementService(IStockMovementRepository repository, IUserRepository userRepository, IProductRepository productRepository, IWareHouseRepository wareHouseRepository)
+        private readonly IStockRepository _stockRepository;
+        public StockMovementService(IStockMovementRepository repository, IUserRepository userRepository, IProductRepository productRepository, IWareHouseRepository wareHouseRepository, IStockRepository stockRepository)
         {
             _repository = repository;
             _userRepository = userRepository;
             _productRepository = productRepository;
             _wareHouseRepository = wareHouseRepository;
+            _stockRepository = stockRepository;
         }
 
         public async Task<ApiResponse<NoData>> AddAsync(PostStockMovement postStockMovement, int currentUserId)
@@ -183,19 +185,76 @@ namespace Business.Concrete
         public async Task<ApiResponse<NoData>> ApproveStatus(int id, int currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
+
             if (getUser == null)
             {
                 return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
-            var stockMovement = await _repository.GetAsync(p => p.Id == id);
 
+            var stockMovement = await _repository.GetAsync(p => p.Id == id && p.StatusType == StatusType.Bekleyen);
+            if (stockMovement == null)
+            {
+                return ApiResponse<NoData>.Fail(StatusCodes.Status404NotFound, "Stok hareketleri bulunamadı");
+            }
 
-            stockMovement.UpdatedDate = DateTime.Now;
-            stockMovement.UpdatedBy = currentUserId;
+            var getStock = await _stockRepository.GetAsync(p => p.ProductId == stockMovement.ProductId);
+
+            if (stockMovement.IsEntry)
+            {
+                if (getStock != null)
+                {
+                    
+                    getStock.Quantity += stockMovement.Quantity;
+                    getStock.UpdatedBy = currentUserId;
+                    getStock.UpdatedDate = DateTime.Now;
+
+                    await _stockRepository.UpdateAsync(getStock);
+                }
+                else
+                {
+                    var stockStatus = new Stock
+                    {
+                        Quantity = stockMovement.Quantity,
+                        CreatedDate = DateTime.Now,
+                        CreatedBy = currentUserId,
+                        ProductId = stockMovement.ProductId,
+                        IsActive = true,
+                    };
+                    await _stockRepository.InsertAsync(stockStatus);
+                }
+            }
+            else
+            {
+                if (getStock != null)
+                {
+                    if (getStock.Quantity < stockMovement.Quantity)
+                    {
+                        await RejectStatus(id, currentUserId);
+                        return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Yeterli stok yok ");
+
+                    }
+                    getStock.Quantity -= stockMovement.Quantity;
+                    getStock.UpdatedBy = currentUserId;
+                    getStock.UpdatedDate = DateTime.Now;
+                    await _stockRepository.UpdateAsync(getStock);
+                }
+                else if (getStock==null) 
+                {
+                    await RejectStatus(id, currentUserId);
+                    return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, $"Stokta {getStock.Product.Name} yok!");
+                }
+            }
+
             stockMovement.StatusType = StatusType.Onaylanan;
+            stockMovement.CreatedBy = currentUserId;
+            stockMovement.CreatedDate = DateTime.Now;
+            stockMovement.IsActive = true;
+
             await _repository.UpdateAsync(stockMovement);
+
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
+
 
         public async Task<ApiResponse<List<GetStockMovement>>> AprrovedStatuses(int currentUserId)
         {

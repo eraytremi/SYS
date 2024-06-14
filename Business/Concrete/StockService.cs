@@ -49,42 +49,40 @@ namespace Business.Concrete
                 return ApiResponse<NoData>.Fail(StatusCodes.Status404NotFound, "Ürün kayıtlı değil. Önce ürünü kaydetmeniz gerekiyor!");
             }
 
-            if (a != null)
+            if (postStockStatus.IsEntry == true)
             {
-                a.Quantity += postStockStatus.Quantity;
-                a.UpdatedBy = currentUserId;
-                a.UpdatedDate = DateTime.Now;
-                a.IsActive = true;
-                
-                await _stockStatusRepository.UpdateAsync(a);
+
+                var postStockMovement = new PostStockMovement
+                {
+                    IsEntry = true,
+                    ProductId = postStockStatus.ProductId,
+                    Quantity = postStockStatus.Quantity,
+                    Destination = postStockStatus.Destination,
+                    Source = postStockStatus.Source,
+                    StatusType = ConvertStatusTypeEnumToString(StatusType.Bekleyen),
+                };
+                await _stockMovementService.AddAsync(postStockMovement, currentUserId);
+
+                return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
+
             }
             else
             {
-                var stockStatus = new Stock
+                var postStockMovement = new PostStockMovement
                 {
-                    Quantity = postStockStatus.Quantity,
-                    CreatedDate = DateTime.Now,
-                    CreatedBy = currentUserId,
+                    IsEntry = false,
                     ProductId = postStockStatus.ProductId,
-                    IsActive = true,
-
+                    Quantity = postStockStatus.Quantity,
+                    Destination = postStockStatus.Destination,
+                    Source = postStockStatus.Source,
+                    StatusType = ConvertStatusTypeEnumToString(StatusType.Bekleyen),
                 };
-                await _stockStatusRepository.InsertAsync(stockStatus);
+                await _stockMovementService.AddAsync(postStockMovement, currentUserId);
+
+                return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
             }
 
-
-            var postStockMovement = new PostStockMovement
-            {
-                IsEntry = true,
-                ProductId = postStockStatus.ProductId,
-                Quantity = postStockStatus.Quantity,
-                Destination = postStockStatus.Destination,
-                Source = postStockStatus.Source,
-                StatusType=ConvertStatusTypeEnumToString(StatusType.Bekleyen),
-            };
-            await _stockMovementService.AddAsync(postStockMovement, currentUserId);
-
-            return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
+           
 
         }
 
@@ -154,7 +152,7 @@ namespace Business.Concrete
                         }
                     }
                 };
-                
+
                 list.Add(add);
             }
 
@@ -225,12 +223,12 @@ namespace Business.Concrete
             var getByIdProduct = await _productRepository.GetByIdAsync(postStockStatus.ProductId);
             var getByIdStock = await _stockStatusRepository.GetByIdAsync(postStockStatus.ProductId);
 
-            if (getByIdProduct == null )
+            if (getByIdProduct == null)
             {
                 ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Ürün stokta yok");
             }
 
-            if (getByIdStock.Quantity==0)
+            if (getByIdStock.Quantity == 0)
             {
                 ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, $"Yeterli {getByIdProduct.Name} ürünü yok");
             }

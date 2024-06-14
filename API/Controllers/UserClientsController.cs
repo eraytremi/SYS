@@ -49,10 +49,10 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterDto dto)
+        public async Task<IActionResult> RegisterUser([FromBody] PostUserClient dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
-            var response = await _service.AddUser(dto, currentUserId.GetValueOrDefault());
+            var response = await _service.AddUserClient(dto, currentUserId.GetValueOrDefault());
             return SendResponse(response);
         }
     }
