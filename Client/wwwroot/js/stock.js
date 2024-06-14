@@ -38,8 +38,7 @@ $(document).ready(function () {
         });
     });
 
-    $("#updateStock").click(function () {
-       
+    $("#updateStock").click(function () {     
         var updatedQuantity = $("#updatedQuantity").val();
         var stockId = $("#updatedStockId").val();
         var updatedProductId = $("#updatedProductId").val();

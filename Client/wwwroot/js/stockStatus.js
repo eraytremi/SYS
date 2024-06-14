@@ -25,9 +25,9 @@ function approveStatu(id) {
                 url: '/StockMovement/Approve/' + id,
                 method: 'get',
                 success: function (response) {
-                    if (response.IsSuccess) {
+                    if (response.isSuccess) {
                         Swal.fire({
-                            text: response.Message,
+                            text: response.message[0],
                             icon: 'success',
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'Tamam',
@@ -39,7 +39,7 @@ function approveStatu(id) {
                     } else {
                         Swal.fire({
                             title: 'İşlem Başarısız',
-                            text: response.Messages.join('\n'), 
+                            text: response.messages[0], 
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'Tamam',
                             icon: 'error',

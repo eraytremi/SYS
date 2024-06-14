@@ -238,10 +238,10 @@ namespace Business.Concrete
                     getStock.UpdatedDate = DateTime.Now;
                     await _stockRepository.UpdateAsync(getStock);
                 }
-                else if (getStock==null) 
+                else
                 {
                     await RejectStatus(id, currentUserId);
-                    return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, $"Stokta {getStock.Product.Name} yok!");
+                    return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, $"Stokta yeterli ürün yok!");
                 }
             }
 
