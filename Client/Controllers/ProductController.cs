@@ -1,9 +1,9 @@
 ﻿using Client.ApiServices.Interfaces;
 using Client.Models;
-using Client.Models.Dtos;
 using Client.Models.Dtos.Category;
 using Client.Models.Dtos.Product;
 using Client.Models.Dtos.Supplier;
+using Client.Models.Dtos.User;
 using Client.Models.Dtos.WareHouse;
 using Client.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;

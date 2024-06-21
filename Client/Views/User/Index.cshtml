@@ -1,5 +1,5 @@
-﻿@using Client.Models.Dtos.Supplier
-@model List<GetSupplier>
+﻿@using Client.Models.Dtos.User
+@model List<UserGetDto>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,8 +26,8 @@
                                 <thead>
                                     <tr>
                                         <th><i class="fa fa-bullhorn"></i> Id</th>
-                                        <th class="hidden-phone">   <i class="fa fa-question-circle"></i> Tedarikçi İsmi</th>
-                                        <th><i class="fa fa-question-circle"></i> Açıklama</th>
+                                        <th class="hidden-phone">   <i class="fa fa-question-circle"></i> Kullanıcı İsmi</th>
+                                        <th><i class="fa fa-question-circle"></i> Mail</th>
 
                                         <th></th>
                                     </tr>
@@ -38,10 +38,10 @@
                                         <tr>
                                             <td>@item.Id</td>
                                             <td>@item.Name</td>
-                                            <td>@item.Description</td>
+                                            <td>@item.Mail</td>
                                             <td>
-                                                <button id="openUpdateSupplierModal" class="btn btn-primary btn-md" supplierId="@item.Id"><i class="fa fa-pencil"></i></button>
-                                                <button data-bs-toggle="modal" class="btnDelete btn btn-danger btn-md" supplierId="@item.Id"><i class="fa fa-trash-o "></i></button>
+                                                <button class="openUpdateUserModal btn btn-primary btn-md" userId="@item.Id"><i class="fa fa-pencil"></i></button>
+                                                <button data-bs-toggle="modal" class="btnDelete btn btn-danger btn-md" userId="@item.Id"><i class="fa fa-trash-o "></i></button>
                                             </td>
                                         </tr>
                                     }
@@ -55,55 +55,61 @@
     </section>
 
 
-    <div id="addSupplierModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addSupplierModal" aria-hidden="true">
+    <div id="addUserModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="myModalLabel">Yeni Kayıt Ekle</h4>
+                    <h4 class="modal-title" id="myModalLabel">Yeni Kulkanıcı Ekle</h4>
                 </div>
                 <div class="modal-body">
                     <form id="newRecordForm">
                         <div class="form-group">
-                            <label for="supplierName">Tedarikçi Adı:</label>
-                            <input type="text" class="form-control" id="supplierName" name="supplierName">
+                            <label for="name">Kullanıcı Adı:</label>
+                            <input type="text" class="form-control" id="name" name="name">
 
-                            <label for="description">Açıklama:</label>
-                            <input type="text" class="form-control" id="description" name="description">
+                            <label for="mail">Mail:</label>
+                            <input type="email" class="form-control" id="mail" name="mail">
+
+                            <label for="password">Şifre:</label>
+                            <input type="text" class="form-control" id="password" name="password">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                    <button type="button" class="btn btn-primary" id="postSupplier">Kaydet</button>
+                    <button type="button" class="btn btn-primary" id="postUser">Kaydet</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
 
 
-    <div id="updateSupplierModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateSupplierModal" aria-hidden="true">
+    <div id="updateUserModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateUserModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="myModalLabel">Kaydı Güncelle</h4>
+                    <h4 class="modal-title" id="myModalLabel">Kullanıcı Güncelle</h4>
                 </div>
                 <div class="modal-body">
                     <form id="updateRecordForm">
-                        <input type="hidden" id="updatedSupplierId" name="updatedSupplierId" value="">
+                        <input type="hidden" id="updatedUserId" name="updatedUserId" value="">
                         <div class="form-group">
-                            <label for="updatedSupplierName">Tedarikçi Adı:</label>
-                            <input type="text" class="form-control" id="updatedSupplierName" name="updatedSupplierName">
+                            <label for="updatedUserName">İsim:</label>
+                            <input type="text" class="form-control" id="updatedUserName" name="updatedUserName">
 
-                            <label for="updatedDescription">Açıklama:</label>
-                            <input type="text" class="form-control" id="updatedDescription" name="updatedDescription">
+                            <label for="updatedMail">Mail:</label>
+                            <input type="text" class="form-control" id="updatedMail" name="updatedMail">
+
+                            <label for="updatedPassword">Şifre:</label>
+                            <input type="text" class="form-control" id="updatedPassword" name="updatedPassword">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                    <button type="button" class="btn btn-primary" id="updateSupplier">Güncelle</button>
+                    <button type="button" class="btn btn-primary" id="updateUser">Güncelle</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -117,26 +123,25 @@
     <script src="~/assets/js/jquery.nicescroll.js" type="text/javascript"></script>
     <script src="~/assets/js/common-scripts.js"></script>
     <script src="path/to/sweetalert.min.js"></script>
-    <script src="~/js/supplier.js" charset="windows-1254"></script>
+    <script src="~/js/user.js"></script>
 
 
     <script>
 
         document.getElementById('openAddModalBtn').addEventListener('click', function () {
-            $('#addSupplierModal').modal('show');
+            $('#addUserModal').modal('show');
         });
 
-        $(document).on('click', '#openUpdateSupplierModal', function () {
-            var selectedSupplierName = $(this).closest('tr').find('td:eq(1)').text();
-            var supplierId = $(this).attr('supplierId');
-            var selectedDescription = $(this).closest('tr').find('td:eq(2)').text();
-            $('#updatedSupplierName').val(selectedSupplierName);
-            $('#updatedDescription').val(selectedDescription);
-            $('#updatedSupplierId').val(supplierId);
-            $('#updateSupplierModal').modal('show');
+        $(document).on('click', '.openUpdateUserModal', function () {
+            var selectedUserName = $(this).closest('tr').find('td:eq(1)').text();
+            var userId = $(this).attr('userId');
+            var selectedMail = $(this).closest('tr').find('td:eq(2)').text();
+            $('#updatedUserName').val(selectedUserName);
+            $('#updatedMail').val(selectedMail);
+            $('#updatedUserId').val(userId);
+            $('#updateUserModal').modal('show');
         });
 
     </script>
     <!--script for this page-->
 </body>
-

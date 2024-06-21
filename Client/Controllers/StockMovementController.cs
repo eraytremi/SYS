@@ -1,8 +1,8 @@
 ﻿using Client.ApiServices.Interfaces;
 using Client.Models;
-using Client.Models.Dtos;
 using Client.Models.Dtos.StockMovement;
 using Client.Models.Dtos.StockStatus;
+using Client.Models.Dtos.User;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 

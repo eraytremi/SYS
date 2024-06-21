@@ -57,7 +57,7 @@
 
                     @if (Model.RoleId == "1")
                     {
-                        <h5 class="centered">Admin</h5>
+                        <h5 class="centered">Müdür</h5>
                         <h5 class="centered">@Model.UserGetDto.Name</h5>
 
                         <li class="mt">
@@ -81,12 +81,7 @@
                             </ul>
                         </li>
 
-                        <li class="sub-menu">
-                            <a href="javascript:;">
-                                <i class="fa fa-cogs"></i>
-                                <span>Sipariş</span>
-                            </a>
-                        </li>
+                      
                         <li class="sub-menu">
                             <a href="javascript:;">
                                 <i class="fa fa-book"></i>
@@ -131,28 +126,22 @@
                     }
                     @if (Model.RoleId == "2")
                     {
-                        <h5 class="centered">Müdür</h5>
+                        <h5 class="centered">Admin</h5>
                         <h5 class="centered">@Model.UserGetDto.Name</h5>
 
-                        <li class="mt">
-                            <a class="active" href="/Supplier/Index">
-                                <i class="fa fa-dashboard"></i>
-                                <span>Tedarikçiler</span>
+                        <li class="sub-menu">
+                            <a href="/User/Index">
+                                <i class="fa fa-cogs"></i>
+                                <span>Kullanıcı Yönetimi</span>
                             </a>
                         </li>
 
                         <li class="sub-menu">
-                            <a class="active">
-                                <i class="fa fa-desktop"></i>
-                                <span>Stok Yönetimi</span>
+                            <a href="/UserRole/Index">
+                                <i class="fa fa-cogs"></i>
+                                <span>Rol Yönetimi</span>
                             </a>
-                            <ul class="sub">
-                                <li><a href="/StockMovement/WaitingStatuses">Stok Durumu</a></li>
-                                <li><a href="/StockMovement/Index">Stok Hareketleri</a></li>
-                                <li><a href="/Product/Index">Ürünler</a></li>
-                            </ul>
                         </li>
-
                         <li class="sub-menu">
                             <a href="javascript:;">
                                 <i class="fa fa-cogs"></i>
@@ -164,13 +153,13 @@
                                 <i class="fa fa-book"></i>
                                 <span>Extra Pages</span>
                             </a>
+
                             <ul class="sub">
                                 <li><a href="blank.html">Blank Page</a></li>
                                 <li><a href="login.html">Login</a></li>
                                 <li><a href="lock_screen.html">Lock Screen</a></li>
                             </ul>
                         </li>
-
                     }
                     @if (Model.RoleId == "3")
                     {

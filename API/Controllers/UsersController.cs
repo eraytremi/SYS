@@ -23,7 +23,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string search = null)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.GetUsers(currentUserId.GetValueOrDefault());
@@ -55,5 +55,21 @@ namespace API.Controllers
             return SendResponse(response);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUser dto)
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.UpdateUser(dto, currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.DeleteUser(id, currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+        }
     }
 }

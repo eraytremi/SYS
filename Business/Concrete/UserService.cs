@@ -34,7 +34,7 @@ namespace Business.Concrete
             (user.PasswordHash, user.PasswordSalt) = HashingHelper.CreatePassword(dto.Password);
             
             await _repo.InsertAsync(user);
-            return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
+            return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
 
         }
 
@@ -45,10 +45,11 @@ namespace Business.Concrete
             {
                 return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "yetki yok!");
             }
-            
-            getUser.DeletedDate = DateTime.UtcNow;
-            getUser.IsActive = false;
-            await _repo.UpdateAsync(getUser);
+            var user = await _repo.GetByIdAsync(id);
+
+            user.DeletedDate = DateTime.UtcNow;
+            user.IsActive = false;
+            await _repo.UpdateAsync(user);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
@@ -66,9 +67,10 @@ namespace Business.Concrete
             {
                 var a = new GetUser
                 {
-                    Id = currentUserId,
+                    Id = item.Id,
                     Mail = item.Mail,
-                    Name = item.Name,
+                    Name = item.Name
+                    
                 };
                 mappingUsers.Add(a);
             }
@@ -108,8 +110,9 @@ namespace Business.Concrete
             {
                 Id = dto.Id,
                 Mail = dto.Mail,
-                Name = dto.Name
-                
+                Name = dto.Name,
+                IsActive=true
+               
             };
 
             (update.PasswordHash, update.PasswordSalt) = HashingHelper.CreatePassword(dto.Password);

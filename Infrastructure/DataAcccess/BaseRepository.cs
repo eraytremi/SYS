@@ -46,7 +46,7 @@ namespace Infrastructure.DataAcccess
         {
             using var context = new TContext();
             IQueryable<TEntity> dbSet = context.Set<TEntity>();
-            return await dbSet.SingleOrDefaultAsync(p => p.Id.Equals(entityId));
+            return await dbSet.SingleOrDefaultAsync(p => p.Id.Equals(entityId) && p.IsActive==true);
         }
 
         public async Task<TEntity> InsertAsync(TEntity entity)

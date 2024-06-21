@@ -45,7 +45,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRole([FromQuery]int id)
+        public async Task<IActionResult> DeleteRole(int id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.DeleteUserRole(id, currentUserId.GetValueOrDefault());

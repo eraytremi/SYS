@@ -1,4 +1,4 @@
-﻿namespace Client.Models.Dtos
+﻿namespace Client.Models.Dtos.User
 {
     public class UserGetDto
     {

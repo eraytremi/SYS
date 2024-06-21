@@ -1,19 +1,21 @@
 ﻿using Client.ApiServices.Interfaces;
 using Client.Filters;
 using Client.Models;
-using Client.Models.Dtos.Supplier;
+using Client.Models.Dtos.Role;
 using Client.Models.Dtos.User;
+using Client.Models.Dtos.UserRole;
+using Client.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
 namespace Client.Controllers
 {
     [SessionAspect]
-    public class SupplierController : Controller
+    public class UserRoleController : Controller
     {
         private readonly IHttpApiService _httpApiService;
 
-        public SupplierController(IHttpApiService httpApiService)
+        public UserRoleController(IHttpApiService httpApiService)
         {
             _httpApiService = httpApiService;
         }
@@ -22,16 +24,28 @@ namespace Client.Controllers
         public async Task<IActionResult> Index()
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var response = await _httpApiService.GetDataAsync<ResponseBody<List<GetSupplier>>>("/Suppliers", token.Token);
-            return View(response.Data);
+            var response = await _httpApiService.GetDataAsync<ResponseBody<List<GetUserRole>>>("/UserRoles", token.Token);
+            var responseUser = await _httpApiService.GetDataAsync<ResponseBody<List<UserGetDto>>>("/Users", token.Token);
+            var responseRole = await _httpApiService.GetDataAsync<ResponseBody<List<GetRole>>>("/Roles", token.Token);
+
+            var vm = new UserRoleVM
+            {
+                Role = responseRole.Data,
+                User = responseUser.Data,
+                UserRole = response.Data
+
+            };
+            return View(vm);
         }
 
+
+
         [HttpPost]
-        public async Task<IActionResult> PostSupplier(PostSupplier dto)
+        public async Task<IActionResult> Post(PostUserRole dto)
         {
 
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var response = await _httpApiService.PostDataAsync<ResponseBody<PostSupplier>>("/Suppliers", JsonSerializer.Serialize(dto), token.Token);
+            var response = await _httpApiService.PostDataAsync<ResponseBody<PostUserRole>>("/UserRoles", JsonSerializer.Serialize(dto), token.Token);
             if (response.StatusCode == 201)
             {
                 return Json(new { IsSuccess = true, Message = "Başarıyla Kaydedildi", response.Data });
@@ -43,10 +57,10 @@ namespace Client.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateSupplier(UpdateSupplier dto)
+        public async Task<IActionResult> Update(UpdateUserRole dto)
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var response = await _httpApiService.PutDataAsync<ResponseBody<UpdateSupplier>>("/Suppliers", JsonSerializer.Serialize(dto), token.Token);
+            var response = await _httpApiService.PutDataAsync<ResponseBody<UpdateUserRole>>("/UserRoles", JsonSerializer.Serialize(dto), token.Token);
             if (response.StatusCode == 200)
             {
                 return Json(new { IsSuccess = true, Message = "Başarıyla Güncellendi", response.Data });
@@ -61,10 +75,10 @@ namespace Client.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteSupplier(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var response = await _httpApiService.DeleteDataAsync<ResponseBody<NoContent>>($"/Suppliers/{id}", token.Token);
+            var response = await _httpApiService.DeleteDataAsync<ResponseBody<NoContent>>($"/UserRoles/{id}", token.Token);
 
             if (response.StatusCode == 200)
             {

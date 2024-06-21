@@ -1,7 +1,7 @@
 ﻿using Client.ApiServices.Interfaces;
 using Client.Models;
-using Client.Models.Dtos;
 using Client.Models.Dtos.Category;
+using Client.Models.Dtos.User;
 using Microsoft.AspNetCore.Mvc;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;

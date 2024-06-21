@@ -1,4 +1,4 @@
-﻿using Client.Models.Dtos;
+﻿using Client.Models.Dtos.User;
 
 namespace Client.Models.ViewModels
 {

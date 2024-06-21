@@ -1,6 +1,6 @@
 ﻿using Client.ApiServices.Interfaces;
 using Client.Models;
-using Client.Models.Dtos;
+using Client.Models.Dtos.User;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

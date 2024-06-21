@@ -11,10 +11,12 @@ namespace Business.Concrete
     {
         private readonly IUserRoleRepository _repo;
         private readonly IUserRepository _userRepository;
-        public UserRoleService(IUserRoleRepository repo, IUserRepository userRepository)
+        private readonly IRoleRepository _roleRepository;
+        public UserRoleService(IUserRoleRepository repo, IUserRepository userRepository, IRoleRepository roleRepository)
         {
             _repo = repo;
             _userRepository = userRepository;
+            _roleRepository = roleRepository;
         }
 
         public async Task<ApiResponse<NoData>> AddUserRole(AddUserRole userRole, int currentUserId)
@@ -28,7 +30,8 @@ namespace Business.Concrete
             var addUserRole = new UserRole
             {
                 RoleId = userRole.RoleId,
-                UserId = currentUserId
+                UserId = userRole.UserId,
+                IsActive=true
             };
 
             await _repo.InsertAsync(addUserRole);
@@ -77,7 +80,7 @@ namespace Business.Concrete
             return ApiResponse<List<GetUserRole>>.Success(StatusCodes.Status200OK, list);
         }
 
-        public async Task<ApiResponse<List<GetUserRole>>> GetUserRolesAsync(int currentUserId)
+        public async Task<ApiResponse<List<GetUserRole>>> GetUserRolesAsync(int currentUserId,string search=null)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -91,11 +94,16 @@ namespace Business.Concrete
            
             foreach (var userRole in getUserRoleList)
             {
+                var user = await _userRepository.GetAsync( p => p.IsActive == true && p.Id==userRole.UserId);
+                var role = await _roleRepository.GetAsync(p => p.IsActive == true && p.Id==userRole.RoleId);
                 var addUserRole = new GetUserRole
                 {
                     UserId = userRole.UserId,
                     RoleId = userRole.RoleId,
-                    Id = userRole.Id
+                    Id = userRole.Id,
+                    Mail=user.Mail,
+                    RoleName=role.Name,
+                    UserName=user.Name
                 };
                 userRoleList.Add(addUserRole);
             }
@@ -117,8 +125,9 @@ namespace Business.Concrete
                 UpdatedDate = DateTime.Now,
                 UserId = updateRole.UserId,
                 RoleId = updateRole.RoleId,
-                Id = updateRole.Id
-
+                Id = updateRole.Id,
+                IsActive = true
+                
             };
 
             await _repo.UpdateAsync(update);
