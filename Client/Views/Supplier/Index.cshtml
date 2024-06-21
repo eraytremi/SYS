@@ -1,5 +1,5 @@
-﻿@using Client.Models.Dtos.Supplier
-@model List<GetSupplier>
+﻿@using Client.Models.ViewModels
+@model SupplierCategoryVm
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,17 +28,20 @@
                                         <th><i class="fa fa-bullhorn"></i> Id</th>
                                         <th class="hidden-phone">   <i class="fa fa-question-circle"></i> Tedarikçi İsmi</th>
                                         <th><i class="fa fa-question-circle"></i> Açıklama</th>
+                                        <th><i class="fa fa-question-circle"></i> Kategori</th>
 
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model)
+                                    @foreach (var item in Model.Supplier)
                                     {
                                         <tr>
                                             <td>@item.Id</td>
                                             <td>@item.Name</td>
                                             <td>@item.Description</td>
+                                            <td>@item.Category</td>
+
                                             <td>
                                                 <button id="openUpdateSupplierModal" class="btn btn-primary btn-md" supplierId="@item.Id"><i class="fa fa-pencil"></i></button>
                                                 <button data-bs-toggle="modal" class="btnDelete btn btn-danger btn-md" supplierId="@item.Id"><i class="fa fa-trash-o "></i></button>
@@ -70,6 +73,15 @@
 
                             <label for="description">Açıklama:</label>
                             <input type="text" class="form-control" id="description" name="description">
+
+                            <label for="category">Kategori :</label>
+                            <select class="form-control" id="category" name="category">
+                                <option value="2">Kategori Seçiniz</option>
+                                @foreach (var item in Model.Category)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
                         </div>
                     </form>
                 </div>
@@ -98,6 +110,15 @@
 
                             <label for="updatedDescription">Açıklama:</label>
                             <input type="text" class="form-control" id="updatedDescription" name="updatedDescription">
+
+                            <label for="updatedCategory">Kategori :</label>
+                            <select class="form-control" id="updatedCategory" name="updatedCategory">
+                                <option value="2">Kategori Seçiniz</option>
+                                @foreach (var item in Model.Category)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
                         </div>
                     </form>
                 </div>

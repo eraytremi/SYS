@@ -6,10 +6,11 @@ $(document).ready(function () {
         var formDataObject =
         {
             Name: $("#supplierName").val(),
-            Description: $("#description").val()
+            Description: $("#description").val(),
+            Category: $("#category").val()
         };
         console.log(formDataObject)
-        if ($("#supplierName").val().length > 0) {
+        if ($("#supplierName").val().length > 0 && $("#category").val().length > 0) {
             $.ajax({
                 url: "/Supplier/PostSupplier",
                 method: "POST",
@@ -45,28 +46,29 @@ $(document).ready(function () {
     $("#updateSupplier").click(function () {
         var supplierId = $("#updatedSupplierId").val();
         var newName = $("#updatedSupplierName").val();
-        var description = $("#updatedDescription").val(); // Buradaki seçiciyi güncelledik
+        var description = $("#updatedDescription").val(); 
+        var  category= $("#updatedCategory").val()
 
-        // Form verilerini kontrol et
+
         if (newName.length > 0) {
-            // Form verilerini bir JavaScript nesnesi olarak oluþtur
+         
             var formDataObject = {
                 Id: supplierId,
                 Name: newName,
-                Description: description
-            };
-            // AJAX isteði gönder
+                Description: description,
+                Category: category
+            }
             $.ajax({
-                url: "/Supplier/UpdateSupplier", // Güncelleme endpoint'i
+                url: "/Supplier/UpdateSupplier", 
                 method: "POST",
-                data: formDataObject, // Form verileri
+                data: formDataObject,
                 success: function (response) {
-                    // Sunucudan gelen yanýtý iþle
+                   
                     if (response.isSuccess) {
-                        // Baþarýlý ise sayfayý yenile
+                      
                         window.location.href = "/Supplier/Index";
                     } else {
-                        // Baþarýsýz ise hata mesajýný göster
+                       
                         Swal.fire({
                             title: 'Ýþlem Baþarýsýz',
                             text: response.messages,
@@ -78,7 +80,7 @@ $(document).ready(function () {
                 }
             });
         } else {
-            // Boþ bir ad girdiyse uyarý ver
+   -
             Swal.fire({
                 title: 'Uyarý',
                 text: "Tedarikçi ismi giriniz.",

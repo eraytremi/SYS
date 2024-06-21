@@ -1,8 +1,10 @@
 ﻿using Client.ApiServices.Interfaces;
 using Client.Filters;
 using Client.Models;
+using Client.Models.Dtos.Category;
 using Client.Models.Dtos.Supplier;
 using Client.Models.Dtos.User;
+using Client.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -23,7 +25,14 @@ namespace Client.Controllers
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             var response = await _httpApiService.GetDataAsync<ResponseBody<List<GetSupplier>>>("/Suppliers", token.Token);
-            return View(response.Data);
+            var responseCategory = await _httpApiService.GetDataAsync<ResponseBody<List<GetCategory>>>("/Categories", token.Token);
+
+            var vm = new SupplierCategoryVm
+            {
+                Category = responseCategory.Data,
+                Supplier = response.Data
+            };
+            return View(vm);
         }
 
         [HttpPost]
