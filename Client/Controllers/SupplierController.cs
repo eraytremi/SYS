@@ -2,6 +2,7 @@
 using Client.Filters;
 using Client.Models;
 using Client.Models.Dtos.Category;
+using Client.Models.Dtos.Email;
 using Client.Models.Dtos.Supplier;
 using Client.Models.Dtos.User;
 using Client.Models.ViewModels;
@@ -26,19 +27,20 @@ namespace Client.Controllers
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             var response = await _httpApiService.GetDataAsync<ResponseBody<List<GetSupplier>>>("/Suppliers", token.Token);
             var responseCategory = await _httpApiService.GetDataAsync<ResponseBody<List<GetCategory>>>("/Categories", token.Token);
-
+            
             var vm = new SupplierCategoryVm
             {
                 Category = responseCategory.Data,
                 Supplier = response.Data
             };
+
             return View(vm);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> PostSupplier(PostSupplier dto)
         {
-
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             var response = await _httpApiService.PostDataAsync<ResponseBody<PostSupplier>>("/Suppliers", JsonSerializer.Serialize(dto), token.Token);
             if (response.StatusCode == 201)
@@ -51,6 +53,20 @@ namespace Client.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SendEmail([FromBody]RequestEmail dto)
+        {
+            var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
+            var response = await _httpApiService.PostDataAsync<RequestEmail>("/Emails/send", JsonSerializer.Serialize(dto), token.Token);
+            if (response != null)
+            {
+                return Json(new { IsSuccess = true, Message = "Başarıyla Kaydedildi", response });
+            }
+            else
+            {
+                return Json(new { IsSuccess = false });
+            }
+        }
         [HttpPost]
         public async Task<IActionResult> UpdateSupplier(UpdateSupplier dto)
         {

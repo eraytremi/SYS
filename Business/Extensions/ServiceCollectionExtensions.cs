@@ -41,6 +41,8 @@ namespace Business.Extensions
 
             services.AddSingleton<IWareHouseService, WareHouseService>();
             services.AddSingleton<IWareHouseRepository, WareHouseRepository>();
+
+            services.AddSingleton<IEmailSender,MailSenderService>();
         }
     }
 }

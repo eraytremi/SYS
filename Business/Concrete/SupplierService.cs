@@ -32,7 +32,8 @@ namespace Business.Concrete
                 Name = supplier.Name,
                 IsActive=true,
                 Description = supplier.Description,
-                Category = supplier.Category
+                Category = supplier.Category,
+                Mail=supplier.Mail
             };
 
             await _repo.InsertAsync(add);
@@ -73,7 +74,8 @@ namespace Business.Concrete
                     Id = item.Id,
                     Name = item.Name,
                     Description=item.Description,
-                    Category = item.Category
+                    Category = item.Category,
+                    Mail = item.Mail
                 };
                 list.Add(add);
             }
@@ -97,7 +99,8 @@ namespace Business.Concrete
                 Id= supplier.Id,
                 Description = supplier.Description,
                 IsActive=true,
-                Category = supplier.Category
+                Category = supplier.Category,
+                Mail = supplier.Mail
             };
 
             await   _repo.UpdateAsync(update);

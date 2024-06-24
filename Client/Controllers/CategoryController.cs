@@ -24,16 +24,7 @@ namespace Client.Controllers
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             
-
             var category = await _httpApiService.GetDataAsync<ResponseBody<List<GetCategory>>>("/Categories", token.Token);
-
-            foreach (var categoryItem in category.Data)
-            {
-                if (categoryItem.Picture != null)
-                {
-                    categoryItem.PictureBase64 = Convert.ToBase64String(categoryItem.Picture);
-                }
-            }
           
             return View(category.Data);
         }
@@ -46,17 +37,11 @@ namespace Client.Controllers
 
 
             var category = await _httpApiService.GetDataAsync<ResponseBody<List<GetCategory>>>("/Categories", token.Token);
-
-            foreach (var categoryItem in category.Data)
-            {
-                if (categoryItem.Picture != null)
-                {
-                    categoryItem.PictureBase64 = Convert.ToBase64String(categoryItem.Picture);
-                }
-            }
-            ViewData["CategoriMenu"]=category.Data;
+   
             return View(category.Data);
         }
+
+
         [HttpPost]
         public async Task<IActionResult> Post(PostCategory dto, IFormFile Picture)
         {

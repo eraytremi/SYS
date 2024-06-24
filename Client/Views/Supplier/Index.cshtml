@@ -20,28 +20,31 @@
                             <div class="header-container">
                                 <div class="text-right " style="margin-right: 20px;">
                                     <button id="openAddModalBtn" class="btn btn-success btn-md"><i class="fa fa-plus"></i></button>
+                                    <button id="sendOfferModalBtn" class="btn btn-primary btn-md" style="margin-left: 10px;">Teklif Gönder</button>
                                 </div>
                             </div>
                             <table class="table table-striped table-advance table-hover">
                                 <thead>
                                     <tr>
+                                        <th><i class="fa fa-check-square"></i></th>
                                         <th><i class="fa fa-bullhorn"></i> Id</th>
-                                        <th class="hidden-phone">   <i class="fa fa-question-circle"></i> Tedarikçi İsmi</th>
+                                        <th class="hidden-phone"><i class="fa fa-question-circle"></i> Tedarikçi İsmi</th>
                                         <th><i class="fa fa-question-circle"></i> Açıklama</th>
                                         <th><i class="fa fa-question-circle"></i> Kategori</th>
+                                        <th><i class="fa fa-question-circle"></i> Mail</th>
 
-                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model.Supplier)
                                     {
                                         <tr>
+                                            <td><input type="checkbox" class="checkbox"></td>
                                             <td>@item.Id</td>
                                             <td>@item.Name</td>
                                             <td>@item.Description</td>
                                             <td>@item.Category</td>
-
+                                            <td>@item.Mail</td>
                                             <td>
                                                 <button id="openUpdateSupplierModal" class="btn btn-primary btn-md" supplierId="@item.Id"><i class="fa fa-pencil"></i></button>
                                                 <button data-bs-toggle="modal" class="btnDelete btn btn-danger btn-md" supplierId="@item.Id"><i class="fa fa-trash-o "></i></button>
@@ -57,6 +60,34 @@
         </section>
     </section>
 
+    <div id="sendOfferModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="sendOfferModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Yeni Kayıt Ekle</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="newRecordForm">
+                        <div class="form-group">
+                            <label for="toEmails">Gönderilecek Mailler:</label>
+                            <input type="text" class="form-control" id="toEmails" name="toEmails" placeholder="Mail adreslerini virgül ile ayırarak giriniz">
+
+                            <label for="subject">Konu:</label>
+                            <input type="text" class="form-control" id="subject" name="subject" placeholder="Konu">
+
+                            <label for="body">Mesaj:</label>
+                            <textarea class="form-control" id="body" name="body" placeholder="Mesajınızı buraya giriniz"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary" id="sendOfferSupplier">Kaydet</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 
     <div id="addSupplierModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addSupplierModal" aria-hidden="true">
         <div class="modal-dialog">
@@ -79,9 +110,12 @@
                                 <option value="2">Kategori Seçiniz</option>
                                 @foreach (var item in Model.Category)
                                 {
-                                    <option value="@item.Id">@item.Name</option>
+                                    <option value="@item.Name">@item.Name</option>
                                 }
                             </select>
+
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email">
                         </div>
                     </form>
                 </div>
@@ -119,6 +153,9 @@
                                     <option value="@item.Id">@item.Name</option>
                                 }
                             </select>
+
+                            <label for="updatedEmail">Email:</label>
+                            <input type="email" class="form-control" id="updatedEmail" name="updatedEmail">
                         </div>
                     </form>
                 </div>
@@ -143,6 +180,29 @@
 
     <script>
 
+        document.getElementById('sendOfferModalBtn').addEventListener('click', function () {
+            
+            var emailAddresses = [];
+            $('.checkbox:checked').each(function () {
+                var emailCell = $(this).closest('tr').find('td:eq(5)');
+                if (emailCell.length > 0) {
+                    var email = emailCell.text();
+                    if (email) {
+                        emailAddresses.push(email.trim());
+                    }
+                }
+            });
+
+            if (emailAddresses.length > 0) {
+                $('#toEmails').val(emailAddresses.join(', '));
+            } else {
+                $('#toEmails').val('');
+            }
+
+            // Show the modal
+            $('#sendOfferModal').modal('show');
+        });
+
         document.getElementById('openAddModalBtn').addEventListener('click', function () {
             $('#addSupplierModal').modal('show');
         });
@@ -151,9 +211,13 @@
             var selectedSupplierName = $(this).closest('tr').find('td:eq(1)').text();
             var supplierId = $(this).attr('supplierId');
             var selectedDescription = $(this).closest('tr').find('td:eq(2)').text();
+            var selectedMail = $(this).closest('tr').find('td:eq(4)').text();
+
             $('#updatedSupplierName').val(selectedSupplierName);
             $('#updatedDescription').val(selectedDescription);
             $('#updatedSupplierId').val(supplierId);
+            $('#updatedEmail').val(selectedMail);
+
             $('#updateSupplierModal').modal('show');
         });
 

@@ -11,7 +11,7 @@ namespace Entity.Dtos.Email
         public string SenderMail { get; set; }
         public string SenderPass { get; set; }
         public int Port { get; set; } = 587;
-        public string Host { get; set; } = "smtp.outlook.com";
+        public string Host { get; set; } = "smtp.gmail.com";
         public bool EnableSsl { get; set; } = true;
     }
 }

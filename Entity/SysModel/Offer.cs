@@ -15,6 +15,5 @@ namespace Entity.SysModel
         public string Description { get; set; }
         public Unit Unit { get; set; }
         public Product  Product { get; set; }
-
     }
 }

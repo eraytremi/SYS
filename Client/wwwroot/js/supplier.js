@@ -2,15 +2,22 @@
 
 $(document).ready(function () {
     $("#postSupplier").click(function () {
-        console.log($("#description").val())
-        var formDataObject =
-        {
-            Name: $("#supplierName").val(),
-            Description: $("#description").val(),
-            Category: $("#category").val()
-        };
-        console.log(formDataObject)
-        if ($("#supplierName").val().length > 0 && $("#category").val().length > 0) {
+
+
+        var name = $("#supplierName").val();
+        var description = $("#description").val();
+        var category = $("#category").val();
+        var mail= $("#email").val();
+       
+        if (name.length > 0 && description.length > 0 && mail.val().length > 0 && category.val().length>0)  {
+
+            var formDataObject =
+            {
+                Name: name,
+                Description: description,
+                Category: category,
+                Mail:mail
+            }
             $.ajax({
                 url: "/Supplier/PostSupplier",
                 method: "POST",
@@ -42,33 +49,85 @@ $(document).ready(function () {
         }
     });
 
+    $("#sendOfferSupplier").click(function () {
 
+        var toEmails = $("#toEmails").val();
+        var subject = $("#subject").val();
+        var body = $("#body").val();
+        
+        if (toEmails.length > 0 && subject.length > 0 && body.length > 0) {
+            var emailArray = toEmails.split(',').map(email => email.trim());
+            var formDataObject = {
+                To: emailArray,
+                Subject: subject,
+                Body: body
+            };
+            console.log(formDataObject)
+            $.ajax({
+                url: "/Supplier/SendEmail",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(formDataObject), 
+                success: function (response) {
+                    if (response.isSuccess) {
+                        window.location.href = "/Supplier/Index";
+                    } else {
+                        Swal.fire({
+                            title: 'Ýþlem Baþarýsýz',
+                            text: response.messages,
+                            icon: 'error',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Tamam'
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        title: 'Hata',
+                        text: 'Sunucu ile baðlantý kurulurken bir hata oluþtu.',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Tamam'
+                    });
+                }
+            });
+        } else {
+            Swal.fire({
+                title: 'Uyarý',
+                text: 'Alanlar boþ býrakýlamaz.',
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Tamam'
+            });
+        }
+    });
     $("#updateSupplier").click(function () {
         var supplierId = $("#updatedSupplierId").val();
         var newName = $("#updatedSupplierName").val();
-        var description = $("#updatedDescription").val(); 
-        var  category= $("#updatedCategory").val()
-
+        var description = $("#updatedDescription").val();
+        var category = $("#updatedCategory").val();
+        var mail = $("#updatedMail").val();
 
         if (newName.length > 0) {
-         
+
             var formDataObject = {
                 Id: supplierId,
                 Name: newName,
                 Description: description,
-                Category: category
+                Category: category,
+                Mail: mail
             }
             $.ajax({
-                url: "/Supplier/UpdateSupplier", 
+                url: "/Supplier/UpdateSupplier",
                 method: "POST",
                 data: formDataObject,
                 success: function (response) {
-                   
+
                     if (response.isSuccess) {
-                      
+
                         window.location.href = "/Supplier/Index";
                     } else {
-                       
+
                         Swal.fire({
                             title: 'Ýþlem Baþarýsýz',
                             text: response.messages,
@@ -80,14 +139,14 @@ $(document).ready(function () {
                 }
             });
         } else {
-   -
-            Swal.fire({
-                title: 'Uyarý',
-                text: "Tedarikçi ismi giriniz.",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Tamam'
-            });
+            -
+                Swal.fire({
+                    title: 'Uyarý',
+                    text: "Tedarikçi ismi giriniz.",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Tamam'
+                });
         }
     });
 
@@ -117,7 +176,7 @@ function deleteSupplier(id) {
                 success: function (response) {
                     if (response.isSuccess) {
                         Swal.fire({
-                            
+
                             text: response.message,
                             icon: 'success',
                             confirmButtonColor: '#3085d6',

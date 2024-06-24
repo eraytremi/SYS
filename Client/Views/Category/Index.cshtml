@@ -28,9 +28,9 @@
                                     <tr>
                                         <td>@item.Id</td>
                                         <td>
-                                            @if (!string.IsNullOrEmpty(item.PictureBase64))
+                                            @if (!string.IsNullOrEmpty(item.Picture))
                                             {
-                                                <img src="data:image/jpeg;base64,@item.PictureBase64" alt="Ürün Resmi" style="width:100px;height:auto;" />
+                                                <img src="data:image/jpeg;base64,@item.Picture" alt="Ürün Resmi" style="width:100px;height:auto;" />
                                             }
                                             else
                                             {
