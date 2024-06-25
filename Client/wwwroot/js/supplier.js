@@ -49,6 +49,7 @@ $(document).ready(function () {
         }
     });
 
+    //tedarikçilere mail yollar
     $("#sendOfferSupplier").click(function () {
 
         var toEmails = $("#toEmails").val();
@@ -101,12 +102,13 @@ $(document).ready(function () {
             });
         }
     });
+
     $("#updateSupplier").click(function () {
         var supplierId = $("#updatedSupplierId").val();
         var newName = $("#updatedSupplierName").val();
         var description = $("#updatedDescription").val();
         var category = $("#updatedCategory").val();
-        var mail = $("#updatedMail").val();
+        var mail = $("#updatedEmail").val();
 
         if (newName.length > 0) {
 
@@ -150,12 +152,24 @@ $(document).ready(function () {
         }
     });
 
+  
     $('.btnDelete').click(function () {
         var id = $(this).attr('supplierId');
 
         deleteSupplier(id);
     });
 
+    var allSelected = false;
+
+    $('#selectAllBtn').click(function () {
+        allSelected = !allSelected;
+        $('.checkbox').prop('checked', allSelected);
+        if (allSelected) {
+            $(this).text('Seçimleri Kaldýr');
+        } else {
+            $(this).text('Tümünü Seç');
+        }
+    });
 });
 function deleteSupplier(id) {
 

@@ -12,7 +12,7 @@ namespace Business.Abstract
 {
     public interface IProductService
     {
-        Task<ApiResponse<List<GetProduct>>> GetProductAsync(int currentUserId);
+        Task<ApiResponse<PagingList<GetProduct>>> GetProductAsync(int currentUserId, int pageNumber, int pageSize);
         Task<ApiResponse<NoData>> AddProductAsync(AddProduct product, int currentUserId);
         Task<ApiResponse<NoData>> DeleteProductAsync(long id, int currentUserId);
         Task<ApiResponse<NoData>> UpdateProductAsync(UpdateProduct updateProduct, int currentUserId);

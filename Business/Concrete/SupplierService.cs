@@ -4,6 +4,8 @@ using Entity.Dtos.Supplier;
 using Entity.SysModel;
 using Infrastructure.Utilities.Responses;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Business.Concrete
 {
@@ -56,6 +58,8 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
+       
+
         public async Task<ApiResponse<List<GetSupplier>>> GetSupplierAsync(int currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
@@ -66,21 +70,24 @@ namespace Business.Concrete
 
             var getList =  await _repo.GetAllAsync(p=>p.IsActive==true);
             var list =  new List<GetSupplier>();
-
-            foreach (var item in getList)
-            {
-                var add = new GetSupplier
+            
+           
+                foreach (var item in getList)
                 {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Description=item.Description,
-                    Category = item.Category,
-                    Mail = item.Mail
-                };
-                list.Add(add);
-            }
+                    var add = new GetSupplier
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Description = item.Description,
+                        Category = item.Category,
+                        Mail = item.Mail
+                    };
+                    list.Add(add);
+                }
 
-            return ApiResponse<List<GetSupplier>>.Success(StatusCodes.Status200OK, list);
+                return ApiResponse<List<GetSupplier>>.Success(StatusCodes.Status200OK, list);
+            
+           
         }
 
         public async Task<ApiResponse<NoData>> UpdateSupplierAsync(UpdateSupplier supplier, int currentUserId)

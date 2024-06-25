@@ -37,6 +37,7 @@ namespace Client.Controllers
             return View(vm);
         }
 
+       
 
         [HttpPost]
         public async Task<IActionResult> PostSupplier(PostSupplier dto)

@@ -27,7 +27,6 @@ namespace API.Controllers
             return SendResponse(response);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> AddSupplier([FromBody] AddSupplier dto)
         {

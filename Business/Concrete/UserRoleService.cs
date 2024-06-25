@@ -31,7 +31,10 @@ namespace Business.Concrete
             {
                 RoleId = userRole.RoleId,
                 UserId = userRole.UserId,
-                IsActive=true
+                IsActive=true,
+                CreatedBy=currentUserId,
+                CreatedDate=DateTime.Now
+                
             };
 
             await _repo.InsertAsync(addUserRole);
@@ -126,8 +129,7 @@ namespace Business.Concrete
                 UserId = updateRole.UserId,
                 RoleId = updateRole.RoleId,
                 Id = updateRole.Id,
-                IsActive = true
-                
+                IsActive = true             
             };
 
             await _repo.UpdateAsync(update);

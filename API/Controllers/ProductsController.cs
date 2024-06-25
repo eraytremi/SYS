@@ -23,10 +23,10 @@ namespace API.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int pageNumber=1,int pageSize = 10)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
-            var response = await _service.GetProductAsync(currentUserId.GetValueOrDefault());
+            var response = await _service.GetProductAsync(currentUserId.GetValueOrDefault(),pageNumber,pageSize);
             return SendResponse(response);
         }
 

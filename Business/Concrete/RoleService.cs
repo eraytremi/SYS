@@ -29,7 +29,8 @@ namespace Business.Concrete
             {
                 CreatedDate = DateTime.Now,
                 CreatedBy = currentUserId,
-                Name = role.Name
+                Name = role.Name,
+                IsActive=true
             };
 
             await _repo.InsertAsync(mappingRole);

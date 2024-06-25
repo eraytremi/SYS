@@ -19,11 +19,20 @@
                         <div class="content-panel">
                             <div class="header-container">
                                 <div class="text-right " style="margin-right: 20px;">
+                                    <button id="selectAllBtn" class="btn btn-info btn-md" style="margin-right: 750px;">Tümünü Seç</button>
                                     <button id="openAddModalBtn" class="btn btn-success btn-md"><i class="fa fa-plus"></i></button>
                                     <button id="sendOfferModalBtn" class="btn btn-primary btn-md" style="margin-left: 10px;">Teklif Gönder</button>
+                                    <select class="form-control btn-md" id="categoryFilter" name="category" style="margin-left: 10px; width: auto; display: inline-block;">
+                                        <option value="all">Kategori Filtrele</option>
+                                        @foreach (var item in Model.Category)
+                                        {
+                                            <option value="@item.Name">@item.Name</option>
+                                        }
+                                    </select>
+                                  
                                 </div>
                             </div>
-                            <table class="table table-striped table-advance table-hover">
+                            <table class="table table-striped table-advance table-hover" id="supplierTable">
                                 <thead>
                                     <tr>
                                         <th><i class="fa fa-check-square"></i></th>
@@ -32,13 +41,12 @@
                                         <th><i class="fa fa-question-circle"></i> Açıklama</th>
                                         <th><i class="fa fa-question-circle"></i> Kategori</th>
                                         <th><i class="fa fa-question-circle"></i> Mail</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model.Supplier)
                                     {
-                                        <tr>
+                                        <tr class="supplierRow" data-category="@item.Category">
                                             <td><input type="checkbox" class="checkbox"></td>
                                             <td>@item.Id</td>
                                             <td>@item.Name</td>
@@ -150,7 +158,7 @@
                                 <option value="2">Kategori Seçiniz</option>
                                 @foreach (var item in Model.Category)
                                 {
-                                    <option value="@item.Id">@item.Name</option>
+                                    <option value="@item.Name">@item.Name</option>
                                 }
                             </select>
 
@@ -179,6 +187,29 @@
 
 
     <script>
+        $('#categoryFilter').change(function () {
+            var selectedCategory = $(this).val();
+
+            if (selectedCategory === 'all') {
+                $('table tbody tr').show();
+            } else {
+                $('table tbody tr').each(function () {
+                    var category = $(this).find('td:eq(4)').text();
+                    if (category === selectedCategory) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+
+        document.getElementById('selectAllBtn').addEventListener('click', function () {
+            var checkboxes = document.querySelectorAll('#supplierTable .checkbox');
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = true;
+            });
+        });
 
         document.getElementById('sendOfferModalBtn').addEventListener('click', function () {
             
@@ -206,18 +237,17 @@
         document.getElementById('openAddModalBtn').addEventListener('click', function () {
             $('#addSupplierModal').modal('show');
         });
-
+                                                                 
         $(document).on('click', '#openUpdateSupplierModal', function () {
-            var selectedSupplierName = $(this).closest('tr').find('td:eq(1)').text();
+            var selectedSupplierName = $(this).closest('tr').find('td:eq(2)').text();
             var supplierId = $(this).attr('supplierId');
-            var selectedDescription = $(this).closest('tr').find('td:eq(2)').text();
-            var selectedMail = $(this).closest('tr').find('td:eq(4)').text();
+            var selectedDescription = $(this).closest('tr').find('td:eq(3)').text();
+            var selectedMail = $(this).closest('tr').find('td:eq(5)').text();
 
             $('#updatedSupplierName').val(selectedSupplierName);
             $('#updatedDescription').val(selectedDescription);
             $('#updatedSupplierId').val(supplierId);
             $('#updatedEmail').val(selectedMail);
-
             $('#updateSupplierModal').modal('show');
         });
 

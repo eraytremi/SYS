@@ -63,7 +63,7 @@ namespace Business.Concrete
                 Unit = unitEnum,
                 Barcode=GenerateBarcode(getLastIndex.ToString())
             };
-            await _repo.InsertAsync(add);
+            await _repo.InsertAsync(add);   
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
         }
 
@@ -85,18 +85,20 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<ApiResponse<List<GetProduct>>> GetProductAsync(int currentUserId)
+        public async Task<ApiResponse<PagingList<GetProduct>>> GetProductAsync(int currentUserId,int pageNumber, int pageSize)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
             {
-                return ApiResponse<List<GetProduct>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
+                return ApiResponse<PagingList<GetProduct>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
 
             var getListProduct = await _repo.GetAllAsync(p=>p.IsActive==true);
+            var paginatedList = getListProduct.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            var totalItems = getListProduct.Count();
             var list = new List<GetProduct>();
-            foreach (var item in getListProduct)
+            foreach (var item in paginatedList)
             {
                 var getSupplier = await _supplierRepository.GetByIdAsync(item.SupplierId);
                 var getCategory = await _categoryRepository.GetByIdAsync(item.CategoryId);
@@ -134,8 +136,15 @@ namespace Business.Concrete
                 };
                 list.Add(add);
             }
-
-            return ApiResponse<List<GetProduct>>.Success(StatusCodes.Status200OK, list);
+            var paginatedResponse = new PagingList<GetProduct>
+            {
+                Items = list,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalItems = totalItems,
+                TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize)
+            };
+            return ApiResponse<PagingList<GetProduct>>.Success(StatusCodes.Status200OK, paginatedResponse);
         }
 
         public async Task<ApiResponse<NoData>> UpdateProductAsync(UpdateProduct updateProduct, int currentUserId)
