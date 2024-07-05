@@ -10,9 +10,9 @@ namespace Business.Abstract
 {
     public interface IRoleService
     {
-        Task<ApiResponse<List<GetRole>>> GetRolesAsync(int currentUserId);
-        Task<ApiResponse<NoData>> AddRole(AddRole role, int currentUserId);
-        Task<ApiResponse<NoData>> DeleteRole(int id, int currentUserId);
-        Task<ApiResponse<NoData>> UpdateRoleAsync(UpdateRole updateRole, int currentUserId);
+        Task<ApiResponse<List<GetRole>>> GetRolesAsync(long currentUserId);
+        Task<ApiResponse<NoData>> AddRole(AddRole role, long currentUserId);
+        Task<ApiResponse<NoData>> DeleteRole(int id, long currentUserId);
+        Task<ApiResponse<NoData>> UpdateRoleAsync(UpdateRole updateRole, long currentUserId);
     }
 }

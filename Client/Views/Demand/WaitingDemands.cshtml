@@ -1,0 +1,50 @@
+﻿@using Client.Models.Dtos.Demand
+@model List<GetDemand>
+
+<section id="container">
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="row mt">
+                <div class="col-md-12">
+                    <div class="content-panel">
+                        <div class="header-container">
+                        </div>
+                        <table class="table table-striped table-advance table-hover">
+                            <thead>
+                                <tr>
+                                    <th><i class="fa fa-bullhorn"></i> Id</th>
+                                    <th class="hidden-phone">   <i class="fa fa-question-circle"></i> Ürün İsmi</th>
+                                    <th><i class="fa fa-question-circle"></i> Miktar</th>
+                                    <th><i class="fa fa-question-circle"></i> Açıklama</th>
+                                    <th><i class="fa fa-question-circle"></i> Oluşturan Kişi</th>
+                                    <th><i class="fa fa-question-circle"></i> Oluşturma Tarihi</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.ProductName</td>
+                                        <td>@item.Quantity </td>
+                                        <td>@item.Description</td>
+                                        <td>@item.CreatedBy</td>
+                                        <td>@item.CreatedDate</td>
+                                        <td>
+                                            <button data-bs-toggle="modal" class="btnApprove btn-primary btn-md" demandId="@item.Id"><i class="fa fa-check"></i></button>
+                                            <button data-bs-toggle="modal" class="btnReject btn btn-danger btn-md" demandId="@item.Id"><i class="fa fa-trash-o "></i></button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!-- /col-m   d-12 -->
+            </div><!-- /row -->
+        </section><! --/wrapper -->
+    </section><!-- /MAIN CONTENT -->
+</section>
+
+<script src="~/js/demand.js"></script>
+

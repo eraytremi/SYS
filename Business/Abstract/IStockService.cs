@@ -10,11 +10,11 @@ namespace Business.Abstract
 {
     public interface IStockService
     {
-        Task<ApiResponse<List<GetStock>>> GetAllAsync(int currentUserId);
-        Task<ApiResponse<NoData>> AddAsync(PostStock postStockStatus, int currentUserId);
-        Task<ApiResponse<NoData>> DeleteAsync(int id, int currentUserId);
-        Task<ApiResponse<NoData>> UpdateAsync(UpdateStock updateStockStatus, int currentUserId);
-        Task<ApiResponse<NoData>> SellProductAsync(PostStock postStockStatus, int currentUserId);
+        Task<ApiResponse<List<GetStock>>> GetAllAsync(long currentUserId);
+        Task<ApiResponse<NoData>> AddAsync(PostStock postStockStatus, long currentUserId);
+        Task<ApiResponse<NoData>> DeleteAsync(int id, long currentUserId);
+        Task<ApiResponse<NoData>> UpdateAsync(UpdateStock updateStockStatus, long currentUserId);
+        Task<ApiResponse<NoData>> SellProductAsync(PostStock postStockStatus, long currentUserId);
 
 
 

@@ -55,7 +55,7 @@
                 <ul class="sidebar-menu" id="nav-accordion">
 
 
-                    @if (Model.RoleId == "1")
+                    @if (Model.RoleId == "2")
                     {
                         <h5 class="centered">Müdür</h5>
                         <h5 class="centered">@Model.UserGetDto.Name</h5>
@@ -68,14 +68,21 @@
 
                             <ul class="sub">
                                 <li><a href="/Stock/Index">Stok </a></li>
+                                <li><a href="/StockMovement/WaitingStatuses">Stok Onay </a></li>
                                 <li><a href="/StockMovement/Index">Stok Hareketleri</a></li>
                                 <li><a href="/Product/Index">Ürünler</a></li>
                                 <li><a href="/Category/Index">Kategoriler</a></li>
-
+                                
                             </ul>
-                        </li>        
+                        </li>
+                        <li class="sub-menu">
+                            <a href="/WareHouse/Index">
+                                <i class="fa fa-cogs"></i>
+                                <span>Depo Yönetimi</span>
+                            </a>
+                        </li>
                     }
-                    @if (Model.RoleId == "2")
+                    @if (Model.RoleId == "1")
                     {
                         <h5 class="centered">Admin</h5>
                         <h5 class="centered">@Model.UserGetDto.Name</h5>
@@ -94,7 +101,7 @@
                             </a>
                         </li>                     
                     }
-                    @if (Model.RoleId == "3")
+                    @if (Model.RoleId == "5")
                     {
                         <h5 class="centered">Kasiyer</h5>
                         <h5 class="centered">@Model.UserGetDto.Name</h5>
@@ -102,12 +109,18 @@
                         <li class="mt">
                             <a class="active" href="/Category/CategoryMenu">
                                 <i class="fa fa-dashboard"></i>
+                                <span></span>
+                            </a>
+                        </li>
+                        <li class="mt">
+                            <a class="active" href="/SaleDetails/Index">
+                                <i class="fa fa-dashboard"></i>
                                 <span>Ürün Satış Paneli</span>
                             </a>
                         </li>
-
                     }
-                    @if (Model.RoleId == "4")
+
+                    @if (Model.RoleId == "3")
                     {
                         <h5 class="centered">Satın Alma</h5>
                         <h5 class="centered">@Model.UserGetDto.Name</h5>
@@ -117,6 +130,44 @@
                                 <i class="fa fa-dashboard"></i>
                                 <span>Tedarikçiler</span>
                             </a>
+                        </li>
+                        <li class="mt">
+                            <a class="active" href="/Demand/WaitingDemands">
+                                <i class="fa fa-dashboard"></i>
+                                <span>Talep Onay</span>
+                            </a>
+                        </li>
+                        <li class="mt">
+                            <a class="active" href="/Demand/ApprovedDemands">
+                                <i class="fa fa-dashboard"></i>
+                                <span>Onaylanmış Talepler</span>
+                            </a>
+                        </li>
+                    }
+                    @if (Model.RoleId == "4")
+                    {
+                        <h5 class="centered">Depo Sorumlusu</h5>
+                        <h5 class="centered">@Model.UserGetDto.Name</h5>
+
+                        <li class="mt">
+                            <a class="active" href="/Demand/Index">
+                                <i class="fa fa-dashboard"></i>
+                                <span>Talep Oluştur</span>
+                            </a>
+                        </li>
+
+                        <li class="sub-menu">
+                            <a class="active">
+                                <i class="fa fa-desktop"></i>
+                                <span>Stok Yönetimi</span>
+                            </a>
+
+                            <ul class="sub">
+                                <li><a href="/Stock/Index">Stok </a></li>
+                                <li><a href="/Product/Index">Ürünler</a></li>
+                                <li><a href="/Category/Index">Kategoriler</a></li>
+
+                            </ul>
                         </li>
 
                     }

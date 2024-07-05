@@ -9,6 +9,6 @@ namespace Entity.Dtos.UserRole
     public class AddUserRole
     {
         public int RoleId { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
     }
 }

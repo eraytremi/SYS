@@ -18,7 +18,7 @@ namespace Business.Concrete
             _userRepository = userRepository;
         }
 
-        public async Task<ApiResponse<NoData>> AddCategory(AddCategory category, int currentUserId)
+        public async Task<ApiResponse<NoData>> AddCategory(AddCategory category, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -37,7 +37,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
         }
 
-        public async Task<ApiResponse<NoData>> DeleteCategory(int id, int currentUserId)
+        public async Task<ApiResponse<NoData>> DeleteCategory(int id, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -53,7 +53,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<ApiResponse<List<GetCategory>>> GetCategoriesAsync(int currentUserId)
+        public async Task<ApiResponse<List<GetCategory>>> GetCategoriesAsync(long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -78,7 +78,7 @@ namespace Business.Concrete
             return ApiResponse<List<GetCategory>>.Success(StatusCodes.Status200OK, list);
         }
 
-        public  async Task<ApiResponse<NoData>> UpdateCategoryAsync(UpdateCategory updateCategory, int currentUserId)
+        public  async Task<ApiResponse<NoData>> UpdateCategoryAsync(UpdateCategory updateCategory, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)

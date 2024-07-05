@@ -18,13 +18,7 @@
                                     var pageSizeOptions = new List<int> { 5, 10, 20, 50 };
                                 }
 
-                                <select id="pageSizeSelect" onchange="updatePageSize()">
-                                    @foreach (var size in pageSizeOptions)
-                                    {
-                                        string selectedAttribute = size == Model.PageSize ? "selected" : "";
-                                        <option value="@size" selected="@selectedAttribute">@size</option>
-                                    }
-                                </select>
+                               
 
                             </div>
                         </div>
@@ -72,18 +66,7 @@
                                     </tr>
                                 }
                             </tbody>
-                        </table>
-                        <div class="text-center">
-                            <ul class="pagination">
-                                @for (int i = 1; i <= Model.TotalPages; i++)
-                                {
-                                    <li class="@(Model.CurrentPage == i ? "active" : "")">
-                                        <a href="?pageNumber=@i&pageSize=@Model.PageSize">@i</a>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
+                        </table>          
                 </div><!-- /col-md-12 -->
             </div><!-- /row -->
         </section><!-- /wrapper -->
@@ -226,11 +209,6 @@
 <script src="~/js/product.js" charset="windows-1254"></script>
 
 <script>
-    function updatePageSize() {
-        var pageSize = document.getElementById('pageSizeSelect').value;
-        var currentPage = '@Model.CurrentPage';
-        window.location.href = '?pageNumber=' + currentPage + '&pageSize=' + pageSize;
-    }
 
     document.getElementById('openAddModalBtn').addEventListener('click', function () {
         $('#addProductModal').modal('show');

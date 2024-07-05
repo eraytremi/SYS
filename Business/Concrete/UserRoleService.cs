@@ -19,7 +19,7 @@ namespace Business.Concrete
             _roleRepository = roleRepository;
         }
 
-        public async Task<ApiResponse<NoData>> AddUserRole(AddUserRole userRole, int currentUserId)
+        public async Task<ApiResponse<NoData>> AddUserRole(AddUserRole userRole, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -41,7 +41,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
         }
 
-        public async Task<ApiResponse<NoData>> DeleteUserRole(int id, int currentUserId)
+        public async Task<ApiResponse<NoData>> DeleteUserRole(int id, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -59,7 +59,7 @@ namespace Business.Concrete
 
         }
 
-        public async Task<ApiResponse<List<GetUserRole>>> GetByIdAsync(int id, int currentUserId)
+        public async Task<ApiResponse<List<GetUserRole>>> GetByIdAsync(int id, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -83,7 +83,7 @@ namespace Business.Concrete
             return ApiResponse<List<GetUserRole>>.Success(StatusCodes.Status200OK, list);
         }
 
-        public async Task<ApiResponse<List<GetUserRole>>> GetUserRolesAsync(int currentUserId,string search=null)
+        public async Task<ApiResponse<List<GetUserRole>>> GetUserRolesAsync(long currentUserId,string search=null)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -114,7 +114,7 @@ namespace Business.Concrete
             return ApiResponse<List<GetUserRole>>.Success(StatusCodes.Status200OK,userRoleList);
         }
 
-        public async Task<ApiResponse<NoData>> UpdateUserRoleAsync(UpdateUserRole updateRole, int currentUserId)
+        public async Task<ApiResponse<NoData>> UpdateUserRoleAsync(UpdateUserRole updateRole, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)

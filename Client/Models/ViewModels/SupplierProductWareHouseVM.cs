@@ -11,8 +11,6 @@ namespace Client.Models.ViewModels
         public List<GetProduct> GetProducts { get; set; }
         public List<GetWareHouse> GetWareHouses { get; set; }
         public List<GetCategory> GetCategories { get; set; }
-        public int TotalPages { get; set; }
-        public int CurrentPage { get; set; }
-        public int PageSize { get; set; }
+       
     }
 }

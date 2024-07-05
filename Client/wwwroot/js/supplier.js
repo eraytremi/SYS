@@ -2,22 +2,19 @@
 
 $(document).ready(function () {
     $("#postSupplier").click(function () {
+        var name = $("#supplierName").val().trim();
+        var description = $("#description").val().trim();
+        var category = $("#category").val().trim();
+        var mail = $("#email").val().trim();
 
-
-        var name = $("#supplierName").val();
-        var description = $("#description").val();
-        var category = $("#category").val();
-        var mail= $("#email").val();
-       
-        if (name.length > 0 && description.length > 0 && mail.val().length > 0 && category.val().length>0)  {
-
-            var formDataObject =
-            {
+        if (name && description && mail && category) {
+            var formDataObject = {
                 Name: name,
                 Description: description,
                 Category: category,
-                Mail:mail
-            }
+                Mail: mail
+            };
+
             $.ajax({
                 url: "/Supplier/PostSupplier",
                 method: "POST",
@@ -25,8 +22,7 @@ $(document).ready(function () {
                 success: function (response) {
                     if (response.isSuccess) {
                         window.location.href = "/Supplier/Index";
-                    }
-                    else {
+                    } else {
                         Swal.fire({
                             title: 'Ýþlem Baþarýsýz',
                             text: response.messages,
@@ -37,17 +33,17 @@ $(document).ready(function () {
                     }
                 }
             });
-        }
-        else {
+        } else {
             Swal.fire({
                 title: 'Uyarý',
-                text: "Tedarikçi ismi giriniz.",
+                text: "Lütfen tüm alanlarý doldurunuz.",
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Tamam'
             });
         }
     });
+
 
     //tedarikçilere mail yollar
     $("#sendOfferSupplier").click(function () {

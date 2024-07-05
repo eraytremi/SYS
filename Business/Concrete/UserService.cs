@@ -20,7 +20,7 @@ namespace Business.Concrete
 
 
       
-        public async Task<ApiResponse<NoData>> AddUser(RegisterDto dto, int currentUserId)
+        public async Task<ApiResponse<NoData>> AddUser(RegisterDto dto, long currentUserId)
         {
             var user = new User
             {
@@ -38,7 +38,7 @@ namespace Business.Concrete
 
         }
 
-        public async Task<ApiResponse<NoData>> DeleteUser(int id, int currentUserId)
+        public async Task<ApiResponse<NoData>> DeleteUser(int id, long currentUserId)
         {
             var getUser = await _repo.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -53,7 +53,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
-        public  async Task<ApiResponse<List<GetUser>>> GetUsers(int currentUserId)
+        public  async Task<ApiResponse<List<GetUser>>> GetUsers(long currentUserId)
         {
             var getUser = await _repo.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -87,7 +87,7 @@ namespace Business.Concrete
                 throw new BadRequestException("kullanıcı bulunamadı");
             }
             if (!HashingHelper.VerifyPasswordHash(dto.Password, getUser.PasswordHash, getUser.PasswordSalt))
-                throw new BadRequestException("Email veya parola hatalı");
+                throw new BadRequestException("Parola hatalı");
 
             var mappingUser = new GetUser
             {
@@ -98,7 +98,7 @@ namespace Business.Concrete
             return ApiResponse<GetUser>.Success(StatusCodes.Status200OK, mappingUser);
         }
 
-        public async Task<ApiResponse<NoData>> UpdateUser(UpdateUser dto, int currentUserId)
+        public async Task<ApiResponse<NoData>> UpdateUser(UpdateUser dto, long currentUserId)
         {
             var getUser = await _repo.GetByIdAsync(currentUserId);
             if (getUser == null)

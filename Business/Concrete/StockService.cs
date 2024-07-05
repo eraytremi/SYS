@@ -33,7 +33,7 @@ namespace Business.Concrete
             _stockMovementService = stockMovementService;
         }
 
-        public async Task<ApiResponse<NoData>> AddAsync(PostStock postStockStatus, int currentUserId)
+        public async Task<ApiResponse<NoData>> AddAsync(PostStock postStockStatus, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -86,7 +86,7 @@ namespace Business.Concrete
 
         }
 
-        public async Task<ApiResponse<NoData>> DeleteAsync(int id, int currentUserId)
+        public async Task<ApiResponse<NoData>> DeleteAsync(int id, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -102,7 +102,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<ApiResponse<List<GetStock>>> GetAllAsync(int currentUserId)
+        public async Task<ApiResponse<List<GetStock>>> GetAllAsync(long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -159,7 +159,7 @@ namespace Business.Concrete
             return ApiResponse<List<GetStock>>.Success(StatusCodes.Status200OK, list);
         }
 
-        public async Task<ApiResponse<NoData>> UpdateAsync(UpdateStock updateStockStatus, int currentUserId)
+        public async Task<ApiResponse<NoData>> UpdateAsync(UpdateStock updateStockStatus, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -212,7 +212,7 @@ namespace Business.Concrete
             }
         }
 
-        public async Task<ApiResponse<NoData>> SellProductAsync(PostStock postStockStatus, int currentUserId)
+        public async Task<ApiResponse<NoData>> SellProductAsync(PostStock postStockStatus, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)

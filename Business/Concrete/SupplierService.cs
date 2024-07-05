@@ -19,7 +19,7 @@ namespace Business.Concrete
             _userRepository = userRepository;
         }
 
-        public async Task<ApiResponse<NoData>> AddSupplierAsync(AddSupplier supplier, int currentUserId)
+        public async Task<ApiResponse<NoData>> AddSupplierAsync(AddSupplier supplier, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -42,7 +42,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
         }
 
-        public async Task<ApiResponse<NoData>> DeleteSupplierAsync(int id, int currentUserId)
+        public async Task<ApiResponse<NoData>> DeleteSupplierAsync(int id, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -60,7 +60,7 @@ namespace Business.Concrete
 
        
 
-        public async Task<ApiResponse<List<GetSupplier>>> GetSupplierAsync(int currentUserId)
+        public async Task<ApiResponse<List<GetSupplier>>> GetSupplierAsync(long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -90,7 +90,7 @@ namespace Business.Concrete
            
         }
 
-        public async Task<ApiResponse<NoData>> UpdateSupplierAsync(UpdateSupplier supplier, int currentUserId)
+        public async Task<ApiResponse<NoData>> UpdateSupplierAsync(UpdateSupplier supplier, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)

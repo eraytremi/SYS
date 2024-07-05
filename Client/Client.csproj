@@ -7,6 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\demand.js" />
+    <Content Remove="wwwroot\js\salesDetails.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\demand.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\salesDetails.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\demand.js" />
+    <None Include="wwwroot\js\salesDetails.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.35.0" />
   </ItemGroup>

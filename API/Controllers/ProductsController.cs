@@ -39,6 +39,15 @@ namespace API.Controllers
             return SendResponse(response);
         }
 
+
+        [HttpPost("getProductsByName")]
+        public async Task<IActionResult> GetProductsByName(string barcode)
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.GetProductByName(barcode, currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddProduct([FromBody]AddProduct dto)
         {

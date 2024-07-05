@@ -47,7 +47,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromQuery] int id)
+        public async Task<IActionResult> Delete( int id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _service.DeleteWareHouse(id, currentUserId.GetValueOrDefault());

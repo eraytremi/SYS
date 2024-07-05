@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories.Concrete
 {
-    public class UserRepository:BaseRepository<User,int,SysContext>,IUserRepository
+    public class UserRepository:BaseRepository<User,long,SysContext>,IUserRepository
     {
     }
 }

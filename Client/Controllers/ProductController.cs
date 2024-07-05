@@ -111,6 +111,23 @@ namespace Client.Controllers
                 return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetProductByName(string name)
+        {
+            var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
+            var response = await _httpApiService.PostDataAsync<ResponseBody<GetProduct>>("/Products/getProductsByName", JsonSerializer.Serialize(name), token.Token);
+            if (response.StatusCode == 200)
+            {
+                return Json(new { IsSuccess = true, response.Data });
+            }
+            else
+            {
+                return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
+            }
+        }
+
+
         [HttpDelete]
         public async Task<IActionResult> Delete(long id)
         {

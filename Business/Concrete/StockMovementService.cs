@@ -26,7 +26,7 @@ namespace Business.Concrete
             _stockRepository = stockRepository;
         }
 
-        public async Task<ApiResponse<NoData>> AddAsync(PostStockMovement postStockMovement, int currentUserId)
+        public async Task<ApiResponse<NoData>> AddAsync(PostStockMovement postStockMovement, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -70,7 +70,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
         }
 
-        public async Task<ApiResponse<NoData>> DeleteAsync(int id, int currentUserId)
+        public async Task<ApiResponse<NoData>> DeleteAsync(int id, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -87,7 +87,7 @@ namespace Business.Concrete
 
         }
 
-        public async Task<ApiResponse<List<GetStockMovement>>> GetAllAsync(int currentUserId)
+        public async Task<ApiResponse<List<GetStockMovement>>> GetAllAsync(long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -129,7 +129,7 @@ namespace Business.Concrete
             return ApiResponse<List<GetStockMovement>>.Success(StatusCodes.Status200OK, list);
         }
 
-        public async Task<ApiResponse<NoData>> UpdateAsync(UpdateStockMovement updateStockMovement, int currentUserId)
+        public async Task<ApiResponse<NoData>> UpdateAsync(UpdateStockMovement updateStockMovement, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -166,7 +166,7 @@ namespace Business.Concrete
             }
         }
 
-        public async Task<ApiResponse<NoData>> RejectStatus(int id, int currentUserId)
+        public async Task<ApiResponse<NoData>> RejectStatus(int id, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -182,7 +182,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<ApiResponse<NoData>> ApproveStatus(int id, int currentUserId)
+        public async Task<ApiResponse<NoData>> ApproveStatus(int id, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
 
@@ -256,7 +256,7 @@ namespace Business.Concrete
         }
 
 
-        public async Task<ApiResponse<List<GetStockMovement>>> AprrovedStatuses(int currentUserId)
+        public async Task<ApiResponse<List<GetStockMovement>>> AprrovedStatuses(long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -300,7 +300,7 @@ namespace Business.Concrete
             return ApiResponse<List<GetStockMovement>>.Success(StatusCodes.Status200OK, list);
 
         }
-        public async Task<ApiResponse<List<GetStockMovement>>> RejectedStatuses(int currentUserId)
+        public async Task<ApiResponse<List<GetStockMovement>>> RejectedStatuses(long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -327,7 +327,7 @@ namespace Business.Concrete
 
             return ApiResponse<List<GetStockMovement>>.Success(StatusCodes.Status200OK, list);
         }
-        public async Task<ApiResponse<List<GetStockMovement>>> WaitingStatuses(int currentUserId)
+        public async Task<ApiResponse<List<GetStockMovement>>> WaitingStatuses(long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)

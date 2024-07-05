@@ -11,9 +11,9 @@ namespace Business.Abstract
 {
     public interface ICategoryService
     {
-        Task<ApiResponse<List<GetCategory>>> GetCategoriesAsync(int currentUserId);
-        Task<ApiResponse<NoData>> AddCategory(AddCategory category, int currentUserId);
-        Task<ApiResponse<NoData>> DeleteCategory(int id, int currentUserId);
-        Task<ApiResponse<NoData>> UpdateCategoryAsync(UpdateCategory updateCategory, int currentUserId);
+        Task<ApiResponse<List<GetCategory>>> GetCategoriesAsync(long currentUserId);
+        Task<ApiResponse<NoData>> AddCategory(AddCategory category, long currentUserId);
+        Task<ApiResponse<NoData>> DeleteCategory(int id, long currentUserId);
+        Task<ApiResponse<NoData>> UpdateCategoryAsync(UpdateCategory updateCategory, long currentUserId);
     }
 }

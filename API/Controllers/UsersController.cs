@@ -29,6 +29,7 @@ namespace API.Controllers
             var response = await _service.GetUsers(currentUserId.GetValueOrDefault());
             return SendResponse(response);
         }   
+
         [HttpPost("login")]
         public async Task<IActionResult> Login ([FromBody]LoginDto loginDto)
         {           
@@ -39,7 +40,7 @@ namespace API.Controllers
                 
             };
 
-            var roles = await _userRoleService.GetByIdAsync(response.Data.Id, response.Data.Id);
+            var roles = await _userRoleService.GetByIdAsync((int)response.Data.Id, response.Data.Id);
             var roleId = roles.Data.Select(p => p.RoleId).ToList();
 
             var accessToken = new JwtGenerator(_configuration).CreateAccessToken(claims,roleId);

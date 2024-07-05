@@ -1,0 +1,49 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Client.Models.Dtos.Product
+
+@model List<GetProduct>
+
+<style>
+
+    #salesForm {
+        margin-top: 60px;
+       
+    }
+</style>
+
+
+<form id="salesForm">
+    <table id="salesTable" class="table">
+        <thead>
+            <tr>
+                <th>Ürün Adı</th>
+                <th>Fiyat</th>
+                <th>Miktar</th>
+                <th>Toplam</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <select class="form-control" id="productName" name="productName">
+                        <option value="">Ürünü Seçiniz</option>
+                        @foreach (var item in Model)
+                        {
+                            <option value="@item.Name">@item.Name</option>
+                        }
+                    </select>
+                </td>
+                <td><input type="text" class="form-control product-price" readonly /></td>
+                <td><input type="number" class="form-control product-quantity" min="1" value="1" /></td>
+                <td><input type="text" class="form-control product-total" readonly /></td>
+                <td><button type="button" class="btn btn-success add-row">+</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
+
+<script src="~/js/salesdetails.js"></script>

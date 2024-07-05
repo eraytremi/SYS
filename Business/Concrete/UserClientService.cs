@@ -28,7 +28,7 @@ namespace Business.Concrete
             _repository = repository;
         }
 
-        public async Task<ApiResponse<NoData>> AddUserClient(PostUserClient dto, int currentUserId)
+        public async Task<ApiResponse<NoData>> AddUserClient(PostUserClient dto, long currentUserId)
         {
             var user = new UserClient
             {
@@ -48,7 +48,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<ApiResponse<NoData>> DeleteUserClient(int id, int currentUserId)
+        public async Task<ApiResponse<NoData>> DeleteUserClient(int id, long currentUserId)
         {
             var getUser = await _repository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -62,7 +62,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<ApiResponse<List<GetUserClient>>> GetUserClients(int currentUserId)
+        public async Task<ApiResponse<List<GetUserClient>>> GetUserClients(long currentUserId)
         {
             var getUser = await _repository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -108,7 +108,7 @@ namespace Business.Concrete
             return ApiResponse<GetUserClient>.Success(StatusCodes.Status200OK, mappingUser);
         }
 
-        public async Task<ApiResponse<NoData>> UpdateUserClient(UpdateUserClient dto, int currentUserId)
+        public async Task<ApiResponse<NoData>> UpdateUserClient(UpdateUserClient dto, long currentUserId)
         {
             var getUser = await _repository.GetByIdAsync(currentUserId);
             if (getUser == null)

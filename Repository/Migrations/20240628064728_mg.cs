@@ -20,7 +20,8 @@ namespace DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -34,13 +35,36 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Demands",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StatusType = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<long>(type: "bigint", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Demands", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -57,13 +81,13 @@ namespace DataAccess.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Mail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -83,7 +107,7 @@ namespace DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -100,11 +124,10 @@ namespace DataAccess.Migrations
                 name: "UserRoles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -114,7 +137,7 @@ namespace DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRoles", x => x.Id);
+                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
                         name: "FK_UserRoles_Roles_RoleId",
                         column: x => x.RoleId,
@@ -139,11 +162,12 @@ namespace DataAccess.Migrations
                     SupplierId = table.Column<int>(type: "int", nullable: false),
                     WareHouseId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Barcode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Barcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -179,7 +203,7 @@ namespace DataAccess.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Unit = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -211,7 +235,7 @@ namespace DataAccess.Migrations
                     Source = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Destination = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StatusType = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -238,7 +262,7 @@ namespace DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
                     Quantity = table.Column<double>(type: "float", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -265,8 +289,10 @@ namespace DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Mail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductId = table.Column<long>(type: "bigint", nullable: true),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: true),
+                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedBy = table.Column<long>(type: "bigint", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -286,29 +312,29 @@ namespace DataAccess.Migrations
 
             migrationBuilder.InsertData(
                 table: "Categories",
-                columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "IsActive", "Name", "UpdatedBy", "UpdatedDate" },
+                columns: new[] { "Id", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "IsActive", "Name", "Picture", "UpdatedBy", "UpdatedDate" },
                 values: new object[,]
                 {
-                    { 1, null, null, null, null, false, "Meyve", null, null },
-                    { 2, null, null, null, null, false, "Sebze", null, null },
-                    { 3, null, null, null, null, false, "Et Ürünleri", null, null },
-                    { 4, null, null, null, null, false, "Süt Ürünleri", null, null },
-                    { 5, null, null, null, null, false, "Tatlılar", null, null },
-                    { 6, null, null, null, null, false, "Kahvaltılıklar", null, null },
-                    { 7, null, null, null, null, false, "Deniz Ürünleri", null, null },
-                    { 8, null, null, null, null, false, "Kuru Yemişler", null, null },
-                    { 9, null, null, null, null, false, "İçecekler", null, null },
-                    { 10, null, null, null, null, false, "Baharatlar", null, null },
-                    { 11, null, null, null, null, false, "Saklama Kabı", null, null },
-                    { 12, null, null, null, null, false, "Kahve", null, null },
-                    { 13, null, null, null, null, false, "Çay", null, null },
-                    { 14, null, null, null, null, false, "Dondurma", null, null },
-                    { 15, null, null, null, null, false, "Kuruyemiş", null, null },
-                    { 16, null, null, null, null, false, "Atıştırmalık", null, null },
-                    { 17, null, null, null, null, false, "Un ve Unlu Mamüller", null, null },
-                    { 18, null, null, null, null, false, "Pasta", null, null },
-                    { 19, null, null, null, null, false, "Pilavlık ve Bulgur", null, null },
-                    { 20, null, null, null, null, false, "Konserve ve Salça", null, null }
+                    { 1, 0L, null, null, null, false, "Meyve", "", null, null },
+                    { 2, 0L, null, null, null, false, "Sebze", "", null, null },
+                    { 3, 0L, null, null, null, false, "Et Ürünleri", "", null, null },
+                    { 4, 0L, null, null, null, false, "Süt Ürünleri", "", null, null },
+                    { 5, 0L, null, null, null, false, "Tatlılar", "", null, null },
+                    { 6, 0L, null, null, null, false, "Kahvaltılıklar", "", null, null },
+                    { 7, 0L, null, null, null, false, "Deniz Ürünleri", "", null, null },
+                    { 8, 0L, null, null, null, false, "Kuru Yemişler", "", null, null },
+                    { 9, 0L, null, null, null, false, "İçecekler", "", null, null },
+                    { 10, 0L, null, null, null, false, "Baharatlar", "", null, null },
+                    { 11, 0L, null, null, null, false, "Saklama Kabı", "", null, null },
+                    { 12, 0L, null, null, null, false, "Kahve", "", null, null },
+                    { 13, 0L, null, null, null, false, "Çay", "", null, null },
+                    { 14, 0L, null, null, null, false, "Dondurma", "", null, null },
+                    { 15, 0L, null, null, null, false, "Kuruyemiş", "", null, null },
+                    { 16, 0L, null, null, null, false, "Atıştırmalık", "", null, null },
+                    { 17, 0L, null, null, null, false, "Un ve Unlu Mamüller", "", null, null },
+                    { 18, 0L, null, null, null, false, "Pasta", "", null, null },
+                    { 19, 0L, null, null, null, false, "Pilavlık ve Bulgur", "", null, null },
+                    { 20, 0L, null, null, null, false, "Konserve ve Salça", "", null, null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -345,16 +371,14 @@ namespace DataAccess.Migrations
                 name: "IX_UserRoles_RoleId",
                 table: "UserRoles",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRoles_UserId",
-                table: "UserRoles",
-                column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Demands");
+
             migrationBuilder.DropTable(
                 name: "Offers");
 

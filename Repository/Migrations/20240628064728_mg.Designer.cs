@@ -12,8 +12,8 @@ using Repository.Contexts;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(SysContext))]
-    [Migration("20240606134751_mig51")]
-    partial class mig51
+    [Migration("20240628064728_mg")]
+    partial class mg
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -71,7 +71,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -108,6 +108,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Meyve",
                             Picture = ""
@@ -115,6 +116,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 2,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Sebze",
                             Picture = ""
@@ -122,6 +124,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 3,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Et Ürünleri",
                             Picture = ""
@@ -129,6 +132,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 4,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Süt Ürünleri",
                             Picture = ""
@@ -136,6 +140,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 5,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Tatlılar",
                             Picture = ""
@@ -143,6 +148,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 6,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Kahvaltılıklar",
                             Picture = ""
@@ -150,6 +156,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 7,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Deniz Ürünleri",
                             Picture = ""
@@ -157,6 +164,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 8,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Kuru Yemişler",
                             Picture = ""
@@ -164,6 +172,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 9,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "İçecekler",
                             Picture = ""
@@ -171,6 +180,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 10,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Baharatlar",
                             Picture = ""
@@ -178,6 +188,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 11,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Saklama Kabı",
                             Picture = ""
@@ -185,6 +196,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 12,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Kahve",
                             Picture = ""
@@ -192,6 +204,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 13,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Çay",
                             Picture = ""
@@ -199,6 +212,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 14,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Dondurma",
                             Picture = ""
@@ -206,6 +220,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 15,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Kuruyemiş",
                             Picture = ""
@@ -213,6 +228,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 16,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Atıştırmalık",
                             Picture = ""
@@ -220,6 +236,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 17,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Un ve Unlu Mamüller",
                             Picture = ""
@@ -227,6 +244,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 18,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Pasta",
                             Picture = ""
@@ -234,6 +252,7 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 19,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Pilavlık ve Bulgur",
                             Picture = ""
@@ -241,10 +260,60 @@ namespace DataAccess.Migrations
                         new
                         {
                             Id = 20,
+                            CreatedBy = 0L,
                             IsActive = false,
                             Name = "Konserve ve Salça",
                             Picture = ""
                         });
+                });
+
+            modelBuilder.Entity("Entity.SysModel.Demand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("DeletedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Quantity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusType")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Demands");
                 });
 
             modelBuilder.Entity("Entity.SysModel.Offer", b =>
@@ -258,7 +327,7 @@ namespace DataAccess.Migrations
                     b.Property<double>("Count")
                         .HasColumnType("float");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -314,7 +383,7 @@ namespace DataAccess.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -377,7 +446,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -419,7 +488,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -478,7 +547,11 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -496,6 +569,10 @@ namespace DataAccess.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Mail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -525,7 +602,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -557,13 +634,13 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entity.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -607,13 +684,13 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entity.UserRole", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedDate")
@@ -625,11 +702,11 @@ namespace DataAccess.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
 
                     b.Property<long?>("UpdatedBy")
                         .HasColumnType("bigint");
@@ -637,14 +714,9 @@ namespace DataAccess.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserRoles");
                 });
@@ -711,13 +783,13 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entity.UserRole", b =>
                 {
                     b.HasOne("Entity.Role", "Role")
-                        .WithMany()
+                        .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entity.User", "User")
-                        .WithMany()
+                        .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -725,6 +797,11 @@ namespace DataAccess.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Entity.Role", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("Entity.SysModel.Category", b =>
@@ -735,6 +812,11 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entity.SysModel.Product", b =>
                 {
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("Entity.User", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

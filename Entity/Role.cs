@@ -9,5 +9,7 @@ namespace Entity
     public class Role:BaseEntity<int>
     {
         public string Name { get; set; }
+        public List<UserRole> UserRoles { get; set; }
+
     }
 }

@@ -12,9 +12,9 @@ namespace Business.Abstract
 {
     public interface IWareHouseService
     {
-        Task<ApiResponse<List<GetWareHouse>>> GetListWareHouseAsync(int currentUserId);
-        Task<ApiResponse<NoData>> AddWareHouse(PostWareHouse postWareHouse, int currentUserId);
-        Task<ApiResponse<NoData>> DeleteWareHouse(int id, int currentUserId);
-        Task<ApiResponse<NoData>> UpdateWareHouseAsync(UpdateWareHouse updateWareHouse, int currentUserId);
+        Task<ApiResponse<List<GetWareHouse>>> GetListWareHouseAsync(long currentUserId);
+        Task<ApiResponse<NoData>> AddWareHouse(PostWareHouse postWareHouse, long currentUserId);
+        Task<ApiResponse<NoData>> DeleteWareHouse(int id, long currentUserId);
+        Task<ApiResponse<NoData>> UpdateWareHouseAsync(UpdateWareHouse updateWareHouse, long currentUserId);
     }
 }

@@ -12,10 +12,10 @@ namespace Business.Abstract
 {
     public interface IUserClientRoleService
     {
-        Task<ApiResponse<List<GetUserClientRole>>> GetUserClientRolesAsync(int currentUserId);
-        Task<ApiResponse<NoData>> AddUserClientRole(PostUserClientRole userRole, int currentUserId);
-        Task<ApiResponse<NoData>> DeleteUserClientRole(int id, int currentUserId);
-        Task<ApiResponse<NoData>> UpdateUserClientRoleAsync(UpdateUserClientRole updateRole, int currentUserId);
-        Task<ApiResponse<List<GetUserClientRole>>> GetByIdAsync(int id, int currentUserId);
+        Task<ApiResponse<List<GetUserClientRole>>> GetUserClientRolesAsync(long currentUserId);
+        Task<ApiResponse<NoData>> AddUserClientRole(PostUserClientRole userRole, long currentUserId);
+        Task<ApiResponse<NoData>> DeleteUserClientRole(int id, long currentUserId);
+        Task<ApiResponse<NoData>> UpdateUserClientRoleAsync(UpdateUserClientRole updateRole, long currentUserId);
+        Task<ApiResponse<List<GetUserClientRole>>> GetByIdAsync(int id, long currentUserId);
     }
 }

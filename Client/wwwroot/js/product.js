@@ -1,6 +1,6 @@
 $(document).ready(function () {
     // Event handler for posting stock
-    $("#postProduct").click(function () {
+    $("#saveProduct").click(function () {
 
         var formData = new FormData();
         formData.append("Name", $("#productName").val());

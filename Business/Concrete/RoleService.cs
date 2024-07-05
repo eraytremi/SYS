@@ -17,7 +17,7 @@ namespace Business.Concrete
             _userRepository = userRepository;
         }
 
-        public async Task<ApiResponse<NoData>> AddRole(AddRole role, int currentUserId)
+        public async Task<ApiResponse<NoData>> AddRole(AddRole role, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -37,7 +37,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
         }
 
-        public async Task<ApiResponse<NoData>> DeleteRole(int id, int currentUserId)
+        public async Task<ApiResponse<NoData>> DeleteRole(int id, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -52,7 +52,7 @@ namespace Business.Concrete
 
         }
 
-        public async Task<ApiResponse<List<GetRole>>> GetRolesAsync(int currentUserId)
+        public async Task<ApiResponse<List<GetRole>>> GetRolesAsync(long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -74,7 +74,7 @@ namespace Business.Concrete
             return ApiResponse<List<GetRole>>.Success(StatusCodes.Status200OK, roleList);
         }
 
-        public async Task<ApiResponse<NoData>> UpdateRoleAsync(UpdateRole updateRole, int currentUserId)
+        public async Task<ApiResponse<NoData>> UpdateRoleAsync(UpdateRole updateRole, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)

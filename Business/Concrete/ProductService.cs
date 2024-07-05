@@ -30,7 +30,7 @@ namespace Business.Concrete
             _warehouseRepository = warehouseRepository;
         }
 
-        public async Task<ApiResponse<NoData>> AddProductAsync(AddProduct product, int currentUserId)
+        public async Task<ApiResponse<NoData>> AddProductAsync(AddProduct product, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -67,7 +67,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
         }
 
-        public async Task<ApiResponse<NoData>> DeleteProductAsync(long id, int currentUserId)
+        public async Task<ApiResponse<NoData>> DeleteProductAsync(long id, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -85,20 +85,19 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<ApiResponse<PagingList<GetProduct>>> GetProductAsync(int currentUserId,int pageNumber, int pageSize)
+        public async Task<ApiResponse<List<GetProduct>>> GetProductAsync(long currentUserId,int pageNumber, int pageSize)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
             {
-                return ApiResponse<PagingList<GetProduct>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
+                return ApiResponse<List<GetProduct>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
 
-            var getListProduct = await _repo.GetAllAsync(p=>p.IsActive==true);
-            var paginatedList = getListProduct.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            var getListProduct = await _repo.GetAllAsync(p=>p.IsActive==true);      
             var totalItems = getListProduct.Count();
             var list = new List<GetProduct>();
-            foreach (var item in paginatedList)
+            foreach (var item in getListProduct)
             {
                 var getSupplier = await _supplierRepository.GetByIdAsync(item.SupplierId);
                 var getCategory = await _categoryRepository.GetByIdAsync(item.CategoryId);
@@ -136,18 +135,11 @@ namespace Business.Concrete
                 };
                 list.Add(add);
             }
-            var paginatedResponse = new PagingList<GetProduct>
-            {
-                Items = list,
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                TotalItems = totalItems,
-                TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize)
-            };
-            return ApiResponse<PagingList<GetProduct>>.Success(StatusCodes.Status200OK, paginatedResponse);
+           
+            return ApiResponse<List<GetProduct>>.Success(StatusCodes.Status200OK, list);
         }
 
-        public async Task<ApiResponse<NoData>> UpdateProductAsync(UpdateProduct updateProduct, int currentUserId)
+        public async Task<ApiResponse<NoData>> UpdateProductAsync(UpdateProduct updateProduct, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             var existingProduct = await _repo.GetByIdAsync(updateProduct.Id);
@@ -230,7 +222,7 @@ namespace Business.Concrete
             return barcodePath;
         }
 
-        public async Task<ApiResponse<GetProduct>> GetProductByBarcode(string barcode, int currentUserId)
+        public async Task<ApiResponse<GetProduct>> GetProductByBarcode(string barcode, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -257,6 +249,30 @@ namespace Business.Concrete
             };
 
            return ApiResponse<GetProduct>.Success(StatusCodes.Status200OK, mapping);
+        }
+
+        public async Task<ApiResponse<GetProduct>> GetProductByName(string name, long currentUserId)
+        {
+            var getUser = await _userRepository.GetByIdAsync(currentUserId);
+            if (getUser == null)
+            {
+                return ApiResponse<GetProduct>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
+            }
+
+            var getProduct = await _repo.GetAsync(p => p.Name.Contains(name));
+            var product = new GetProduct
+            {
+                Id = getProduct.Id,
+                Price = getProduct.Price,
+                CategoryId = getProduct.CategoryId,
+                Description = getProduct.Description,
+                Name = getProduct.Name,
+                SupplierId = getProduct.SupplierId,
+                Picture = getProduct.Picture,
+                Unit = ConvertUnitEnumToString(getProduct.Unit)
+            };
+
+           return ApiResponse<GetProduct>.Success(StatusCodes.Status200OK, product);
         }
     }
 }

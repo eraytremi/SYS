@@ -43,6 +43,19 @@ namespace Business.Extensions
             services.AddSingleton<IWareHouseRepository, WareHouseRepository>();
 
             services.AddSingleton<IEmailSender,MailSenderService>();
+
+            services.AddSingleton<IDemandService, DemandService>();
+            services.AddSingleton<IDemandRepository, DemandRepository>();
+
+            services.AddSingleton<ISaleService, SalesService>();
+            services.AddSingleton<ISalesRepository, SalesRepository>();
+
+            services.AddSingleton<ISalesDetailsRepository, SalesDetailsRepository>();
+            services.AddSingleton<ISaleDetailsService, SaleDetailsService>();
+
+            services.AddSingleton<IBillService, BillService>();
+            services.AddSingleton<IBillRepository, BillRepository>();
+
         }
     }
 }
