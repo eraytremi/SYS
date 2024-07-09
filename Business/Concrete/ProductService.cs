@@ -85,7 +85,7 @@ namespace Business.Concrete
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<ApiResponse<List<GetProduct>>> GetProductAsync(long currentUserId,int pageNumber, int pageSize)
+        public async Task<ApiResponse<List<GetProduct>>> GetProductAsync(long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -251,7 +251,7 @@ namespace Business.Concrete
            return ApiResponse<GetProduct>.Success(StatusCodes.Status200OK, mapping);
         }
 
-        public async Task<ApiResponse<GetProduct>> GetProductByName(string name, long currentUserId)
+        public async Task<ApiResponse<GetProduct>> GetProductById(long id, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
@@ -259,7 +259,7 @@ namespace Business.Concrete
                 return ApiResponse<GetProduct>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
-            var getProduct = await _repo.GetAsync(p => p.Name.Contains(name));
+            var getProduct = await _repo.GetByIdAsync(id);
             var product = new GetProduct
             {
                 Id = getProduct.Id,

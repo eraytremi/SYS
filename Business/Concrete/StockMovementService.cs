@@ -103,7 +103,7 @@ namespace Business.Concrete
                 var getWareHouse = await _wareHouseRepository.GetByIdAsync(getProduct.WareHouseId);
                 var add = new GetStockMovement
                 {
-                    Date = DateTime.Now,
+                    Date =item.Date,
                     Id = item.Id,
                     IsEntry = item.IsEntry,
                     ProductId = item.ProductId,
@@ -139,7 +139,7 @@ namespace Business.Concrete
 
             var update = new StockMovement
             {
-                Date = DateTime.Now,
+                Date = updateStockMovement.Date,
                 Id = updateStockMovement.Id,
                 IsEntry = updateStockMovement.IsEntry,
                 ProductId = updateStockMovement.ProductId,

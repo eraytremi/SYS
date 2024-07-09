@@ -24,14 +24,14 @@ namespace Client.Controllers
         public async Task<IActionResult> Index()
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var product = await _httpApiService.GetDataAsync<ResponseBody<PagingList<GetProduct>>>("/Products", token.Token);
+            var product = await _httpApiService.GetDataAsync<ResponseBody<List<GetProduct>>>("/Products", token.Token);
             var supplier = await _httpApiService.GetDataAsync<ResponseBody<List<GetSupplier>>>("/Suppliers", token.Token);
             
             var wareHouse= await _httpApiService.GetDataAsync<ResponseBody<List<GetWareHouse>>>("/WareHouses", token.Token);
 
             var category = await _httpApiService.GetDataAsync<ResponseBody<List<GetCategory>>>("/Categories",token.Token);
 
-            foreach (var productItem in product.Data.Items)
+            foreach (var productItem in product.Data)
             {
                 if (productItem.Picture != null)
                 {
@@ -41,7 +41,7 @@ namespace Client.Controllers
 
             var data = new SupplierProductWareHouseVM
             {
-                GetProducts = product.Data.Items,
+                GetProducts = product.Data,
                 GetSuppliers = supplier.Data,
                 GetWareHouses = wareHouse.Data,
                 GetCategories=category.Data
@@ -113,19 +113,20 @@ namespace Client.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetProductByName(string name)
-        {
+        public async Task<IActionResult> GetProductById([FromBody] long id)
+            {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var response = await _httpApiService.PostDataAsync<ResponseBody<GetProduct>>("/Products/getProductsByName", JsonSerializer.Serialize(name), token.Token);
+            var response = await _httpApiService.PostDataAsync<ResponseBody<GetProduct>>("/Products/getProductsById", JsonSerializer.Serialize(id), token.Token);
             if (response.StatusCode == 200)
             {
-                return Json(new { IsSuccess = true, response.Data });
+                return Json(new { IsSuccess = true, Data = response.Data });
             }
             else
             {
                 return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
             }
         }
+
 
 
         [HttpDelete]

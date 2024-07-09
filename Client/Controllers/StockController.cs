@@ -26,11 +26,11 @@ namespace Client.Controllers
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             var stockStatus = await _httpApiService.GetDataAsync<ResponseBody<List<GetStockStatus>>>("/Stocks", token.Token);
-            var product = await _httpApiService.GetDataAsync<ResponseBody<PagingList<GetProduct>>>("/Products", token.Token);
+            var product = await _httpApiService.GetDataAsync<ResponseBody<List<GetProduct>>>("/Products", token.Token);
 
             var response = new ProductStockVm
             {
-                GetProducts = product.Data.Items,
+                GetProducts = product.Data,
                 GetStockStatuses = stockStatus.Data
             };
 

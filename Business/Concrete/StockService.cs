@@ -43,7 +43,7 @@ namespace Business.Concrete
 
             var a = await _stockStatusRepository.GetAsync(p => p.ProductId == postStockStatus.ProductId);
 
-            var anyProduct = _productRepository.GetAsync(p => p.Id == postStockStatus.ProductId);
+            var anyProduct = await _productRepository.GetAsync(p => p.Id == postStockStatus.ProductId);
             if (anyProduct == null)
             {
                 return ApiResponse<NoData>.Fail(StatusCodes.Status404NotFound, "Ürün kayıtlı değil. Önce ürünü kaydetmeniz gerekiyor!");

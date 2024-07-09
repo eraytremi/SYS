@@ -17,13 +17,13 @@ namespace Client.Controllers
         public DemandController(IHttpApiService httpApiService)
         {
             _httpApiService = httpApiService;
-        }
+        } 
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
-            var responseProduct = await _httpApiService.GetDataAsync<ResponseBody<PagingList<GetProduct>>>("/Products", token.Token);
+            var responseProduct = await _httpApiService.GetDataAsync<ResponseBody<List<GetProduct>>>("/Products", token.Token);
 
             return View(responseProduct.Data);
         }

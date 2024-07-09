@@ -23,10 +23,10 @@ namespace API.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int pageNumber=1,int pageSize = 10)
+        public async Task<IActionResult> GetAll()
         {
             var currentUserId = CurrentUser.Get(HttpContext);
-            var response = await _service.GetProductAsync(currentUserId.GetValueOrDefault(),pageNumber,pageSize);
+            var response = await _service.GetProductAsync(currentUserId.GetValueOrDefault());
             return SendResponse(response);
         }
 
@@ -40,11 +40,11 @@ namespace API.Controllers
         }
 
 
-        [HttpPost("getProductsByName")]
-        public async Task<IActionResult> GetProductsByName(string barcode)
+        [HttpPost("getProductsById")]
+        public async Task<IActionResult> GetProductsById([FromBody]long id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
-            var response = await _service.GetProductByName(barcode, currentUserId.GetValueOrDefault());
+            var response = await _service.GetProductById(id, currentUserId.GetValueOrDefault());
             return SendResponse(response);
         }
 

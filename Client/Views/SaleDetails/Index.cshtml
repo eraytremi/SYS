@@ -1,49 +1,92 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 @using Client.Models.Dtos.Product
+@using Newtonsoft.Json;
 
 @model List<GetProduct>
 
 <style>
-
     #salesForm {
         margin-top: 60px;
-       
+    }
+
+    .custom-select {
+        height: 38px; 
+        font-size: 16px; 
+    }
+
+    .custom-select option {
+            font-size: 16px; 
+    }
+
+    .confirm-btn-container {
+        text-align: right;
+        margin-top: 20px;
     }
 </style>
 
 
-<form id="salesForm">
-    <table id="salesTable" class="table">
-        <thead>
-            <tr>
-                <th>Ürün Adı</th>
-                <th>Fiyat</th>
-                <th>Miktar</th>
-                <th>Toplam</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <select class="form-control" id="productName" name="productName">
-                        <option value="">Ürünü Seçiniz</option>
-                        @foreach (var item in Model)
-                        {
-                            <option value="@item.Name">@item.Name</option>
-                        }
-                    </select>
-                </td>
-                <td><input type="text" class="form-control product-price" readonly /></td>
-                <td><input type="number" class="form-control product-quantity" min="1" value="1" /></td>
-                <td><input type="text" class="form-control product-total" readonly /></td>
-                <td><button type="button" class="btn btn-success add-row">+</button></td>
-            </tr>
-        </tbody>
-    </table>
-    <button type="submit" class="btn btn-primary">Kaydet</button>
-</form>
+<div class="container" id="salesForm">
+    <main role="main" class="pb-3">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Ürün</th>
+                    <th>Fiyat</th>
+                    <th>Miktar</th>
+                    <th>Toplam Fiyat</th>   
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <select class="form-select"  style="width:300px;">
+                            <option value="">Ürünü Seçiniz</option>
+                            @foreach (var item in Model)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </td>
+                    <td><input type="text" class="form-control product-price" readonly /></td>
+                    <td><input type="number" class="form-control product-quantity" min="1" value="1" /></td>
+                    <td><input type="text" class="form-control product-total" readonly /></td>
+                    <td><button type="button" class="btn btn-success add-row">+</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="confirm-btn-container">
+            <button type="button" class="btn btn-primary" id="confirmBtn">İşlemi Onayla</button>
+        </div>
+    </main>
+</div>
+<script>
 
-<script src="~/js/salesdetails.js"></script>
+    var products = @Html.Raw(JsonConvert.SerializeObject(Model));
+
+    $(document).ready(function () {
+        $('#salesForm').on('click', '.add-row', function () {
+            var newRow = '<tr>' +
+                '<td><select class="form-select" style="width:300px;">' +
+                '<option value="">Ürünü Seçiniz</option>';
+    
+        
+            products.forEach(function (item) {
+                newRow += '<option value="' + item.Id + '">' + item.Name + '</option>';
+            });
+
+            newRow += '</select></td>' +
+                '<td><input type="text" class="form-control product-price" readonly /></td>' +
+                '<td><input type="number" class="form-control product-quantity" min="1" value="1" /></td>' +
+                '<td><input type="text" class="form-control product-total" readonly /></td>' +
+                '<td><button type="button" class="btn btn-danger remove-row">-</button></td>' +
+                '</tr>';
+
+            $('#salesForm tbody').append(newRow);
+        });
+    });
+
+</script>
+<script src="~/js/salesDetails.js"></script>
