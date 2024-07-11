@@ -30,49 +30,92 @@
 
 <div class="container" id="salesForm">
     <main role="main" class="pb-3">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Ürün</th>
-                    <th>Fiyat</th>
-                    <th>Miktar</th>
-                    <th>Toplam Fiyat</th>   
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <select class="form-select"  style="width:300px;">
-                            <option value="">Ürünü Seçiniz</option>
-                            @foreach (var item in Model)
-                            {
-                                <option value="@item.Id">@item.Name</option>
-                            }
-                        </select>
-                    </td>
-                    <td><input type="text" class="form-control product-price" readonly /></td>
-                    <td><input type="number" class="form-control product-quantity" min="1" value="1" /></td>
-                    <td><input type="text" class="form-control product-total" readonly /></td>
-                    <td><button type="button" class="btn btn-success add-row">+</button></td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="confirm-btn-container">
-            <button type="button" class="btn btn-primary" id="confirmBtn">İşlemi Onayla</button>
+      
+        <div class="customer-info">
+            <h4>Müşteri Bilgileri</h4>
+            <div class="form-group">
+                <label for="customerName">Müşteri İsmi</label>
+                <input type="text" class="form-control" id="customerName" placeholder="Müşteri İsmi">
+            </div>
+            <div class="form-group">
+                <label for="customerPhone">Telefon Numarası</label>
+                <input type="tel" class="form-control" id="customerPhone" placeholder="Telefon Numarası">
+            </div>
+            <div class="form-group">
+                <label for="customerEmail">E-posta</label>
+                <input type="email" class="form-control" id="customerEmail" placeholder="E-posta">
+            </div>
+            <div class="form-group">
+                <label for="companyName">Şirket Adı</label>
+                <input type="text" class="form-control" id="companyName" placeholder="Şirket Adı">
+            </div>
+            <div class="form-group">
+                <label for="customerAddress">Adres</label>
+                <textarea class="form-control" id="customerAddress" rows="3" placeholder="Adres"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" id="nextToProduct">Ürün Bilgilerini Gir</button>
+        </div>
+        <!-- Horizontal Line -->
+        <hr>
+
+        <!-- Product Information Section -->
+        <div id="productInfo" class="step" style="display:none;">
+            <h4>Ürün Bilgileri</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Ürün</th>
+                        <th>Fiyat</th>
+                        <th>Miktar</th>
+                        <th>Toplam Fiyat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select class="form-select" style="width:300px;">
+                                <option value="">Ürünü Seçiniz</option>
+                                @foreach (var item in Model)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control product-price" readonly /></td>
+                        <td><input type="number" class="form-control product-quantity" min="1" value="1" /></td>
+                        <td><input type="text" class="form-control product-total" readonly /></td>
+                        <td><button type="button" class="btn btn-success add-row">+</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="confirm-btn-container">
+                <button type="button" class="btn btn-primary" id="confirmBtn">İşlemi Onayla</button>
+            </div>
         </div>
     </main>
 </div>
+
+
+
+
 <script>
-
-    var products = @Html.Raw(JsonConvert.SerializeObject(Model));
-
     $(document).ready(function () {
+      
+        var products = @Html.Raw(JsonConvert.SerializeObject(Model));
+
+
+        $('#nextToProduct').on('click', function () {
+            $('#customerInfo').hide();
+            $('#productInfo').show(); 
+        });
+
+        
         $('#salesForm').on('click', '.add-row', function () {
             var newRow = '<tr>' +
                 '<td><select class="form-select" style="width:300px;">' +
                 '<option value="">Ürünü Seçiniz</option>';
-    
-        
+
+         
             products.forEach(function (item) {
                 newRow += '<option value="' + item.Id + '">' + item.Name + '</option>';
             });
@@ -84,9 +127,15 @@
                 '<td><button type="button" class="btn btn-danger remove-row">-</button></td>' +
                 '</tr>';
 
+           
             $('#salesForm tbody').append(newRow);
         });
-    });
 
+       
+        $('#salesForm').on('click', '.remove-row', function () {
+            $(this).closest('tr').remove();
+        });
+    });
 </script>
+
 <script src="~/js/salesDetails.js"></script>

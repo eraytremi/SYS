@@ -3,6 +3,7 @@ using Business.Abstract;
 using Business.Concrete;
 using Entity.Dtos.Category;
 using Entity.Dtos.SalesDetails;
+using Entity.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,10 +31,10 @@ namespace API.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] List<PostSalesDetails> dtos)
+        public async Task<IActionResult> Add([FromBody] SalesCustomerVM vm)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
-            var response = await _service.AddSalesDetailsAsync(dtos, currentUserId.GetValueOrDefault());
+            var response = await _service.AddSalesDetailsAsync(vm, currentUserId.GetValueOrDefault());
             return SendResponse(response);
         }
 

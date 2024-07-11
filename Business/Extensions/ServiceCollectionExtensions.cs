@@ -56,6 +56,8 @@ namespace Business.Extensions
             services.AddSingleton<IBillService, BillService>();
             services.AddSingleton<IBillRepository, BillRepository>();
 
+            services.AddSingleton<ICustomerRepository, CustomerRepository>();
+            services.AddSingleton<ICustomerService, CustomerService>();
         }
     }
 }

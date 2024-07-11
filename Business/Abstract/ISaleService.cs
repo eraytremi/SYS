@@ -19,6 +19,7 @@ namespace Business.Abstract
         Task<ApiResponse<NoData>> DeleteSalesAsync(long id, long currentUserId);
         Task<ApiResponse<NoData>> UpdateSalesAsync(UpdateSales update, long currentUserId);
         Task<ApiResponse<GetSales>> GetSales(long salesId, long currentUserId);
+
     }
-    
+
 }

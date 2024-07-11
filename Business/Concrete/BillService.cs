@@ -38,10 +38,7 @@ namespace Business.Concrete
                 BillDate = DateTime.Now,
                 CreatedDate = DateTime.Now,
                 CreatedBy = currentUserId,
-                CustomerAdress = bill.CustomerAdress,
-                CustomerName = bill.CustomerName,
                 SalesId = bill.SalesId,
-                TotalAmount = getSales.Data.TotalAmount,
                 IsActive = true
             };
             await _billRepository.InsertAsync(add);
@@ -82,10 +79,7 @@ namespace Business.Concrete
 
                 var add = new GetBill
                 {
-                    CustomerAdress = item.CustomerAdress,
                     SalesId = item.SalesId,
-                    TotalAmount = getSales.Data.TotalAmount,
-                    CustomerName = item.CustomerName,
                     BillDate = item.BillDate,
                 };
                 list.Add(add);
@@ -105,10 +99,7 @@ namespace Business.Concrete
 
             var update = new Bill
             {
-                CustomerAdress = bill.CustomerAdress,
                 SalesId = bill.SalesId,
-                TotalAmount = bill.TotalAmount,
-                CustomerName = bill.CustomerName,
                 Id = bill.Id,
                 UpdatedBy=currentUserId,
                 UpdatedDate=DateTime.Now,

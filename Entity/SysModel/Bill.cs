@@ -11,9 +11,6 @@ namespace Entity.SysModel
     {
         public long SalesId { get; set; }
         public DateTime BillDate { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerAdress { get; set; }
-        public decimal TotalAmount { get; set; }
         [ForeignKey("SalesId")]
         public Sales Sales { get; set; }
     }

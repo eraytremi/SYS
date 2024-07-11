@@ -1,4 +1,5 @@
-﻿using Entity.Dtos.SalesDetails;
+﻿using Entity.Dtos.Customer;
+using Entity.Dtos.SalesDetails;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Entity.Dtos.Sales
         public long Id { get; set; }
         public DateTime Date { get; set; }
         public decimal TotalAmount { get; set; }
-        public List<GetSalesDetails> GetSalesDetails { get; set; }
+        public List<GetSalesDetails> SalesDetails { get; set; }
+        public GetCustomer Customer { get; set; }
     }
 }

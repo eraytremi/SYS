@@ -32,7 +32,7 @@ namespace Repository.Contexts
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Sales> Sales { get; set; }
         public DbSet<SalesDetails> SalesDetails { get; set; }
-
+        public DbSet<Customer> Customers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

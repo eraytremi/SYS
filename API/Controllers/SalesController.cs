@@ -27,9 +27,16 @@ namespace API.Controllers
             return SendResponse(response);
         }
 
+        [HttpGet("getSale")]
+        public async Task<IActionResult> Get(long salesId)
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _saleService.GetSales(salesId,currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> AddCategory([FromBody] PostSales dto)
+        public async Task<IActionResult> Add([FromBody] PostSales dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _saleService.AddSalesAsync(dto, currentUserId.GetValueOrDefault());
@@ -37,7 +44,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCategory([FromBody] UpdateSales dto)
+        public async Task<IActionResult> Update([FromBody] UpdateSales dto)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _saleService.UpdateSalesAsync(dto, currentUserId.GetValueOrDefault());
@@ -45,7 +52,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
             var response = await _saleService.DeleteSalesAsync(id, currentUserId.GetValueOrDefault());

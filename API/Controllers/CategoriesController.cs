@@ -1,8 +1,5 @@
 ﻿using Business.Abstract;
-using DataAccess.Repositories.Abstract;
 using Entity.Dtos.Category;
-using Entity.Dtos.Product;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers

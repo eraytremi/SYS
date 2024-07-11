@@ -54,7 +54,16 @@
     });
 
     $('#confirmBtn').click(function () {
-        var salesDetails = [];
+        var salesCustomerVm = {
+            SalesDetails: [],
+            Customer: {
+                Name: $('#customerName').val(),
+                CompanyName: $('#companyName').val(),
+                PhoneNumber: $('#customerPhone').val(),
+                Mail: $('#customerEmail').val(),
+                Address: $('#customerAddress').val()
+            }
+        };
 
         $('#salesForm tbody tr').each(function () {
             var productId = $(this).find('.form-select').val();
@@ -62,26 +71,27 @@
             var price = $(this).find('.product-price').val();
 
             if (productId && quantity && price) {
-                salesDetails.push({
+                salesCustomerVm.SalesDetails.push({
                     ProductId: parseInt(productId),
                     Quantity: parseInt(quantity),
                     Price: parseFloat(price)
                 });
             }
         });
-        console.log(salesDetails)
-        if (salesDetails.length > 0) {
+
+        if (salesCustomerVm.SalesDetails.length > 0) {
             $.ajax({
                 url: "/SaleDetails/Post",
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(salesDetails),
+                data: JSON.stringify(salesCustomerVm),
                 success: function (response) {
+                    console.log(response);
                     if (response.isSuccess) {
                         alert('Satış işlemi başarılı');
-                        window.location.href = "/SaleDetails/Index";
+                        window.location.href = "/SaleDetails/Download?filePath=" + encodeURIComponent(response.filePath);
                     } else {
-                        alert('Satış işlemi başarısız: ' + response.message);
+                        alert('Satış işlemi başarısız: ' + response.Message);
                     }
                 },
                 error: function () {
@@ -92,4 +102,8 @@
             alert('Lütfen en az bir ürün seçin');
         }
     });
+
+
+
+
 });
