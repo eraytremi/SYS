@@ -55,7 +55,7 @@
                 <ul class="sidebar-menu" id="nav-accordion">
 
 
-                    @if (Model.RoleId == "2")
+                    @if (Model.RoleId == "5")
                     {
                         <h5 class="centered">Müdür</h5>
                         <h5 class="centered">@Model.UserGetDto.Name</h5>
@@ -101,7 +101,7 @@
                             </a>
                         </li>                     
                     }
-                    @if (Model.RoleId == "5")
+                    @if (Model.RoleId == "3")
                     {
                         <h5 class="centered">Satış Elemanı</h5>
                         <h5 class="centered">@Model.UserGetDto.Name</h5>
@@ -120,7 +120,7 @@
                         </li>
                     }
 
-                    @if (Model.RoleId == "3")
+                    @if (Model.RoleId == "2")
                     {
                         <h5 class="centered">Satın Alma</h5>
                         <h5 class="centered">@Model.UserGetDto.Name</h5>

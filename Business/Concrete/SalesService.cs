@@ -171,7 +171,7 @@ namespace Business.Concrete
                 UpdatedDate = DateTime.Now,
                 TotalAmount = update.TotalAmount,
                 Date = DateTime.Now,
-                 IsActive=true,
+                IsActive=true,
             };
             await _salesRepository.UpdateAsync(updateSales);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);

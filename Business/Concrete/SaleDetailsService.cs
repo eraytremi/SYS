@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entity.Dtos.Customer;
+using Entity.Dtos.StockStatus;
 
 namespace Business.Concrete
 {
@@ -25,13 +26,15 @@ namespace Business.Concrete
         private readonly IProductRepository _productRepository;
         private readonly ISalesRepository _salesRepository;
         private readonly ICustomerRepository _customerRepository;
-        public SaleDetailsService(ISalesDetailsRepository salesDetailsRepository, IUserRepository userRepository, IProductRepository productRepository, ISalesRepository salesRepository, ICustomerRepository customerRepository)
+        private readonly IStockService _stockService;
+        public SaleDetailsService(ISalesDetailsRepository salesDetailsRepository, IUserRepository userRepository, IProductRepository productRepository, ISalesRepository salesRepository, ICustomerRepository customerRepository, IStockService stockService)
         {
             _salesDetailsRepository = salesDetailsRepository;
             _userRepository = userRepository;
             _productRepository = productRepository;
             _salesRepository = salesRepository;
             _customerRepository = customerRepository;
+            _stockService = stockService;
         }
 
         public async Task<ApiResponse<string>> AddSalesDetailsAsync(SalesCustomerVM vm, long currentUserId)
@@ -84,6 +87,11 @@ namespace Business.Concrete
             foreach (var sale in vm.SalesDetails)
             {
                 var product = await _productRepository.GetByIdAsync(sale.ProductId );
+                var stock = await _stockService.GetByProductIdAsync(product.Id,currentUserId);
+                if (sale.Quantity>stock.Data.Quantity || stock==null)
+                {
+                    return ApiResponse<string>.Fail(StatusCodes.Status400BadRequest, $"Stokta yeterli {product.Name} yok ");
+                }
 
                 var add = new SalesDetails
                 {
@@ -97,7 +105,15 @@ namespace Business.Concrete
                 };
 
                 await _salesDetailsRepository.InsertAsync(add);
-               
+
+                var stockStatus = new UpdateStock
+                {   
+                    ProductId = product.Id,
+                    Quantity =stock.Data.Quantity-sale.Quantity,
+                    Id = stock.Data.Id,
+                };
+
+                await _stockService.UpdateAsync(stockStatus,currentUserId);
             }
 
             //fatura oluştur

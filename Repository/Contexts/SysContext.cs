@@ -29,7 +29,6 @@ namespace Repository.Contexts
         public DbSet<StockMovement> StockMovements { get; set; }
         public DbSet<Stock> StockStatuses { get; set; }
         public DbSet<Demand> Demands { get; set; }
-        public DbSet<Bill> Bills { get; set; }
         public DbSet<Sales> Sales { get; set; }
         public DbSet<SalesDetails> SalesDetails { get; set; }
         public DbSet<Customer> Customers { get; set; }

@@ -10,6 +10,7 @@ using Entity.Dtos.WareHouse;
 using Entity.SysModel;
 using Infrastructure.Utilities.Responses;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace Business.Concrete
 {
@@ -171,8 +172,10 @@ namespace Business.Concrete
             {
                 Id = updateStockStatus.Id,
                 ProductId = updateStockStatus.ProductId,
-                Quantity = updateStockStatus.Quantity
-
+                Quantity = updateStockStatus.Quantity,
+                UpdatedBy=currentUserId,
+                UpdatedDate = DateTime.Now,
+                IsActive=true
             };
 
             await _stockStatusRepository.UpdateAsync(update);
@@ -245,6 +248,60 @@ namespace Business.Concrete
 
             await _stockStatusRepository.UpdateAsync(update);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
+        }
+
+        public async Task<ApiResponse<GetStock>> GetByProductIdAsync(long productId, long currentUserId)
+        {
+            var getUser = await _userRepository.GetByIdAsync(currentUserId);
+            if (getUser == null)
+            {
+                return ApiResponse<GetStock>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
+            }
+            
+            var getStock = await _stockStatusRepository.GetByIdAsync(productId);
+            if (getStock == null)
+            {
+                return ApiResponse<GetStock>.Fail(StatusCodes.Status400BadRequest, "Geçerli ürün stokta yok!");
+            }
+            var getProduct = await _productRepository.GetByIdAsync(productId);
+            var getWareHouseId = await _warehouseRepository.GetByIdAsync((int)getProduct.WareHouseId);
+            var getCategoryById = await _categoryRepository.GetByIdAsync(getProduct.CategoryId);
+            var getSupplierById = await _supplierRepository.GetByIdAsync(getProduct.SupplierId);
+            var stock = new GetStock
+            {
+                Id = getStock.Id,
+                ProductId = getStock.ProductId,
+                Quantity = getStock.Quantity,
+                GetProduct = new GetProduct
+                {
+                    Id = getStock.ProductId,
+                    WareHouseId = getProduct.WareHouseId,
+                    Name = getProduct.Name,
+                    Price = getProduct.Price,
+                    SupplierId = getProduct.SupplierId,
+                    CategoryId = getProduct.CategoryId,
+                    Unit = ConvertUnitEnumToString(getProduct.Unit),
+                    Description = getProduct.Description,
+                    GetWareHouse = new GetWareHouse
+                    {
+                        Id = getWareHouseId.Id,
+                        Name = getWareHouseId.Name
+                    },
+                    GetSupplier = new GetSupplier
+                    {
+                        Id = getSupplierById.Id,
+                        Description = getSupplierById.Description,
+                        Name = getSupplierById.Name
+                    },
+                    GetCategory = new GetCategory
+                    {
+                        Id = getCategoryById.Id,
+                        Name = getCategoryById.Name
+                    }
+                }
+            };
+
+            return ApiResponse<GetStock>.Success(StatusCodes.Status200OK, stock);
         }
     }
 

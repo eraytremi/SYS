@@ -27,6 +27,14 @@ namespace API.Controllers
             return SendResponse(response);
         }
 
+        [HttpGet("getByIdProductId")]
+        public async Task<IActionResult> Get(long productId)
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _stockStatusService.GetByProductIdAsync(productId,currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] PostStock dto)

@@ -65,7 +65,7 @@ namespace Client.Controllers
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
             var fileName = Path.GetFileName(filePath);
 
-            // Dosyayı indirmek için File metodunu kullanın
+           
             return File(fileBytes, "application/pdf", fileName);
         }
 
