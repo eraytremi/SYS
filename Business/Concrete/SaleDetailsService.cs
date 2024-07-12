@@ -1,21 +1,15 @@
-﻿using Aspose.Pdf.Text;
-using Aspose.Pdf;
+﻿using Aspose.Pdf;
+using Aspose.Pdf.Text;
 using Business.Abstract;
 using DataAccess.Repositories.Abstract;
-using DataAccess.Repositories.Concrete;
+using Entity.Dtos.Customer;
 using Entity.Dtos.Sales;
 using Entity.Dtos.SalesDetails;
+using Entity.Dtos.StockStatus;
 using Entity.SysModel;
 using Entity.ViewModels;
 using Infrastructure.Utilities.Responses;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Entity.Dtos.Customer;
-using Entity.Dtos.StockStatus;
 
 namespace Business.Concrete
 {
@@ -25,15 +19,15 @@ namespace Business.Concrete
         private readonly IUserRepository _userRepository;
         private readonly IProductRepository _productRepository;
         private readonly ISalesRepository _salesRepository;
-        private readonly ICustomerRepository _customerRepository;
+        private readonly ICustomerService _customerService;
         private readonly IStockService _stockService;
-        public SaleDetailsService(ISalesDetailsRepository salesDetailsRepository, IUserRepository userRepository, IProductRepository productRepository, ISalesRepository salesRepository, ICustomerRepository customerRepository, IStockService stockService)
+        public SaleDetailsService(ISalesDetailsRepository salesDetailsRepository, IUserRepository userRepository, IProductRepository productRepository, ISalesRepository salesRepository, ICustomerService customerService, IStockService stockService)
         {
             _salesDetailsRepository = salesDetailsRepository;
             _userRepository = userRepository;
             _productRepository = productRepository;
             _salesRepository = salesRepository;
-            _customerRepository = customerRepository;
+            _customerService = customerService;
             _stockService = stockService;
         }
 
@@ -45,21 +39,9 @@ namespace Business.Concrete
                 return ApiResponse<string>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
-            var customer = new Customer
-            {
-                Address = vm.Customer.Address,
-                CompanyName = vm.Customer.CompanyName,
-                CreatedBy = currentUserId,
-                CreatedDate = DateTime.Now,
-                IsActive = true,
-                Mail = vm.Customer.Mail,
-                Name = vm.Customer.Name,
-                PhoneNumber = vm.Customer.PhoneNumber
-
-            };
-            await _customerRepository.InsertAsync(customer);
-            var getCustomer = await _customerRepository.GetAllAsync(p => p.IsActive == true);
-            var lastIndexCustomer = getCustomer.OrderByDescending(x => x.Id).FirstOrDefault();
+            await _customerService.AddCustomer(vm.Customer, currentUserId);
+            var getCustomer = await _customerService.GetCustomers(currentUserId);
+            var lastIndexCustomer = getCustomer.Data.OrderByDescending(x => x.Id).FirstOrDefault();
 
             decimal totalAmount = 0;
 
@@ -88,7 +70,12 @@ namespace Business.Concrete
             {
                 var product = await _productRepository.GetByIdAsync(sale.ProductId );
                 var stock = await _stockService.GetByProductIdAsync(product.Id,currentUserId);
-                if (sale.Quantity>stock.Data.Quantity || stock==null)
+                if (stock.Data==null)
+                {
+                    return ApiResponse<string>.Fail(StatusCodes.Status400BadRequest, $"Stokta yeterli {product.Name} yok ");
+                }
+
+                if (sale.Quantity > stock.Data.Quantity )
                 {
                     return ApiResponse<string>.Fail(StatusCodes.Status400BadRequest, $"Stokta yeterli {product.Name} yok ");
                 }
@@ -136,12 +123,11 @@ namespace Business.Concrete
                 SalesDetails = salesDetails,
                 Customer = new GetCustomer
                 {
-                    Id = lastIndexCustomer.Id,
-                    Name = lastIndexCustomer.Name,
-                    CompanyName = lastIndexCustomer.CompanyName,
-                    PhoneNumber = lastIndexCustomer.PhoneNumber,
-                    Mail = lastIndexCustomer.Mail,
-                    Address = lastIndexCustomer.Address
+                    Name = vm.Customer.Name,
+                    CompanyName = vm.Customer.CompanyName,
+                    PhoneNumber = vm.Customer.PhoneNumber,
+                    Mail = vm.Customer.Mail,
+                    Address = vm.Customer.Address
                 }
             };
 

@@ -1,4 +1,5 @@
 ﻿using Entity.Dtos.Customer;
+using Entity.SysModel;
 using Infrastructure.Utilities.Responses;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Business.Abstract
     public interface ICustomerService
     {
         Task<ApiResponse<List<GetCustomer>>> GetCustomers(long currentUserId);
-        Task<ApiResponse<NoData>> AddCustomer(AddCustomer customer, long currentUserId);
+        Task<ApiResponse<Customer>> AddCustomer(AddCustomer customer, long currentUserId);
         Task<ApiResponse<NoData>> DeleteCustomer(int id, long currentUserId);
         Task<ApiResponse<NoData>> UpdateCustomer(UpdateCustomer customer, long currentUserId);
         Task<ApiResponse<GetCustomer>> GetCustomerById(long id, long currentUserId);

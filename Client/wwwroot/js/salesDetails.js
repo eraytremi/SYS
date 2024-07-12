@@ -86,21 +86,46 @@
                 contentType: 'application/json',
                 data: JSON.stringify(salesCustomerVm),
                 success: function (response) {
-                    console.log(response);
                     if (response.isSuccess) {
-                        alert('Satış işlemi başarılı');
-                        window.location.href = "/SaleDetails/Download?filePath=" + encodeURIComponent(response.filePath);
+                        Swal.fire({
+                            title: 'İşlem Başarılı',
+                            text: response.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Tamam'
+                        }).then(() => {
+                            window.location.href = "/SaleDetails/Download?filePath=" + encodeURIComponent(response.filePath);
+                        });
                     } else {
-                        alert('Satış işlemi başarısız: ' + response.Message);
+                        Swal.fire({
+                            title: 'İşlem Başarısız',
+                            text: response.messages.join(','),
+                            icon: 'error',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Tamam'
+                        });
                     }
                 },
                 error: function () {
-                    alert('Satış işlemi sırasında bir hata oluştu');
+                    Swal.fire({
+                        title: 'İşlem Başarısız',
+                        text: 'Bir hata oluştu. Lütfen tekrar deneyiniz.',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Tamam'
+                    });
                 }
             });
         } else {
-            alert('Lütfen en az bir ürün seçin');
+            Swal.fire({
+                title: 'İşlem Başarısız',
+                text: response.messages.join(','), 
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Tamam'
+            });
         }
+
     });
 
 

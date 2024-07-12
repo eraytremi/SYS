@@ -23,12 +23,19 @@ namespace Business.Concrete
             _userRepository = userRepository;
         }
 
-        public async Task<ApiResponse<NoData>> AddCustomer(AddCustomer customer, long currentUserId)
+        public async Task<ApiResponse<Customer>> AddCustomer(AddCustomer customer, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
             {
-                return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
+                return ApiResponse<Customer>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
+            }
+
+            var existCustomer = await _repo.GetAsync(p => p.Name == customer.Name && p.Mail==customer.Mail && p.IsActive==true);
+
+            if (existCustomer != null)
+            {
+                return ApiResponse<Customer>.Success(StatusCodes.Status200OK, existCustomer);
             }
 
             var add = new Customer
@@ -40,10 +47,11 @@ namespace Business.Concrete
                 Name = customer.Name,
                 Mail = customer.Mail,
                 PhoneNumber = customer.PhoneNumber,
-                CompanyName = customer.CompanyName      
+                CompanyName = customer.CompanyName     
             };
+
             await _repo.InsertAsync(add);
-            return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
+            return ApiResponse<Customer>.Success(StatusCodes.Status201Created);
         }
 
         public async Task<ApiResponse<NoData>> DeleteCustomer(int id, long currentUserId)
