@@ -1,6 +1,10 @@
 ﻿using Business.Abstract;
 using Entity.Dtos.Product;
 using Entity.Dtos.Role;
+using Infrastructure.Consts;
+using Infrastructure.CustomAttributes;
+using Infrastructure.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +12,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsController : BaseController
     {
         private readonly IConfiguration _configuration;
@@ -20,9 +25,8 @@ namespace API.Controllers
         }
 
 
-
-
         [HttpGet]
+        [AuthorizeDefinition(Menu = AuthorizeDefinitionConsts.Product, ActionType = ActionType.Reading, Definition = "Get Products")]
         public async Task<IActionResult> GetAll()
         {
             var currentUserId = CurrentUser.Get(HttpContext);

@@ -1,11 +1,13 @@
 ﻿using Business.Abstract;
 using Entity.Dtos.Customer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CustomersController : BaseController
     {
         private readonly IConfiguration _configuration;

@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Entity.Dtos.User;
 using Infrastructure.Utilities.JWT;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,6 +11,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : BaseController
     {
         private readonly IUserService _service;

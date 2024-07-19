@@ -2,6 +2,7 @@
 using Business.Abstract;
 using Entity.Dtos.Category;
 using Entity.Dtos.Sales;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SalesController : BaseController
     {
         private readonly IConfiguration _configuration;

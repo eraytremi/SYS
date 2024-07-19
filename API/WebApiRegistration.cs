@@ -51,7 +51,7 @@ namespace PurchasingSystem.API
         public static void AddAuthServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthorization();
-            var conStr = configuration.GetConnectionString("PurchasingDb");
+            var conStr = configuration.GetConnectionString("SysDb");
             var tokenOptions = configuration.GetSection("TokenOptions").Get<Infrastructure.Utilities.JWT.TokenOptions>();
             services.AddAuthentication(opt =>
             {

@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Entity.Dtos.Category;
+using Infrastructure.CustomAttributes;
+using Infrastructure.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -20,37 +22,37 @@ namespace API.Controllers
 
 
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        var currentUserId = CurrentUser.Get(HttpContext);
-        var response = await _service.GetCategoriesAsync(currentUserId.GetValueOrDefault());
-        return SendResponse(response);
-    }
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.GetCategoriesAsync(currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+        }
 
 
-    [HttpPost]
-    public async Task<IActionResult> AddCategory([FromBody]AddCategory dto)
-    {
-        var currentUserId = CurrentUser.Get(HttpContext);
-        var response = await _service.AddCategory(dto, currentUserId.GetValueOrDefault());
-        return SendResponse(response);
-    }
+        [HttpPost]
+        public async Task<IActionResult> AddCategory([FromBody] AddCategory dto)
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.AddCategory(dto, currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+        }
 
-    [HttpPut]
-    public async Task<IActionResult> UpdateCategory([FromBody]UpdateCategory dto)
-    {
-        var currentUserId = CurrentUser.Get(HttpContext);
-        var response = await _service.UpdateCategoryAsync(dto, currentUserId.GetValueOrDefault());
-        return SendResponse(response);
-    }
+        [HttpPut]
+        public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategory dto)
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.UpdateCategoryAsync(dto, currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+        }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCategory(int id)
-    {
-        var currentUserId = CurrentUser.Get(HttpContext);
-        var response = await _service.DeleteCategory(id, currentUserId.GetValueOrDefault());
-        return SendResponse(response);
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _service.DeleteCategory(id, currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+        }
     }
-}
 }

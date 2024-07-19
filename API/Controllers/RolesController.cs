@@ -3,6 +3,7 @@ using Business.Abstract;
 using Entity.Dtos.Role;
 using Entity.Dtos.User;
 using Infrastructure.Utilities.JWT;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -11,6 +12,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RolesController : BaseController
     {
         private readonly IConfiguration _configuration;

@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Entity.Dtos.Product;
 using Entity.Dtos.Supplier;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SuppliersController : BaseController
     {
         private readonly IConfiguration _configuration;
