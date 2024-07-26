@@ -1,0 +1,120 @@
+﻿@using Client.Models.Dtos.Chat
+@model List<GetChat>
+
+
+@{
+    var user = ViewBag.ActivePerson;
+    Layout = "_Layout";
+}
+<div class="chat-container" style="margin-top: 60px; margin-left:300px; margin-right:100px;">
+    <div class="card bg-light" style="height: 80vh;width: 100%;">
+        <div class="card-header">
+            Sohbet Uygulaması
+        </div>
+        <div id="chatEkrani">
+            <div class="d-flex col-12">
+                <div id="mesajAlani" class="col-md-12 bg-white">
+                    <div class="d-flex flex-column">
+                        @foreach (var item in Model)
+                        {
+                            <div class="alert alert-dark" role="alert">
+                                <p><b>@item.UserName</b>: @item.MessageText</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div id="yeniMesajAlani" class="col-md-12" style="position: absolute; bottom: 10px;">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="mesaj" placeholder="Mesaj yazınız.." />
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="form-control btn btn-success" id="sendButton">Gönder</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"></script>
+<script type="text/javascript">
+    const user = "@user";
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("https://localhost:7220/chatHub")
+        .configureLogging(signalR.LogLevel.Debug)
+        .build();
+
+    connection.on("ReceiveMessage", function (user, message) {
+    
+        const alertDiv = document.createElement("div");
+        alertDiv.classList.add("alert", "alert-dark");
+        alertDiv.setAttribute("role", "alert");
+
+        const messageParagraph = document.createElement("p");
+
+        const boldUserName = document.createElement("b");
+        boldUserName.textContent = decodeURIComponent(user);
+
+        messageParagraph.appendChild(boldUserName);
+        messageParagraph.appendChild(document.createTextNode(": " + decodeURIComponent(message)));
+
+        alertDiv.appendChild(messageParagraph);
+
+        document.getElementById("mesajAlani").appendChild(alertDiv);
+    });
+
+    connection.start().catch(function (err) {
+        console.error(err.toString());
+    });
+
+    document.getElementById("sendButton").addEventListener("click", function (event) {
+        event.preventDefault();
+
+        const message = document.getElementById("mesaj").value;
+        if (!message) {
+            console.error('Mesaj boş olamaz.');
+            return;
+        }
+
+        const data = { user: user, message: message };
+        console.log('Sending data:', data);
+
+        const queryString = new URLSearchParams(data).toString();
+        const url = 'https://localhost:7220/api/Chats?' + queryString;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+                //token'ı buraya eklersin
+            }
+        }).then(response => {
+            if (response.ok) {
+                console.log('Mesaj gönderildi ve kaydedildi.');
+            } else {
+                return response.json().then(err => {
+                    console.error('Mesaj gönderilemedi:', err);
+                });
+            }
+        }).catch(error => {
+            console.error('Hata:', error);
+        });
+    });
+</script>
+
+
+<style>
+    .chat-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    #mesajAlani {
+        overflow-y: auto;
+        max-height: 65vh;
+    }
+</style>

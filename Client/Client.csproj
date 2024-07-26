@@ -7,16 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\chat.js" />
     <Content Remove="wwwroot\js\demand.js" />
     <Content Remove="wwwroot\js\salesDetails.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\chat.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\demand.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\salesDetails.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\chat.js" />
     <None Include="wwwroot\js\demand.js" />
     <None Include="wwwroot\js\salesDetails.js" />
   </ItemGroup>

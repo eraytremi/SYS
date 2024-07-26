@@ -58,6 +58,11 @@ namespace Business.Extensions
 
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<ICustomerService, CustomerService>();
+
+            services.AddSingleton<IChatRepository, ChatRepository>();
+            services.AddSingleton<IChatService, ChatHub>();
+
+            services.AddTransient<ChatHub>();
         }
     }
 }

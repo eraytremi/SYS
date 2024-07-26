@@ -1,6 +1,7 @@
 ﻿@using Client.Models.ViewModels
 @model SideBarViewModel
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,26 +25,112 @@
 
     <script src="~/assets/js/chart-master/Chart.js"></script>
 
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #333; 
+        }
 
+        .sidebar-toggle-box {
+            display: flex;
+            align-items: center;
+        }
+
+        .top-menu {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+            .top-menu .nav {
+                display: flex;
+                align-items: center;
+            }
+
+                .top-menu .nav > li {
+                    margin-left: 150px; 
+                }
+
+            .top-menu .dropdown-toggle {
+                display: flex;
+                align-items: center;
+            }
+
+            .top-menu .logout {
+                padding: 10px 15px;
+                background-color: #f00; /* Example background color for logout button */
+                color: #fff;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            z-index: 1000;
+        }
+
+            .dropdown-menu.show {
+                display: block;
+            }
+
+
+    </style>
 </head>
 
 <body>
 
     <section id="container">
-        <!-- **********************************************************************************************************************************************************
-        TOP BAR CONTENT & NOTIFICATIONS
-        *********************************************************************************************************************************************************** -->
-        <!--header start-->
+
         <header class="header black-bg">
             <div class="sidebar-toggle-box">
                 <div class="fa fa-bars tooltips" data-placement="right"></div>
             </div>
             <div class="top-menu">
                 <ul class="nav pull-right top-menu">
+                    <li>
+                        <div id="header_inbox_bar" class="dropdown">
+                            <a id="dropdownToggle" class="dropdown-toggle" href="javascript:void(0);">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="badge bg-theme">5</span>
+                            </a>
+                            <ul id="dropdownMenu" class="dropdown-menu extended inbox">
+                                <div class="notify-arrow notify-arrow-green"></div>
+                                <li>
+                                    <p class="green">You have  new messages</p>
+                                </li>
+                                <li>
+
+                                    <a href="index.html#">
+                                        <span class="subject">
+                                            <span class="from">Zac Snider</span>
+                                            <span class="time">Just now</span>
+                                        </span>
+                                        <span class="message">
+                                            Hi mate, how is everything?
+                                        </span>
+                                    </a>
+                                </li>
+                             
+                                <li>
+                                    <a href="index.html#">See all messages</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                     <li><a class="logout" href="/Exit/Index">Çıkış</a></li>
                 </ul>
             </div>
         </header>
+
+
         <!--header end-->
         <!-- **********************************************************************************************************************************************************
         MAIN SIDEBAR MENU
@@ -59,7 +146,7 @@
                     {
                         <h5 class="centered">Müdür</h5>
                         <h5 class="centered">@Model.UserGetDto.Name</h5>
-                        
+
                         <li class="sub-menu">
                             <a class="active">
                                 <i class="fa fa-desktop"></i>
@@ -72,7 +159,7 @@
                                 <li><a href="/StockMovement/Index">Stok Hareketleri</a></li>
                                 <li><a href="/Product/Index">Ürünler</a></li>
                                 <li><a href="/Category/Index">Kategoriler</a></li>
-                                
+
                             </ul>
                         </li>
                         <li class="sub-menu">
@@ -81,12 +168,24 @@
                                 <span>Depo Yönetimi</span>
                             </a>
                         </li>
+                        <li class="sub-menu">
+                            <a href="/Chat/Index">
+                                <i class="fa fa-cogs"></i>
+                                <span>Chat</span>
+                            </a>
+                        </li>
                     }
                     @if (Model.RoleId == "1")
                     {
                         <h5 class="centered">Admin</h5>
                         <h5 class="centered">@Model.UserGetDto.Name</h5>
 
+                        <li class="sub-menu">
+                            <a href="/Chat/Index">
+                                <i class="fa fa-cogs"></i>
+                                <span>Chat</span>
+                            </a>
+                        </li>
                         <li class="sub-menu">
                             <a href="/User/Index">
                                 <i class="fa fa-cogs"></i>
@@ -99,13 +198,18 @@
                                 <i class="fa fa-cogs"></i>
                                 <span>Rol Yönetimi</span>
                             </a>
-                        </li>                     
+                        </li>
                     }
                     @if (Model.RoleId == "3")
                     {
                         <h5 class="centered">Satış Elemanı</h5>
                         <h5 class="centered">@Model.UserGetDto.Name</h5>
-    
+                        <li class="sub-menu">
+                            <a href="/Chat/Index">
+                                <i class="fa fa-cogs"></i>
+                                <span>Chat</span>
+                            </a>
+                        </li>
                         <li class="mt">
                             <a class="active" href="/SaleDetails/Index">
                                 <i class="fa fa-dashboard"></i>
@@ -137,6 +241,12 @@
                                 <span>Onaylanmış Talepler</span>
                             </a>
                         </li>
+                        <li class="sub-menu">
+                            <a href="/Chat/Index">
+                                <i class="fa fa-cogs"></i>
+                                <span>Chat</span>
+                            </a>
+                        </li>
                     }
                     @if (Model.RoleId == "4")
                     {
@@ -163,7 +273,12 @@
 
                             </ul>
                         </li>
-
+                        <li class="sub-menu">
+                            <a href="/Chat/Index">
+                                <i class="fa fa-cogs"></i>
+                                <span>Chat</span>
+                            </a>
+                        </li>
                     }
                 </ul>
 
@@ -194,15 +309,82 @@
 
     <script type="application/javascript">
 
-
         function myNavFunction(id) {
             $("#date-popover").hide();
             var nav = $("#" + id).data("navigation");
             var to = $("#" + id).data("to");
             console.log('nav ' + nav + ' to: ' + to.month + '/' + to.year);
         }
-    </script>
 
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var dropdownToggle = document.getElementById('dropdownToggle');
+            var dropdownMenu = document.getElementById('dropdownMenu');
+
+            if (dropdownToggle && dropdownMenu) {
+                dropdownToggle.addEventListener('click', function () {
+                    dropdownMenu.classList.toggle('show');
+                });
+
+                // Close the dropdown if the user clicks outside of it
+                window.addEventListener('click', function (event) {
+                    if (!dropdownToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                        dropdownMenu.classList.remove('show');
+                    }
+                });
+            }
+        });
+
+        $(document).ready(function () {
+            // AJAX isteği gönder
+            $.ajax({
+                url: '/Chat/GetUnreadMessages', 
+                method: 'GET',
+                success: function (data) {
+                  
+                    var unreadMessages = data;
+                    var unreadCount = unreadMessages.length;
+
+                    // Badge'in metnini güncelleyin
+                    $('#header_inbox_bar .badge').text(unreadCount);
+
+                    // Dropdown menüsünü temizleyin
+                    var dropdownMenu = $('#dropdownMenu');
+                    dropdownMenu.empty();
+
+                    // Yeni mesajları ekleyin
+                    if (unreadCount > 0) {
+                        dropdownMenu.append('<div class="notify-arrow notify-arrow-green"></div>');
+                        dropdownMenu.append('<li><p class="green">You have ' + unreadCount + ' new messages</p></li>');
+
+                        unreadMessages.forEach(function (message) {
+                            dropdownMenu.append(
+                                '<li>' +
+                                '    <a href="index.html#">' +
+                                '        <span class="photo"><img alt="avatar" src="assets/img/ui-zac.jpg"></span>' +
+                                '        <span class="subject">' +
+                                '            <span class="from">' + message.userName + '</span>' +
+                                '            <span class="time">' + message.timeSent + '</span>' +
+                                '        </span>' +
+                                '        <span class="message">' + message.messageText + '</span>' +
+                                '    </a>' +
+                                '</li>'
+                            );
+                        });
+
+                        dropdownMenu.append('<li><a href="index.html#">See all messages</a></li>');
+                    } else {
+                        dropdownMenu.append('<li><p class="green">You have no new messages</p></li>');
+                    }
+                },
+                error: function (error) {
+                    console.error('Error fetching unread messages:', error);
+                }
+            });
+        });
+
+    </script>
 
 </body>
 </html>

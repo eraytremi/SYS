@@ -32,6 +32,9 @@ namespace Repository.Contexts
         public DbSet<Sales> Sales { get; set; }
         public DbSet<SalesDetails> SalesDetails { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
