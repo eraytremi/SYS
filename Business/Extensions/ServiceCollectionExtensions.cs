@@ -62,6 +62,12 @@ namespace Business.Extensions
             services.AddSingleton<IChatRepository, ChatRepository>();
             services.AddSingleton<IChatService, ChatHub>();
 
+            services.AddSingleton<IGroupMemberService, GroupMemberService>();
+            services.AddSingleton<IGroupMemberRepository, GroupMemberRepository>();
+
+            services.AddSingleton<IGroupRepository, GroupRepository>();
+            services.AddSingleton<IGroupChatService, GroupChatService>();
+
             services.AddTransient<ChatHub>();
         }
     }

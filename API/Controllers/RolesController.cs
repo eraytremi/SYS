@@ -12,7 +12,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   
     public class RolesController : BaseController
     {
         private readonly IConfiguration _configuration;

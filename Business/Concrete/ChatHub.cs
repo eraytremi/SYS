@@ -21,6 +21,7 @@ namespace Business.Concrete
         private readonly IChatRepository _chatRepository;
         private readonly IUserRepository _userRepository;
         protected IHubContext<ChatHub> _hubContext;
+        private static Dictionary<string, string> userConnectionMap = new Dictionary<string, string>();
         public ChatHub(IChatRepository chatRepository, IUserRepository userRepository, IHubContext<ChatHub> hubContext)
         {
             _chatRepository = chatRepository;
@@ -50,13 +51,9 @@ namespace Business.Concrete
             var unreadMessages =new List<UnreadMessage>();
             foreach (var chat in getChats)
             {
-             
                 var add = new UnreadMessage
                 {
-                    MessageText = chat.MessageText,
-                    Date = chat.Date,
-                    Reciever=chat.Reciever,
-                    Sender=chat.Sender,
+                    MessageText = chat.MessageText,                   
                 };
                 unreadMessages.Add(add);
             }
@@ -65,7 +62,7 @@ namespace Business.Concrete
 
         //ReceiveMessage:Client Method  , Server Method:SendMessage
         //await Clients.All.SendAsync("ReceiveMessage", user, message); All deyince tüm clientlar hub'a abone olmak zorundadır. 
-        public async Task SendMessage(string user, string message)
+        public async Task SendMessage(string user,long senderId, string message)
         {
             //var getUser = await _userRepository.GetByIdAsync(currentUserId);
             //if (getUser == null)
@@ -76,9 +73,11 @@ namespace Business.Concrete
             //{
             //    throw new NullReferenceException("Clients is null.");
             //}
+            var getUserId =await _userRepository.GetAsync(p => p.Name.Contains(user));
             var messageObj = new Message
             {
-                UserName = user,
+                SenderId = senderId,
+                RecipientId=1,
                 MessageText = message,
                 CreatedDate = DateTime.Now,
                 IsActive = true
@@ -87,8 +86,38 @@ namespace Business.Concrete
             await _chatRepository.InsertAsync(messageObj);
             await _hubContext.Clients.All.SendAsync("ReceiveMessage", user, message);
         }
+            
+        //public override Task OnConnectedAsync()
+        //{
+        //    // Bağlanan kullanıcıyı ve bağlantı kimliğini sözlüğe ekle
+        //    var username = Context.User.Identity.Name;
+        //    if (!userConnectionMap.ContainsKey(username))
+        //    {
+        //        userConnectionMap.Add(username, Context.ConnectionId);
+        //    }
+        //    return base.OnConnectedAsync();
+        //}
 
-       
+        //public override Task OnDisconnectedAsync(Exception exception)
+        //{
+        //    // Bağlantısı kesilen kullanıcıyı sözlükten çıkar
+        //    var username = Context.User.Identity.Name;
+        //    if (userConnectionMap.ContainsKey(username))
+        //    {
+        //        userConnectionMap.Remove(username);
+        //    }
+        //    return base.OnDisconnectedAsync(exception);
+        //}
+
+        //public async Task SendMessageToUser(string toUser, string message)
+        //{
+        //    // Mesajın gönderileceği kullanıcının bağlantı kimliğini al
+        //    if (userConnectionMap.TryGetValue(toUser, out string connectionId))
+        //    {
+        //        await Clients.Client(connectionId).SendAsync("ReceiveMessage", Context.User.Identity.Name, message);
+        //    }
+        //}
+
     }
 }
 

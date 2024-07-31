@@ -40,11 +40,11 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Chat([FromQuery]string user,string message)
+        public async Task<IActionResult> Chat([FromQuery]string user,long senderId,string message)
         {
             //var currentUserId = CurrentUser.Get(HttpContext);
 
-            await _chatService.SendMessage(user, message);
+            await _chatService.SendMessage(user,senderId, message);
             return Ok();
         }
     }

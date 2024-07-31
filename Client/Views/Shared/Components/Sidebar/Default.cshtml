@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="Dashboard">
     <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-
+    <link href="~/css/default.css" rel="stylesheet" />
     <!-- Bootstrap core CSS -->
     <link href="~/assets/css/bootstrap.css" rel="stylesheet">
     <!--external css-->
@@ -25,64 +25,7 @@
 
     <script src="~/assets/js/chart-master/Chart.js"></script>
 
-    <style>
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #333; 
-        }
 
-        .sidebar-toggle-box {
-            display: flex;
-            align-items: center;
-        }
-
-        .top-menu {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            flex-grow: 1;
-        }
-
-            .top-menu .nav {
-                display: flex;
-                align-items: center;
-            }
-
-                .top-menu .nav > li {
-                    margin-left: 150px; 
-                }
-
-            .top-menu .dropdown-toggle {
-                display: flex;
-                align-items: center;
-            }
-
-            .top-menu .logout {
-                padding: 10px 15px;
-                background-color: #f00; /* Example background color for logout button */
-                color: #fff;
-                text-decoration: none;
-                border-radius: 5px;
-            }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 10px;
-            z-index: 1000;
-        }
-
-            .dropdown-menu.show {
-                display: block;
-            }
-
-
-    </style>
 </head>
 
 <body>
@@ -104,7 +47,7 @@
                             <ul id="dropdownMenu" class="dropdown-menu extended inbox">
                                 <div class="notify-arrow notify-arrow-green"></div>
                                 <li>
-                                    <p class="green">You have  new messages</p>
+                                    <p class="green">Yeni mesajınız var</p>
                                 </li>
                                 <li>
 
@@ -183,8 +126,12 @@
                         <li class="sub-menu">
                             <a href="/Chat/Index">
                                 <i class="fa fa-cogs"></i>
-                                <span>Chat</span>
+                                <span>Sohbet</span>
                             </a>
+                            <ul class="sub">
+                                <li><a href="/GroupChat/Index">Sohbet Ayarları </a></li>
+                                <li><a href="/Message/Index">Mesaj Gönder</a></li>                             
+                            </ul>
                         </li>
                         <li class="sub-menu">
                             <a href="/User/Index">
@@ -285,6 +232,54 @@
             </div>
         </aside>
 
+
+        <!--footer start-->
+       @*  <footer class="footer">
+            <div class="chatbox-holder">
+                <div class="chatbox">
+                    <div class="chatbox-top">
+                        <div class="chat-partner-name">
+                            <span class="status online"></span>
+                            <div class="chat-partner-name-content">
+                                <h3>@Model.UserGetDto.Name</h3>
+                            </div>
+                        </div>
+                        <div class="chatbox-icons">
+                            <a href="javascript:void(0);"><i class="fa fa-minus"></i></a>
+                            <a href="javascript:void(0);"><i class="fa fa-close"></i></a>
+                        </div>
+                    </div>
+                    @foreach (var item in Model.GetChats)
+                    {
+                        <div class="message-box-holder">
+                            <div class="message-sender">
+                                @item.UserName
+                            </div>
+                            <div class="message-box message-partner">
+                                @item.MessageText
+                            </div>
+                        </div>
+                    }
+
+                    <div class="chat-input-holder">
+                        <textarea id="chat-input"></textarea>
+                        <input type="submit" value="Send" id="message-send" />
+                    </div>
+                    <div class="attachment-panel">
+                        <a href="#" class="fa fa-thumbs-up"></a>
+                        <a href="#" class="fa fa-camera"></a>
+                        <a href="#" class="fa fa-video-camera"></a>
+                        <a href="#" class="fa fa-image"></a>
+                        <a href="#" class="fa fa-paperclip"></a>
+                        <a href="#" class="fa fa-link"></a>
+                        <a href="#" class="fa fa-trash-o"></a>
+                        <a href="#" class="fa fa-search"></a>
+                    </div>
+                </div>
+            </div>
+        </footer> *@
+
+
     </section>
 
     <!-- js placed at the end of the document so the pages load faster -->
@@ -306,7 +301,7 @@
     <!--script for this page-->
     <script src="~/assets/js/sparkline-chart.js"></script>
     <script src="~/assets/js/zabuto_calendar.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"></script>
     <script type="application/javascript">
 
         function myNavFunction(id) {
@@ -336,54 +331,121 @@
             }
         });
 
-        $(document).ready(function () {
-            // AJAX isteği gönder
-            $.ajax({
-                url: '/Chat/GetUnreadMessages', 
-                method: 'GET',
-                success: function (data) {
-                  
-                    var unreadMessages = data;
-                    var unreadCount = unreadMessages.length;
+        // $(document).ready(function () {
+        //     $.ajax({
+        //         url: '/Chat/GetUnreadMessages',
+        //         method: 'GET',
+        //         success: function (data) {
+        //             const unreadMessages = data;
+        //             const unreadCount = unreadMessages.length;
 
-                    // Badge'in metnini güncelleyin
-                    $('#header_inbox_bar .badge').text(unreadCount);
+        //             $('#header_inbox_bar .badge').text(unreadCount);
 
-                    // Dropdown menüsünü temizleyin
-                    var dropdownMenu = $('#dropdownMenu');
-                    dropdownMenu.empty();
+        //             const dropdownMenu = $('#dropdownMenu');
+        //             dropdownMenu.empty();
 
-                    // Yeni mesajları ekleyin
-                    if (unreadCount > 0) {
-                        dropdownMenu.append('<div class="notify-arrow notify-arrow-green"></div>');
-                        dropdownMenu.append('<li><p class="green">You have ' + unreadCount + ' new messages</p></li>');
+        //             if (unreadCount > 0) {
+        //                 dropdownMenu.append('<div class="notify-arrow notify-arrow-green"></div>');
+        //                 dropdownMenu.append(`<li><p class="green">You have ${unreadCount} new messages</p></li>`);
 
-                        unreadMessages.forEach(function (message) {
-                            dropdownMenu.append(
-                                '<li>' +
-                                '    <a href="index.html#">' +
-                                '        <span class="photo"><img alt="avatar" src="assets/img/ui-zac.jpg"></span>' +
-                                '        <span class="subject">' +
-                                '            <span class="from">' + message.userName + '</span>' +
-                                '            <span class="time">' + message.timeSent + '</span>' +
-                                '        </span>' +
-                                '        <span class="message">' + message.messageText + '</span>' +
-                                '    </a>' +
-                                '</li>'
-                            );
-                        });
+        //                 unreadMessages.forEach(message => {
+        //                     dropdownMenu.append(`
+        //                             <li>
+        //                                 <a href="index.html#">
+        //                                     <span class="photo"><img alt="avatar" src="assets/img/ui-zac.jpg"></span>
+        //                                     <span class="subject">
+        //                                         <span class="from">${message.userName}</span>
+        //                                         <span class="time">${message.timeSent}</span>
+        //                                     </span>
+        //                                     <span class="message">${message.messageText}</span>
+        //                                 </a>
+        //                             </li>
+        //                         `);
+        //                 });
 
-                        dropdownMenu.append('<li><a href="index.html#">See all messages</a></li>');
-                    } else {
-                        dropdownMenu.append('<li><p class="green">You have no new messages</p></li>');
-                    }
-                },
-                error: function (error) {
-                    console.error('Error fetching unread messages:', error);
-                }
+        //                 dropdownMenu.append('<li><a href="index.html#">See all messages</a></li>');
+        //             } else {
+        //                 dropdownMenu.append('<li><p class="green">You have no new messages</p></li>');
+        //             }
+        //         },
+        //         error: function (error) {
+        //             console.error('Error fetching unread messages:', error);
+        //         }
+        //     });
+        // });
+
+        $(function () {
+            $('.fa-minus').click(function () {
+                $(this).closest('.chatbox').toggleClass('chatbox-min');
+            });
+            $('.fa-close').click(function () {
+                $(this).closest('.chatbox').hide();
             });
         });
 
+        const user = "@Model.UserGetDto.Name";
+        const senderId = @Model.UserGetDto.Id;
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("https://localhost:7220/chatHub")
+            .configureLogging(signalR.LogLevel.Debug)
+            .build();
+
+        connection.on("ReceiveMessage", function (user, message) {
+            const alertDiv = document.createElement("div");
+            alertDiv.classList.add("alert", "alert-dark");
+            alertDiv.setAttribute("role", "alert");
+
+            const messageParagraph = document.createElement("p");
+
+            const boldUserName = document.createElement("b");
+            boldUserName.textContent = decodeURIComponent(user);
+
+            messageParagraph.appendChild(boldUserName);
+            messageParagraph.appendChild(document.createTextNode(": " + decodeURIComponent(message)));
+
+            alertDiv.appendChild(messageParagraph);
+
+            document.getElementById("mesajAlani").appendChild(alertDiv);
+        });
+
+        connection.start().catch(function (err) {
+            console.error(err.toString());
+        });
+
+        // document.getElementById("message-send").addEventListener("click", function (event) {
+        //     event.preventDefault();
+
+        //     const message = document.getElementById("chat-input").value;
+        //     if (!message) {
+        //         console.error('Mesaj boş olamaz.');
+        //         return;
+        //     }
+
+        //     const data = { user: user,senderId, message: message };
+        //     const queryString = new URLSearchParams(data).toString();
+
+        //     console.log('Sending data:', data);
+
+        //     const url = 'https://localhost:7220/api/Chats?' + queryString;
+        //     fetch(url, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //             //token'ı buraya eklersin
+        //         },
+              
+        //     }).then(response => {
+        //         if (response.ok) {
+        //             console.log('Mesaj gönderildi ve kaydedildi.');
+        //         } else {
+        //             return response.json().then(err => {
+        //                 console.error('Mesaj gönderilemedi:', err);
+        //             });
+        //         }
+        //     }).catch(error => {
+        //         console.error('Hata:', error);
+        //     });
+        // });
     </script>
 
 </body>

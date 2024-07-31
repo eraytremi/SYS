@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\default.css" />
     <_ContentIncludedByDefault Remove="wwwroot\js\chat.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\demand.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\salesDetails.js" />

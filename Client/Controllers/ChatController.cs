@@ -21,9 +21,8 @@ namespace Client.Controllers
         {
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             ViewBag.ActivePerson = token.Name;
-            var responseProduct = await _httpApiService.GetDataAsync<ResponseBody<List<GetChat>>>("/Chats", token.Token);
-
-            return View(responseProduct.Data);
+            var responseChat = await _httpApiService.GetDataAsync<ResponseBody<List<GetChat>>>("/Chats", token.Token);
+            return View(responseChat.Data);
         }
 
         [HttpGet]

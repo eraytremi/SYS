@@ -14,6 +14,6 @@ namespace Business.Abstract
         Task<ApiResponse<List<Message>>> GetMessages(long currentUserId);
         Task<ApiResponse<List<UnreadMessage>>> GetUnreadMessages(long currentUserId);
 
-        Task SendMessage(string user, string message);
+        Task SendMessage(string user,long senderId, string message);
     }
 }

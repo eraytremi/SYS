@@ -1,0 +1,317 @@
+﻿@using Client.Models.ViewModels
+@model GroupChatUserVm
+
+<section id="container">
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="row mt">
+                <div class="col-md-12">
+                    <div class="content-panel">
+                        <div class="header-container">
+                            <div class="text-right" style="margin-right: 20px;">
+                                <button id="openAddModalBtn" class="btn btn-success btn-md"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-advance table-hover">
+                            <thead>
+                                <tr>
+                                    <th><i class="fa fa-bullhorn"></i> Id</th>
+                                    <th class="hidden-phone"><i class="fa fa-question-circle"></i> Grup İsmi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.GetGroupChat)
+                                {
+                                    <tr class="clickable-row" data-group-id="@item.Id">
+                                        <td>@item.Id</td>
+                                        <td>@item.GroupName</td>
+                                        <td>
+                                            <button data-bs-toggle="modal" class="btnDelete btn btn-danger btn-md" userId="@item.Id"><i class="fa fa-trash-o "></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="group-members" id="group-@item.Id" style="display: none;">
+                                        <td colspan="3">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">Grup Üyeleri</div>
+                                                <div class="panel-body">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Üye Id</th>
+                                                                <th>Üye İsmi</th>
+                                                                <th>Üye Mail</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="members-list-@item.Id">
+                                                            <div class="header-container">
+                                                                <div class="text-right" style="margin-right: 20px;">
+                                                                    <button group-id="@item.Id"  class="openAddNewUserBtn btn btn-success btn-md"><i class="fa fa-plus"></i></button>
+                                                                </div>
+                                                            </div>
+                                                            @foreach (var getGroupMember in item.GetGroupMembers)
+                                                            {
+                                                                <tr class="clickable-row" data-group-id="@item.Id">
+                                                                    <td>@getGroupMember.GetUser.Id</td>
+                                                                    <td>@getGroupMember.GetUser.Name</td>
+                                                                    <td>@getGroupMember.GetUser.Mail</td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</section>
+
+
+<div id="addGroupChatModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addGroupChatModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Grup Ekle</h4>
+            </div>
+            <div class="modal-body">
+                <form id="newRecordForm1">
+                    <div class="form-group">
+                        <label for="name">Grup İsmi:</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                        <h4>Grup Üyelerini Ekle</h4>
+                        <label for="username1">Kişi:</label>
+                        <div class="input-group">
+                            <select class="form-control" id="userId1" name="userId">
+                                <option value="">Kişi Seçiniz</option>
+                                @foreach (var item in Model.UserGetDto)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="btn btn-success" type="button" id="addMemberBtn"><i class="fa fa-plus"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <h4>Seçilen Üyeler</h4>
+                        <table class="table table-bordered" id="selectedMembersTable1">
+                            <thead>
+                                <tr>
+                                    <th>Üye İsmi</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Seçilen üyeler buraya eklenecek -->
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="postUser">Kaydet</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div id="addGroupNewUserModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addGroupChatModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Grup Ekle</h4>
+            </div>
+            <div class="modal-body">
+                <form id="newRecordForm2">
+                    <div class="form-group">
+                        <h4>Yeni Grup Üyeleri Ekle</h4>
+                        <label for="username2">Kişi:</label>
+                        <div class="input-group">
+                            <select class="form-control" id="userId2" name="userId">
+                                <option value="">Kişi Seçiniz</option>
+                                @foreach (var item in Model.UserGetDto)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            </select>
+                            <span class="input-group-btn">
+                                <button class="btn btn-success" type="button" id="addNewMemberBtn"><i class="fa fa-plus"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <h4>Seçilen Üyeler</h4>
+                        <table class="table table-bordered" id="selectedNewMembersTable">
+                            <thead>
+                                <tr>
+                                    <th>Üye İsmi</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Seçilen üyeler buraya eklenecek -->
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="postNewUser">Kaydet</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+
+
+<script>
+    var chatGroupId = null;
+
+    document.getElementById('openAddModalBtn').addEventListener('click', function () {
+        $('#addGroupChatModal').modal('show');
+    });
+
+    $('.openAddNewUserBtn').click(function () {
+        $('#addGroupNewUserModal').modal('show');
+        chatGroupId = $(this).attr("group-id");
+        console.log(chatGroupId)
+    });
+
+    $(document).ready(function () {
+        $('.clickable-row').on('click', function () {
+            var groupId = $(this).data('group-id');
+            var $membersRow = $('#group-' + groupId);
+            // Alt tabloyu aç/kapa
+            $membersRow.toggle();
+
+        });
+    });
+
+    $('#addMemberBtn').on('click', function () {
+        var selectedUserId = $('#userId1').val();
+        var selectedUserName = $('#userId1 option:selected').text();
+
+        if (selectedUserId && selectedUserId !== "") {
+            // Yeni satırı ekle
+            var newRow = '<tr>' +
+                '<td>' + selectedUserName + '</td>' +
+                '<td><button type="button" class="btn btn-danger btn-sm remove-member-btn"><i class="fa fa-trash"></i></button></td>' +
+                '<input type="hidden" name="memberIds[]" value="' + selectedUserId + '">' +
+                '</tr>';
+            $('#selectedMembersTable1 tbody').append(newRow);
+
+            // Seçimi temizle
+            $('#userId1').val('');
+        }
+    });
+
+    $('#addNewMemberBtn').on('click', function () {
+        var selectedUserId = $('#userId2').val();
+        var selectedUserName = $('#userId2 option:selected').text();
+
+        if (selectedUserId && selectedUserId !== "") {
+            // Yeni satırı ekle
+            var newRow = '<tr>' +
+                '<td>' + selectedUserName + '</td>' +
+                '<td><button type="button" class="btn btn-danger btn-sm remove-member-btn"><i class="fa fa-trash"></i></button></td>' +
+                '<input type="hidden" name="memberIds[]" value="' + selectedUserId + '">' +
+                '</tr>';
+            $('#selectedNewMembersTable tbody').append(newRow);
+
+            // Seçimi temizle
+            $('#userId2').val('');
+        }
+    });
+
+
+    // Seçilen üyeyi kaldırma işlemi
+    $(document).on('click', '.remove-member-btn', function () {
+        $(this).closest('tr').remove();
+    });
+
+    $('#postUser').on('click', function () {
+        var groupName = $('#name').val();
+       
+        var groupMembers = [];
+        $('#selectedMembersTable tbody tr').each(function () {
+            var memberId = $(this).find('input[name="memberIds[]"]').val();
+            groupMembers.push({
+                UserId: memberId
+            });
+        });
+
+        var formData = {
+            GroupName: groupName,
+            GroupMembers: groupMembers,
+            GroupId: groupId
+        };
+
+        $.ajax({
+            url: '/GroupChat/Post',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                // Başarılı işlemler
+                alert('Grup başarıyla eklendi!');
+                $('#addGroupChatModal').modal('hide');
+                // Gerekiyorsa formu ve tabloyu temizleyin
+                $('#newRecordForm')[0].reset();
+                $('#selectedMembersTable tbody').empty();
+            },
+            error: function (error) {
+                // Hata işlemleri
+                console.log("Hata: ", error);
+            }
+        });
+    });
+
+    $('#postNewUser').on('click', function () {
+        var groupName = $('#name').val();
+        var groupId = chatGroupId;
+
+        var groupMembers = [];
+
+        $('#selectedNewMembersTable tbody tr').each(function () {
+            var memberId = $(this).find('input[name="memberIds[]"]').val();
+            groupMembers.push({
+                UserId: memberId
+            });
+        });
+
+        var formData = {
+            GroupName: groupName,
+            GroupMembers: groupMembers,
+            GroupId: groupId
+        };
+
+        $.ajax({
+            url: '/GroupChat/Post',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                alert('Yeni üyeler başarıyla eklendi!');
+                $('#addGroupNewUserModal').modal('hide');
+                $('#newRecordForm2')[0].reset();
+                $('#selectedNewMembersTable tbody').empty();
+            },
+            error: function (error) {
+                console.log("Hata: ", error);
+            }
+        });
+    });
+
+</script>
