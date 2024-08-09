@@ -6,7 +6,7 @@ namespace Client.Models.ViewModels
 {
     public class GroupChatUserVm
     {
-        public List<GetGroupChat> GetGroupChat { get; set; }
-        public List<UserGetDto> UserGetDto { get; set; }
+        public List<GetGroupChat> GetGroupChat { get; set;}
+        public List<UserGetDto> UserGetDto { get; set;}
     }
 }

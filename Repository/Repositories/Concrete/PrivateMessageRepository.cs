@@ -1,5 +1,4 @@
-﻿using DataAccess.Repositories.Abstract;
-using Entity.SysModel;
+﻿using Entity.SysModel;
 using Infrastructure.DataAcccess;
 using Repository.Contexts;
 using System;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories.Concrete
 {
-    public class ChatRepository:BaseRepository<Message,long,SysContext>, IChatRepository
+    public class PrivateMessageRepository:BaseRepository<PrivateMessage,long,SysContext>
     {
     }
 }

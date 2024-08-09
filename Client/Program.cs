@@ -9,6 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
+builder.Services.AddSignalR();
 builder.Services.AddScoped<IHttpApiService, HttpApiService>();
 
 var app = builder.Build();

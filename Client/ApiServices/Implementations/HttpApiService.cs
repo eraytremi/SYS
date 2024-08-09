@@ -80,7 +80,6 @@ namespace Client.ApiServices.Implementations
             var responseMessage = await client.SendAsync(requestMessage);
             var jsonResponse = await responseMessage.Content.ReadAsStringAsync();
             var response = JsonSerializer.Deserialize<T>(jsonResponse, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-
             return response;
         }
 

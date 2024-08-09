@@ -1,4 +1,5 @@
 ﻿using Entity.Dtos.GroupMember;
+using Entity.Dtos.GroupMessage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace Entity.Dtos.GroupChat
         public long Id { get; set; }
         public string GroupName { get; set; }
         public List<GetGroupMember>  GetGroupMembers { get; set; }
+        public List<GetGroupMessage> GetGroupMessages { get; set; }
     }
 }

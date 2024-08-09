@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Concrete;
+using Business.HubService;
 using DataAccess.Repositories.Abstract;
 using DataAccess.Repositories.Concrete;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,16 +60,22 @@ namespace Business.Extensions
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<ICustomerService, CustomerService>();
 
-            services.AddSingleton<IChatRepository, ChatRepository>();
-            services.AddSingleton<IChatService, ChatHub>();
-
             services.AddSingleton<IGroupMemberService, GroupMemberService>();
             services.AddSingleton<IGroupMemberRepository, GroupMemberRepository>();
 
             services.AddSingleton<IGroupRepository, GroupRepository>();
             services.AddSingleton<IGroupChatService, GroupChatService>();
 
+            services.AddSingleton<IGroupMessageRepository, GroupMessageRepository>();
+            services.AddSingleton<IGroupMessageService, GroupMessageService>();
+
+            services.AddSingleton<IGroupMemberRepository, GroupMemberRepository>();
+            services.AddSingleton<IGroupMemberService, GroupMemberService>();
+
+            services.AddScoped<GroupMessageService>();
             services.AddTransient<ChatHub>();
+
+            
         }
     }
 }

@@ -21,13 +21,11 @@ namespace Client.ViewComponents
         {
             var personUser = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             var userRoleId = HttpContext.Session.GetString("UserRole");
-            var responseChat = await _httpApiService.GetDataAsync<ResponseBody<List<GetChat>>>("/Chats", personUser.Token);
 
             var model = new SideBarViewModel
             {
                 UserGetDto = personUser,
                 RoleId = userRoleId,
-                GetChats=responseChat.Data
             };
 
             ViewData["role"]=model;

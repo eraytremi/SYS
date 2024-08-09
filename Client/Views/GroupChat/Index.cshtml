@@ -26,7 +26,7 @@
                                         <td>@item.Id</td>
                                         <td>@item.GroupName</td>
                                         <td>
-                                            <button data-bs-toggle="modal" class="btnDelete btn btn-danger btn-md" userId="@item.Id"><i class="fa fa-trash-o "></i></button>
+                                            <button data-bs-toggle="modal" class="btnDelete btn btn-danger btn-md" groupId="@item.Id"><i class="fa fa-trash-o "></i></button>
                                         </td>
                                     </tr>
                                     <tr class="group-members" id="group-@item.Id" style="display: none;">
@@ -50,10 +50,14 @@
                                                             </div>
                                                             @foreach (var getGroupMember in item.GetGroupMembers)
                                                             {
-                                                                <tr class="clickable-row" data-group-id="@item.Id">
+                                                                <tr class="clickable-row" data-listgroup-id="@item.Id">
                                                                     <td>@getGroupMember.GetUser.Id</td>
                                                                     <td>@getGroupMember.GetUser.Name</td>
                                                                     <td>@getGroupMember.GetUser.Mail</td>
+                                                                    <td>
+                                                                        <button data-bs-toggle="modal" class="btnUserGroupDelete btn btn-danger btn-md" userId="@getGroupMember.GetUser.Id"><i class="fa fa-trash-o "></i></button>
+                                                                    </td>
+                                                                    
                                                                 </tr>
                                                             }
                                                         </tbody>
@@ -137,7 +141,7 @@
                         <h4>Yeni Grup Üyeleri Ekle</h4>
                         <label for="username2">Kişi:</label>
                         <div class="input-group">
-                            <select class="form-control" id="userId2" name="userId">
+                            <select class="form-control" id="userId2" name="userId2">
                                 <option value="">Kişi Seçiniz</option>
                                 @foreach (var item in Model.UserGetDto)
                                 {
@@ -220,8 +224,23 @@
     $('#addNewMemberBtn').on('click', function () {
         var selectedUserId = $('#userId2').val();
         var selectedUserName = $('#userId2 option:selected').text();
+        var groupId = $(this).data('data-listgroup-id');
+        var isDuplicate = false;
 
-        if (selectedUserId && selectedUserId !== "") {
+        $('#members-list-' + groupId + ' tr').each(function () {
+            var memberId = $(this).find('td:first').text(); // Satırdaki ilk TD'nin (kullanıcı ID'si) metnini al
+            if (memberId === selectedUserId) {
+                isDuplicate = true; 
+                return false; 
+            }
+        });
+
+        if(isDuplicate)
+        {
+            alert("Aynı kişiyi  bir daha ekleyemezsiniz!");
+        }
+        
+        else if (selectedUserId && selectedUserId !== "") {
             // Yeni satırı ekle
             var newRow = '<tr>' +
                 '<td>' + selectedUserName + '</td>' +
@@ -245,7 +264,7 @@
         var groupName = $('#name').val();
        
         var groupMembers = [];
-        $('#selectedMembersTable tbody tr').each(function () {
+        $('#selectedMembersTable1 tbody tr').each(function () {
             var memberId = $(this).find('input[name="memberIds[]"]').val();
             groupMembers.push({
                 UserId: memberId
@@ -254,10 +273,9 @@
 
         var formData = {
             GroupName: groupName,
-            GroupMembers: groupMembers,
-            GroupId: groupId
+            GroupMembers: groupMembers
         };
-
+        console.log(formData)
         $.ajax({
             url: '/GroupChat/Post',
             type: 'POST',
@@ -282,18 +300,18 @@
         var groupName = $('#name').val();
         var groupId = chatGroupId;
 
-        var groupMembers = [];
+        var newGroupMembers = [];
 
         $('#selectedNewMembersTable tbody tr').each(function () {
             var memberId = $(this).find('input[name="memberIds[]"]').val();
-            groupMembers.push({
+            newGroupMembers.push({
                 UserId: memberId
             });
         });
 
         var formData = {
             GroupName: groupName,
-            GroupMembers: groupMembers,
+            GroupMembers: newGroupMembers,
             GroupId: groupId
         };
 
@@ -313,5 +331,117 @@
             }
         });
     });
+
+
+    $('.btnDelete').click(function () {
+        var id = $(this).attr('groupId');
+        deleteGroup(id);
+    });
+
+    // Function to delete supplier
+    function deleteGroup(id) {
+        Swal.fire({
+            text: "Grubu silmek istiyor musunuz?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sil!',
+            cancelButtonText: 'Vazgeç!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/GroupChat/Delete/' + id,
+                    method: 'DELETE',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.isSuccess) {
+                            Swal.fire({
+                                text: response.message,
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Tamam',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "/GroupChat/Index";
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'İşlem Başarısız',
+                                text: response.message,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Tamam',
+                                icon: 'error',
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
+    $('.btnUserGroupDelete').click(function () {
+        var $row = $(this).closest('tr');
+        var groupId = $row.attr('data-listgroup-id');
+        var userId = $(this).attr('userId');
+
+        deleteMember(userId,groupId);
+    });
+
+    function deleteMember(userId, groupId) {
+        Swal.fire({
+            text: "Kullanıcıyı silmek istiyor musunuz?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sil!',
+            cancelButtonText: 'Vazgeç!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/GroupMember/Delete', // URL'yi endpoint'e göre güncelle
+                    method: 'DELETE',
+                    dataType: 'json',
+                    data: { userId: userId, groupId: groupId }, // userId ve groupId'yi query parametreleri olarak ekle
+                    traditional: true,
+                    success: function (response) {
+                        if (response.isSuccess) {
+                            Swal.fire({
+                                text: response.message,
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Tamam',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "/GroupChat/Index";
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'İşlem Başarısız',
+                                text: response.message,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Tamam',
+                                icon: 'error',
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            title: 'Hata',
+                            text: 'Bir hata oluştu: ' + error,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Tamam',
+                            icon: 'error',
+                        });
+                    }
+                });
+            }
+        });
+    }
+
 
 </script>

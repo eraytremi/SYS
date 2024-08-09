@@ -13,7 +13,11 @@ namespace Business.Abstract
     public interface IGroupChatService
     {
         Task<ApiResponse<NoData>> AddGroupChat(PostGroupChat dto, long currentUserId);
-        Task<ApiResponse<List<GetGroupChat>>> GetGroupChat(long currentUserId);
+        Task<ApiResponse<List<GetGroupChat>>> GetGroupChats(long currentUserId);
+        Task<ApiResponse<GetGroupChat>> GetGroupChat(long groupId,long currentUserId);
+
+        Task<ApiResponse<List<GetGroupChat>>> GetGroupChatById(long currentUserId);
+
         Task<ApiResponse<NoData>> UpdateGroupChat(UpdateGroupChat dto, long currentUserId);
         Task<ApiResponse<NoData>> DeleteGroupChat(long id, long currentUserId);
 

@@ -449,7 +449,7 @@ namespace DataAccess.Migrations
                     b.ToTable("GroupMembers");
                 });
 
-            modelBuilder.Entity("Entity.SysModel.Message", b =>
+            modelBuilder.Entity("Entity.SysModel.GroupMessage", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -469,6 +469,9 @@ namespace DataAccess.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<long?>("GroupChatId")
+                        .HasColumnType("bigint");
+
                     b.Property<long?>("GroupId")
                         .IsRequired()
                         .HasColumnType("bigint");
@@ -483,10 +486,6 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("RecipientId")
-                        .IsRequired()
-                        .HasColumnType("bigint");
-
                     b.Property<long?>("SenderId")
                         .IsRequired()
                         .HasColumnType("bigint");
@@ -499,13 +498,13 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("GroupChatId");
 
-                    b.HasIndex("RecipientId");
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("GroupMessages");
                 });
 
             modelBuilder.Entity("Entity.SysModel.Offer", b =>
@@ -559,6 +558,57 @@ namespace DataAccess.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Offers");
+                });
+
+            modelBuilder.Entity("Entity.SysModel.PrivateMessage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("DeletedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSeen")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MessageText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("RecipientId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SenderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipientId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("PrivateMessages");
                 });
 
             modelBuilder.Entity("Entity.SysModel.Product", b =>
@@ -1027,29 +1077,25 @@ namespace DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Entity.SysModel.Message", b =>
+            modelBuilder.Entity("Entity.SysModel.GroupMessage", b =>
                 {
-                    b.HasOne("Entity.SysModel.GroupChat", "Group")
-                        .WithMany("Messages")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Entity.SysModel.GroupChat", null)
+                        .WithMany("GroupMessages")
+                        .HasForeignKey("GroupChatId");
 
-                    b.HasOne("Entity.User", "Recipient")
-                        .WithMany("ReceivedMessages")
-                        .HasForeignKey("RecipientId")
+                    b.HasOne("Entity.SysModel.GroupChat", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Entity.User", "Sender")
-                        .WithMany("SentMessages")
+                        .WithMany()
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Group");
-
-                    b.Navigation("Recipient");
 
                     b.Navigation("Sender");
                 });
@@ -1063,6 +1109,25 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Entity.SysModel.PrivateMessage", b =>
+                {
+                    b.HasOne("Entity.User", "Recipient")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("RecipientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Entity.User", "Sender")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Recipient");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Entity.SysModel.Product", b =>
@@ -1176,7 +1241,7 @@ namespace DataAccess.Migrations
                 {
                     b.Navigation("GroupMembers");
 
-                    b.Navigation("Messages");
+                    b.Navigation("GroupMessages");
                 });
 
             modelBuilder.Entity("Entity.SysModel.Product", b =>

@@ -1,0 +1,96 @@
+﻿@using Client.Models.Dtos.GroupChat
+@model List<GetGroupChat>
+
+@{
+    var currentUserId = ViewData["user"];
+}
+<section id="container">
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="row mt">
+                <div class="col-md-12">
+                    <div class="content-panel">
+                        <div class="header-container">
+                            <div class="text-right" style="margin-right: 20px;">
+                                <button id="openAddModalBtn" class="btn btn-success btn-md"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-advance table-hover">
+                            <thead>
+                                <tr>
+                                    <th><i class="fa fa-bullhorn"></i> Id</th>
+                                    <th class="hidden-phone"><i class="fa fa-question-circle"></i> Grup İsmi</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="clickable-row" data-group-id="@item.Id">
+                                        <td>@item.Id</td>
+                                        <td>@item.GroupName</td>
+                                        <td>
+                                            <button data-bs-toggle="modal" class="btnDelete btn btn-danger btn-md" groupId="@item.Id"><i class="fa fa-trash-o"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="group-members" id="group-@item.Id" style="display: none;">
+                                        <td colspan="3">
+                                            <div class="chat-container" style="margin-top: 60px; margin-left: 300px; margin-right: 100px;">
+                                                <div class="card bg-light" style="height: 80vh; width: 100%;">
+                                                    <div class="card-header">
+                                                        Sohbet Uygulaması
+                                                    </div>
+                                                    <div id="chatEkrani">
+                                                        <div class="d-flex col-12">
+                                                            <div id="mesajAlani" class="col-md-12 bg-white">
+                                                                <div class="d-flex flex-column">
+                                                                    @foreach (var member in item.GetGroupMessages)
+                                                                    {
+                                                                        <div class="alert alert-dark" role="alert">
+                                                                            <p><b>@member.Sender.Name</b>: @member.MessageText</p>
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <div id="yeniMesajAlani" class="col-md-12" style="position: absolute; bottom: 10px;">
+                                                                <div class="row">
+                                                                    <div class="col-md-9">
+                                                                        <input type="text" class="form-control" id="mesaj" placeholder="Mesaj yazınız.." />
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <button type="button" class="form-control btn btn-success sendButton" data-group-id="@item.Id">Gönder</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"></script>
+<script src="~/js/chat.js"></script>
+
+<style>
+    .chat-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    #mesajAlani {
+        overflow-y: auto;
+        max-height: 65vh;
+    }
+</style>

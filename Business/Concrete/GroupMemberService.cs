@@ -47,16 +47,17 @@ namespace Business.Concrete
         public async Task<ApiResponse<NoData>> DeleteAsync(long id,long groupId, long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
-            if (getUser == null)
+            if (getUser == null)    
             {
                 return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
-            var getGroupChat = await _groupRepository.GetByIdAsync(groupId);
-            var getMember = getGroupChat.GroupMembers.SingleOrDefault(p => p.Id == id);
+            var getMembers = await _repository.GetAllAsync(p=>p.GroupId==groupId && p.IsActive==true);
+            var getMember = getMembers.Single(p=>p.UserId==id);
+            
             getMember.DeletedDate = DateTime.Now;
             getMember.DeletedBy = currentUserId;
             getMember.IsActive = false;
-            await _repository.DeleteAsync(getMember);
+            await _repository.UpdateAsync(getMember);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 

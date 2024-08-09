@@ -18,14 +18,22 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetGroupChat(long groupId)
         {
             var currentUserId = CurrentUser.Get(HttpContext);
-            var response = await _groupChatService.GetGroupChat(currentUserId.GetValueOrDefault());
+            var response = await _groupChatService.GetGroupChat(groupId,currentUserId.GetValueOrDefault());
             return SendResponse(response);
         }
 
-       
+        [HttpGet("GetGroupChatByUserId")]
+        public async Task<IActionResult> GetGroupChatByUserId()
+        {
+            var currentUserId = CurrentUser.Get(HttpContext);
+            var response = await _groupChatService.GetGroupChatById(currentUserId.GetValueOrDefault());
+            return SendResponse(response);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] PostGroupChat dto)
         {

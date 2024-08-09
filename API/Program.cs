@@ -1,18 +1,14 @@
 using API.Middlewares;
-using Autofac.Core;
-using Business.Concrete;
 using Business.Extensions;
-using Microsoft.EntityFrameworkCore;
+using Business.HubService;
 using PurchasingSystem.API;
-using Repository.Contexts;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-
+builder.Services.AddControllers().AddJsonOptions(opt => opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -27,6 +23,7 @@ builder.Services.AddCors(options =>
         builder.WithOrigins("https://localhost:7193")
                .AllowAnyMethod()
                .AllowAnyHeader()
+               .SetIsOriginAllowed(origin => true)
                .AllowCredentials();
     });
 });
@@ -45,8 +42,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<ChatHub>("/chatHub");
-
 app.UseCustomException();
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();

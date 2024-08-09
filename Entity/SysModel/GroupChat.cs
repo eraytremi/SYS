@@ -4,6 +4,6 @@
     {
         public string GroupName { get; set; }
         public virtual ICollection<GroupMember> GroupMembers { get; set; }
-        public virtual ICollection<Message> Messages { get; set; }
+        public virtual ICollection<GroupMessage> GroupMessages { get; set; }
     }
 }

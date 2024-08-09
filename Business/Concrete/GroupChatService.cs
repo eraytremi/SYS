@@ -3,6 +3,7 @@ using Business.Abstract;
 using DataAccess.Repositories.Abstract;
 using Entity.Dtos.GroupChat;
 using Entity.Dtos.GroupMember;
+using Entity.Dtos.GroupMessage;
 using Entity.Dtos.User;
 using Entity.SysModel;
 using Infrastructure.Utilities.Responses;
@@ -20,11 +21,15 @@ namespace Business.Concrete
         private readonly IGroupRepository _groupRepository;
         private readonly IUserRepository _userRepository;
         private readonly IGroupMemberRepository _memberRepository;
-        public GroupChatService(IGroupRepository groupRepository, IUserRepository userRepository, IGroupMemberRepository memberRepository)
+        private readonly IGroupMessageRepository _messageRepository;
+        private readonly IGroupMessageService _messageService;
+        public GroupChatService(IGroupRepository groupRepository, IUserRepository userRepository, IGroupMemberRepository memberRepository, IGroupMessageRepository messageRepository, IGroupMessageService messageService)
         {
             _groupRepository = groupRepository;
             _userRepository = userRepository;
             _memberRepository = memberRepository;
+            _messageRepository = messageRepository;
+            _messageService = messageService;
         }
 
         public async Task<ApiResponse<NoData>> AddGroupChat(PostGroupChat dto, long currentUserId)
@@ -35,13 +40,14 @@ namespace Business.Concrete
                 return ApiResponse<NoData>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
 
-            if (dto.GroupId!=null || dto.GroupId!=0)
+            if (dto.GroupId!=0)
             {
                 var getGroupA = await _groupRepository.GetAllAsync(p => p.IsActive == true && p.Id==dto.GroupId);
                 var listGroup = new List<GroupMember>();
 
                 foreach (var item in dto.GroupMembers)
                 {
+                   
                     var mapping = new GroupMember
                     {
                         CreatedBy = currentUserId,
@@ -84,7 +90,6 @@ namespace Business.Concrete
                 }
             }
             
-           
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
 
         }
@@ -102,23 +107,34 @@ namespace Business.Concrete
             getGroup.IsActive = false;
             getGroup.DeletedBy = currentUserId;
             await _groupRepository.UpdateAsync(getGroup);
+
+
+            var getMembersByGroupId =await _memberRepository.GetAllAsync(p => p.IsActive == true && p.GroupId == id);
+            foreach (var member in getMembersByGroupId)
+            {
+                member.IsActive = false;
+                member.DeletedDate = DateTime.Now;
+                member.DeletedBy = currentUserId;
+                await _memberRepository.UpdateAsync(member);
+            }
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<ApiResponse<List<GetGroupChat>>> GetGroupChat(long currentUserId)
+        public async Task<ApiResponse<List<GetGroupChat>>> GetGroupChats(long currentUserId)
         {
             var getUser = await _userRepository.GetByIdAsync(currentUserId);
             if (getUser == null)
             {
                 return ApiResponse<List<GetGroupChat>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
             }
-
             var getList =await _groupRepository.GetAllAsync(p=>p.IsActive==true);
             var list=new List<GetGroupChat>();
             foreach (var item in getList)
             {
                 var listMembers= new List<GetGroupMember>(); 
+                var listGroupMessages = new List<GetGroupMessage>();
                 var getMembers =await _memberRepository.GetAllAsync(p=>p.GroupId==item.Id && p.IsActive==true);
+                var groupMessages = await _messageRepository.GetAllAsync(p => p.GroupId == item.Id && p.IsActive == true);
                 foreach (var member in getMembers)
                 {
                     var user =await _userRepository.GetAsync(p => p.Id == member.UserId && p.IsActive == true);
@@ -133,21 +149,100 @@ namespace Business.Concrete
                         GroupId = member.Id,
                         Id = member.Id,
                         UserId = member.Id,
-                        GetUser=mappingUser
+                        GetUser=mappingUser,
+                        
                     };
                     listMembers.Add(addMember);
                 }
-
+                foreach (var groupMessage in groupMessages)
+                {
+                    var addList = new GetGroupMessage
+                    {
+                        GroupId = groupMessage.Id,
+                        Id = groupMessage.Id,
+                        IsSeen = groupMessage.IsSeen,
+                        MessageText = groupMessage.MessageText,
+                        SenderId = groupMessage.SenderId
+                    };
+                    listGroupMessages.Add(addList);
+                }
                 var add = new GetGroupChat
                 {
                     GroupName = item.GroupName,
                     Id = item.Id,
-                    GetGroupMembers=listMembers
+                    GetGroupMembers=listMembers,
+                    GetGroupMessages= listGroupMessages
                 };
                 list.Add(add);
             }
             return ApiResponse<List<GetGroupChat>>.Success(StatusCodes.Status200OK,list);
         }
+
+        public async Task<ApiResponse<List<GetGroupChat>>> GetGroupChatById(long currentUserId)
+        {
+            var getUser = await _userRepository.GetByIdAsync(currentUserId);
+            if (getUser == null)
+            {
+                return ApiResponse<List<GetGroupChat>>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
+            }
+
+            var getListGroupChat = await _groupRepository.GetAllAsync(
+                 p => p.IsActive == true && p.GroupMembers.Any(gm => gm.UserId == currentUserId));
+            
+
+            var list = new List<GetGroupChat>();
+
+            var groupM = await _messageService.GetGroupMessagesByUserId(currentUserId);
+
+            foreach (var item in getListGroupChat)
+            {
+                var listMembers = new List<GetGroupMember>();
+                var listGroupMessages = new List<GetGroupMessage>();
+                var getMembers = await _memberRepository.GetAllAsync(p => p.GroupId == item.Id && p.IsActive == true);
+                var groupMessages = await _messageRepository.GetAllAsync(p => p.GroupId == item.Id && p.IsActive == true);
+                foreach (var member in getMembers)
+                {
+                    var user = await _userRepository.GetAsync(p => p.Id == member.UserId && p.IsActive == true);
+                    var mappingUser = new GetUser
+                    {
+                        Id = user.Id,
+                        Mail = user.Mail,
+                        Name = user.Name
+                    };
+                    var addMember = new GetGroupMember
+                    {
+                        GroupId = member.Id,
+                        Id = member.Id,
+                        UserId = member.Id,
+                        GetUser = mappingUser
+                    };
+                    listMembers.Add(addMember);
+                }
+                foreach (var groupMessage in groupMessages)
+                {
+                    var addList = new GetGroupMessage
+                    {
+                        GroupId = groupMessage.Id,
+                        Id = groupMessage.Id,
+                        IsSeen = groupMessage.IsSeen,
+                        MessageText = groupMessage.MessageText,
+                        SenderId = groupMessage.SenderId
+                    };
+                    listGroupMessages.Add(addList);
+                }
+                var add = new GetGroupChat
+                {
+                    GroupName = item.GroupName,
+                    Id = item.Id,
+                    GetGroupMembers = listMembers,
+                    GetGroupMessages = groupM.Data
+                };
+                list.Add(add);
+            }
+            return ApiResponse<List<GetGroupChat>>.Success(StatusCodes.Status200OK, list);
+
+        }
+
 
         public async Task<ApiResponse<NoData>> UpdateGroupChat(UpdateGroupChat dto, long currentUserId)
         {
@@ -166,6 +261,71 @@ namespace Business.Concrete
             };
             await _groupRepository.UpdateAsync(update);
             return ApiResponse<NoData>.Success(StatusCodes.Status200OK);
+        }
+
+        public async Task<ApiResponse<GetGroupChat>> GetGroupChat(long groupId, long currentUserId)
+        {
+            var getUser = await _userRepository.GetByIdAsync(currentUserId);
+            if (getUser == null)
+            {
+                return ApiResponse<GetGroupChat>.Fail(StatusCodes.Status400BadRequest, "Yetki yok");
+            }
+
+            var getMessages = await _messageRepository.GetAllAsync(p => p.IsActive == true && p.GroupId == groupId);
+            var messageList = new List<GetGroupMessage>();
+
+            foreach (var message in getMessages)
+            {
+                var user =await _userRepository.GetByIdAsync((long)message.SenderId);
+                var mappingUserx = new GetUser
+                {
+                    Id = user.Id,
+                    Mail =  user.Mail,
+                    Name = user.Name
+                };
+
+                var add = new GetGroupMessage
+                {
+                    SenderId = user.Id,
+                    GroupId = user.Id,
+                    Id = message.Id,
+                    MessageText = message.MessageText,
+                    Sender = mappingUserx
+                };
+                messageList.Add(add);
+            }
+
+            var getMembers = await _memberRepository.GetAllAsync(p => p.IsActive == true && p.GroupId == groupId);
+            var memberList = new List<GetGroupMember>();
+            foreach (var getMember in getMembers)
+            {
+                var user =await _userRepository.GetByIdAsync(getMember.UserId);
+                var mappingUserx = new GetUser
+                {
+                    Id = user.Id,
+                    Mail = user.Mail,
+                    Name = user.Name
+                };
+                var add = new GetGroupMember
+                {
+                    GroupId = getMember.Id,
+                    Id = getMember.GroupId,
+                    UserId = getMember.UserId,
+                    GetUser = mappingUserx
+                };
+                memberList.Add(add);
+            }
+       
+            var getGroupChat = await _groupRepository.GetByIdAsync(groupId);
+
+            var mappingGroupChat = new GetGroupChat
+            {
+                GetGroupMessages = messageList,
+                GroupName = getGroupChat.GroupName,
+                Id = getGroupChat.Id,
+                GetGroupMembers=memberList
+            };
+            return ApiResponse<GetGroupChat>.Success(StatusCodes.Status200OK,mappingGroupChat);
         }
     }
 }

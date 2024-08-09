@@ -114,8 +114,11 @@
                         <li class="sub-menu">
                             <a href="/Chat/Index">
                                 <i class="fa fa-cogs"></i>
-                                <span>Chat</span>
+                                <span>Sohbet</span>
                             </a>
+                            <ul class="sub">
+                                <li><a href="/Messages/Index">Mesaj Gönder</a></li>
+                            </ul>
                         </li>
                     }
                     @if (Model.RoleId == "1")
@@ -130,7 +133,7 @@
                             </a>
                             <ul class="sub">
                                 <li><a href="/GroupChat/Index">Sohbet Ayarları </a></li>
-                                <li><a href="/Message/Index">Mesaj Gönder</a></li>                             
+                                <li><a href="/Messages/Index">Mesaj Gönder</a></li>                             
                             </ul>
                         </li>
                         <li class="sub-menu">
@@ -188,11 +191,15 @@
                                 <span>Onaylanmış Talepler</span>
                             </a>
                         </li>
+
                         <li class="sub-menu">
-                            <a href="/Chat/Index">
+                            <p href="/Chat/Index">
                                 <i class="fa fa-cogs"></i>
-                                <span>Chat</span>
-                            </a>
+                                <span>Sohbet</span>
+                            </p>
+                            <ul class="sub">
+                                <li><a href="/Messages/Index">Mesaj Gönder</a></li>
+                            </ul>
                         </li>
                     }
                     @if (Model.RoleId == "4")
@@ -383,34 +390,34 @@
             });
         });
 
-        const user = "@Model.UserGetDto.Name";
-        const senderId = @Model.UserGetDto.Id;
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl("https://localhost:7220/chatHub")
-            .configureLogging(signalR.LogLevel.Debug)
-            .build();
+        // const user = "@Model.UserGetDto.Name";
+        // const senderId = @Model.UserGetDto.Id;
+        // const connection = new signalR.HubConnectionBuilder()
+        //     .withUrl("https://localhost:7220/chatHub")
+        //     .configureLogging(signalR.LogLevel.Debug)
+        //     .build();
 
-        connection.on("ReceiveMessage", function (user, message) {
-            const alertDiv = document.createElement("div");
-            alertDiv.classList.add("alert", "alert-dark");
-            alertDiv.setAttribute("role", "alert");
+        // connection.on("ReceiveMessage", function (user, message) {
+        //     const alertDiv = document.createElement("div");
+        //     alertDiv.classList.add("alert", "alert-dark");
+        //     alertDiv.setAttribute("role", "alert");
 
-            const messageParagraph = document.createElement("p");
+        //     const messageParagraph = document.createElement("p");
 
-            const boldUserName = document.createElement("b");
-            boldUserName.textContent = decodeURIComponent(user);
+        //     const boldUserName = document.createElement("b");
+        //     boldUserName.textContent = decodeURIComponent(user);
 
-            messageParagraph.appendChild(boldUserName);
-            messageParagraph.appendChild(document.createTextNode(": " + decodeURIComponent(message)));
+        //     messageParagraph.appendChild(boldUserName);
+        //     messageParagraph.appendChild(document.createTextNode(": " + decodeURIComponent(message)));
 
-            alertDiv.appendChild(messageParagraph);
+        //     alertDiv.appendChild(messageParagraph);
 
-            document.getElementById("mesajAlani").appendChild(alertDiv);
-        });
+        //     document.getElementById("mesajAlani").appendChild(alertDiv);
+        // });
 
-        connection.start().catch(function (err) {
-            console.error(err.toString());
-        });
+        // connection.start().catch(function (err) {
+        //     console.error(err.toString());
+        // });
 
         // document.getElementById("message-send").addEventListener("click", function (event) {
         //     event.preventDefault();

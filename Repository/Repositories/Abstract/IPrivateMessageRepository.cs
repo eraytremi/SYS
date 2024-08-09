@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories.Abstract
 {
-    public interface IChatRepository:IBaseRepository<Message,long>
+    public interface IPrivateMessageRepository:IBaseRepository<PrivateMessage,long>
     {
     }
 }

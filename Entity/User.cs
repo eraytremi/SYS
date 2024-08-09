@@ -13,9 +13,9 @@ namespace Entity
         public string Mail { get; set; }
         public byte[] PasswordSalt { get; set; }
         public byte[] PasswordHash { get; set; }
-        public virtual ICollection<Message> SentMessages { get; set; } 
-        public virtual ICollection<Message> ReceivedMessages { get; set; } 
-        public virtual ICollection<GroupMember> GroupMembers { get; set; } 
+        public virtual List<PrivateMessage> SentMessages { get; set; } = new List<PrivateMessage>();
+        public virtual List<PrivateMessage> ReceivedMessages { get; set; } = new List<PrivateMessage>();
+        public virtual List<GroupMember> GroupMembers { get; set; } = new List<GroupMember>();
         public List<UserRole> UserRoles { get; set; }
     }
 }

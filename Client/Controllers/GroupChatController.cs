@@ -59,5 +59,24 @@ namespace Client.Controllers
             var response = await _httpApiService.PostDataAsync<ResponseBody<List<GetGroupMember>>>("/GroupMembers/getMembersById", JsonSerializer.Serialize(groupId), token.Token);
             return View(response.Data);
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(long id)
+        {
+            var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
+            var response = await _httpApiService.DeleteDataAsync<ResponseBody<NoContent>>($"/GroupChats/{id}", token.Token);
+
+            if (response.StatusCode == 200)
+            {
+                return Json(new { IsSuccess = true, Message = "Başarıyla Silindi", response.Data });
+            }
+            else
+            {
+                return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
+
+            }
+        }
+
+        
     }
 }

@@ -29,12 +29,15 @@ namespace Repository.Contexts
         public DbSet<Sales> Sales { get; set; }
         public DbSet<SalesDetails> SalesDetails { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<Message> Messages { get; set; }
         public DbSet<GroupChat> Groups { get; set; }
         public DbSet<GroupMember> GroupMembers { get; set; }
+        public DbSet<PrivateMessage> PrivateMessages { get; set; }
+        public DbSet<GroupMessage> GroupMessages { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             var enumConverter = new EnumToStringConverter<Unit>();
             modelBuilder.Entity<Product>()
                 .Property(p => p.Unit)
@@ -85,35 +88,45 @@ namespace Repository.Contexts
             modelBuilder.Entity<User>().HasKey(u => u.Id);
             modelBuilder.Entity<GroupChat>().HasKey(g => g.Id);
             modelBuilder.Entity<GroupMember>().HasKey(gm => gm.Id);
-            modelBuilder.Entity<Message>().HasKey(m => m.Id);
+       
 
             modelBuilder.Entity<GroupMember>()
-                .HasOne(gm => gm.Group)
-                .WithMany(g => g.GroupMembers)
-                .HasForeignKey(gm => gm.GroupId);
+                 .HasOne(gm => gm.Group)
+                 .WithMany(g => g.GroupMembers)
+                 .HasForeignKey(gm => gm.GroupId);
 
             modelBuilder.Entity<GroupMember>()
                 .HasOne(gm => gm.User)
                 .WithMany(u => u.GroupMembers)
                 .HasForeignKey(gm => gm.UserId);
 
-            modelBuilder.Entity<Message>()
-                .HasOne(m => m.Group)
-                .WithMany(g => g.Messages)
-                .HasForeignKey(m => m.GroupId)
-                .OnDelete(DeleteBehavior.Cascade);
+           
 
-            modelBuilder.Entity<Message>()
-                .HasOne(m => m.Sender)
+            // PrivateMessage için kaskad silme/güncelleme davranışı belirtme
+            modelBuilder.Entity<PrivateMessage>()
+                .HasOne(pm => pm.Sender)
                 .WithMany(u => u.SentMessages)
-                .HasForeignKey(m => m.SenderId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(pm => pm.SenderId)
+                .OnDelete(DeleteBehavior.Restrict); // Cascade yerine Restrict kullan
 
-            modelBuilder.Entity<Message>()
-                .HasOne(m => m.Recipient)
+            modelBuilder.Entity<PrivateMessage>()
+                .HasOne(pm => pm.Recipient)
                 .WithMany(u => u.ReceivedMessages)
-                .HasForeignKey(m => m.RecipientId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(pm => pm.RecipientId)
+                .OnDelete(DeleteBehavior.Restrict); // Cascade yerine Restrict kullan
+
+            // GroupMessage için kaskad silme/güncelleme davranışı belirtme
+            modelBuilder.Entity<GroupMessage>()
+                .HasOne(gm => gm.Sender)
+                .WithMany()
+                .HasForeignKey(gm => gm.SenderId)
+                .OnDelete(DeleteBehavior.Restrict); // Cascade yerine Restrict kullan
+
+            modelBuilder.Entity<GroupMessage>()
+                .HasOne(gm => gm.Group)
+                .WithMany()
+                .HasForeignKey(gm => gm.GroupId)
+                .OnDelete(DeleteBehavior.Restrict); // Cascade yerine Restrict kullan
         }
     }
 }
