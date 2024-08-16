@@ -64,6 +64,7 @@ namespace Client.ApiServices.Implementations
         public async Task<T> PostDataAsync<T>(string endPoint, string jsonData, string token = null)
         {
             var client = _httpClientFactory.CreateClient();
+            client.Timeout = TimeSpan.FromMinutes(5);
             var requestMessage = new HttpRequestMessage()
             {
                 Method = HttpMethod.Post,

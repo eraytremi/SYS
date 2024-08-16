@@ -27,6 +27,7 @@ namespace Business.Concrete
 
         public async Task SendEmailAsync(string email, string subject, string body)
         {
+
             using (SmtpClient client = new SmtpClient(_emailGetDto.Host))
             {
                 client.Port = _emailGetDto.Port;
@@ -45,6 +46,7 @@ namespace Business.Concrete
                 mail.IsBodyHtml = true;
                 mail.BodyEncoding = Encoding.UTF8;
                 await client.SendMailAsync(mail);
+
             }
 
         }
