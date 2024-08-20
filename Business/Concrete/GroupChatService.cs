@@ -1,4 +1,5 @@
 ﻿using Aspose.Pdf;
+using AutoMapper.Execution;
 using Business.Abstract;
 using DataAccess.Repositories.Abstract;
 using Entity.Dtos.GroupChat;
@@ -220,13 +221,21 @@ namespace Business.Concrete
                 }
                 foreach (var groupMessage in groupMessages)
                 {
+                    var user = await _userRepository.GetAsync(p => p.Id == groupMessage.SenderId && p.IsActive == true);
+                    var mappingUser = new GetUser
+                    {
+                        Id = user.Id,
+                        Mail = user.Mail,
+                        Name = user.Name
+                    };
                     var addList = new GetGroupMessage
                     {
-                        GroupId = groupMessage.Id,
+                        GroupId = groupMessage.GroupId,
                         Id = groupMessage.Id,
                         IsSeen = groupMessage.IsSeen,
                         MessageText = groupMessage.MessageText,
-                        SenderId = groupMessage.SenderId
+                        SenderId = groupMessage.SenderId,
+                        Sender=mappingUser
                     };
                     listGroupMessages.Add(addList);
                 }
@@ -235,7 +244,7 @@ namespace Business.Concrete
                     GroupName = item.GroupName,
                     Id = item.Id,
                     GetGroupMembers = listMembers,
-                    GetGroupMessages = groupM.Data
+                    GetGroupMessages = listGroupMessages
                 };
                 list.Add(add);
             }

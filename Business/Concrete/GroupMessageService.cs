@@ -52,7 +52,7 @@ namespace Business.Concrete
 
             await _repository.InsertAsync(add);
             var groupName = await _groupRepository.GetByIdAsync((long)message.GroupId);
-            //await _hubContext.Clients.Group(groupName.GroupName).SendAsync("ReceiveMessage",getUser.Name,message.MessageText);
+            await _hubContext.Clients.Group(groupName.GroupName).SendAsync("ReceiveMessage", getUser.Name, message.MessageText);
             return ApiResponse<NoData>.Success(StatusCodes.Status201Created);
         }
 

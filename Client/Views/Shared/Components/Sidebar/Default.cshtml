@@ -136,8 +136,10 @@
                                 <li><a href="/Messages/Index">Mesaj Gönder</a></li>                             
                             </ul>
                         </li>
+
+
                         <li class="sub-menu">
-                            <a href="/User/Index">
+                            <a href="/Chat/Index">
                                 <i class="fa fa-cogs"></i>
                                 <span>Kullanıcı Yönetimi</span>
                             </a>
@@ -150,6 +152,7 @@
                             </a>
                         </li>
                     }
+
                     @if (Model.RoleId == "3")
                     {
                         <h5 class="centered">Satış Elemanı</h5>
@@ -193,10 +196,10 @@
                         </li>
 
                         <li class="sub-menu">
-                            <p href="/Chat/Index">
+                            <a href="/Chat/Index">
                                 <i class="fa fa-cogs"></i>
                                 <span>Sohbet</span>
-                            </p>
+                            </a>
                             <ul class="sub">
                                 <li><a href="/Messages/Index">Mesaj Gönder</a></li>
                             </ul>
@@ -228,7 +231,7 @@
                             </ul>
                         </li>
                         <li class="sub-menu">
-                            <a href="/Chat/Index">
+                            <a href="/Messages/Index">
                                 <i class="fa fa-cogs"></i>
                                 <span>Chat</span>
                             </a>

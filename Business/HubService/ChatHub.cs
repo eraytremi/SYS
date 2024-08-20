@@ -14,6 +14,7 @@ namespace Business.HubService
         
         private readonly IUserRepository _userRepository;   
         private readonly IGroupRepository _groupRepository;
+
         public ChatHub(IUserRepository userRepository, IGroupRepository groupRepository)
         {
 

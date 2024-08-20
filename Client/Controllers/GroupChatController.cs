@@ -25,7 +25,7 @@ namespace Client.Controllers
 
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
 
-            var groupChat = await _httpApiService.GetDataAsync<ResponseBody<List<GetGroupChat>>>("/GroupChats", token.Token);
+            var groupChat = await _httpApiService.GetDataAsync<ResponseBody<List<GetGroupChat>>>("/GroupChats/getGroupChats", token.Token);
             var user = await _httpApiService.GetDataAsync<ResponseBody<List<UserGetDto>>>("/users", token.Token);
 
             var vm = new GroupChatUserVm
