@@ -4,11 +4,17 @@ const connection = new signalR.HubConnectionBuilder()
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
+
+let connectionStarted = false; // Bağlantının başlatılıp başlatılmadığını kontrol etmek için
+
 // Bağlantıyı başlatma fonksiyonu
 async function startConnection(groupId) {
     try {
-        await connection.start();
-        console.log("SignalR bağlantısı kuruldu.");
+        if (!connectionStarted) {
+            await connection.start();
+            console.log("SignalR bağlantısı kuruldu.");
+            connectionStarted = true;
+        }
 
         // ConnectionId'yi al ve gruba katıl
         const connectionId = connection.connectionId;
@@ -21,24 +27,29 @@ async function startConnection(groupId) {
     }
 }
 
-const groupId = 1; 
-startConnection(groupId);
+$(document).on("click", ".clickable-row", function () {
+    const groupId = $(this).data("group-id");
+    startConnection(groupId);
+    $(`#group-${groupId}`).toggle();
+});
 
 // Mesaj alındığında çalışacak event
 connection.on("ReceiveMessage", function (userId, message) {
     // Mesajı ekranda göster
-    const messageArea = $("#mesajAlani");
+    const messageArea = $(`#group-${groupId} #mesajAlani`);
     const newMessage = `<div class="alert alert-dark" role="alert">
-                            <p><b>Kullanıcı ${userId}</b>: ${message}</p>
+                            <p><b> ${userId}</b>: ${message}</p>
                         </div>`;
     messageArea.append(newMessage);
     messageArea.scrollTop(messageArea[0].scrollHeight);
+    $(`#group-${groupId} #mesaj-${groupId}`).val('');
+
 });
 
 // Gönder butonuna tıklama eventi
 $(document).on("click", ".sendButton", async function () {
     const groupId = $(this).data("group-id");
-    const message = $("#mesaj").val();
+    const message = $(`#mesaj-${groupId}`).val();
     const currentUserId = $("#currentUserId").val();
 
     if (message.trim() !== "") {
@@ -57,26 +68,7 @@ $(document).on("click", ".sendButton", async function () {
             });
 
             console.log('Mesaj gönderildi ve kaydedildi.');
-
-            // Mesajı gruba gönderme işlemi
-            console.log(groupId);
-            console.log(message);
-            console.log(currentUserId);
-
-            //await connection.invoke("SendMessageToGroup", groupId, message, currentUserId);
-            console.log("Mesaj gruba gönderildi.");
-
-            // Mesajı arayüzde gösterme
-            const alertDiv = $(`
-                <div class="alert alert-dark" role="alert">
-                    <p><b>Ben</b>: ${message}</p>
-                </div>
-            `);
-            $(`#group-${groupId} #mesajAlani`).append(alertDiv);
-            $(`#group-${groupId} #mesajAlani`).scrollTop($(`#group-${groupId} #mesajAlani`)[0].scrollHeight);
-
-            // Mesaj alanını temizle
-            $(`#group-${groupId} #mesaj`).val('');
+        
 
         } catch (error) {
             console.error("Mesaj gönderilemedi: ", error);
@@ -89,8 +81,4 @@ connection.onclose(async () => {
     await startConnection(groupId);
 });
 
-// Gruba tıklayınca mesajları göster
-$(document).on("click", ".clickable-row", function () {
-    const groupId = $(this).data("group-id");
-    $(`#group-${groupId}`).toggle();
-});
+
