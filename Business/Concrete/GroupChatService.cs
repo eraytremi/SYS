@@ -48,7 +48,7 @@ namespace Business.Concrete
 
                 foreach (var item in dto.GroupMembers)
                 {
-                   
+  
                     var mapping = new GroupMember
                     {
                         CreatedBy = currentUserId,

@@ -1,0 +1,26 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">isim</th>
+        <th scope="col">Mail</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <!-- <tr *ngFor="let user of userList; let i = index">
+        <th scope="row">{{ i + 1 }}</th> 
+        <td>{{user.Name}}</td> 
+        <td>{{user.Mail}}</td>
+      </tr> -->
+@for (item of userList; track item) {
+  <tr>
+    <th scope="row">{{ $index + 1 }}</th> 
+    <td>{{item.name}}</td> 
+    <td>{{item.mail}}</td>
+  </tr>
+}
+    
+    </tbody>
+  </table>
+  

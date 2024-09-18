@@ -29,6 +29,7 @@ async function startConnection(groupId) {
 
 $(document).on("click", ".clickable-row", function () {
     const groupId = $(this).data("group-id");
+    console.log(groupId);
     startConnection(groupId);
     $(`#group-${groupId}`).toggle();
 });

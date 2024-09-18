@@ -52,10 +52,7 @@ namespace Business.Extensions
             services.AddSingleton<ISalesRepository, SalesRepository>();
 
             services.AddSingleton<ISalesDetailsRepository, SalesDetailsRepository>();
-            services.AddSingleton<ISaleDetailsService, SaleDetailsService>();
-
-            services.AddSingleton<IBillService, BillService>();
-            services.AddSingleton<IBillRepository, BillRepository>();
+            services.AddSingleton<ISaleDetailsService, SaleDetailsService>();          
 
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<ICustomerService, CustomerService>();
