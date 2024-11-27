@@ -21,7 +21,11 @@ namespace Business.HubService
             _userRepository = userRepository;
             _groupRepository = groupRepository; 
         }
-
+        public async Task SendMessage(string message)
+        {
+            // Gruba mesaj gönderme
+            await Clients.All.SendAsync("ReceiveMessage", message);
+        }
         public async Task SendMessageToGroup(long groupId, string message,long currentUserId)
         {
             var groupName = await _groupRepository.GetByIdAsync(groupId);

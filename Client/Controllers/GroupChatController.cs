@@ -22,7 +22,6 @@ namespace Client.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
 
             var groupChat = await _httpApiService.GetDataAsync<ResponseBody<List<GetGroupChat>>>("/GroupChats/getGroupChats", token.Token);

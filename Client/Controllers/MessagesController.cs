@@ -23,7 +23,6 @@ namespace Client.Controllers
             var token = HttpContext.Session.GetObject<UserGetDto>("ActivePerson");
             ViewData["user"] = token.Id; 
             var groupChat = await _httpApiService.GetDataAsync<ResponseBody<List<GetGroupChat>>>("/GroupChats/GetGroupChatByUserId", token.Token);
-
             return View(groupChat.Data);
         }
 

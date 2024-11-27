@@ -1,19 +1,12 @@
 ﻿using Business.Abstract;
 using Business.HubService;
 using DataAccess.Repositories.Abstract;
-using DataAccess.Repositories.Concrete;
 using Entity.Dtos.GroupMessage;
 using Entity.Dtos.User;
 using Entity.SysModel;
 using Infrastructure.Utilities.Responses;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
@@ -49,6 +42,7 @@ namespace Business.Concrete
                 MessageText = message.MessageText,
                 IsActive = true
             };
+
 
             await _repository.InsertAsync(add);
             var groupName = await _groupRepository.GetByIdAsync((long)message.GroupId);
@@ -92,7 +86,6 @@ namespace Business.Concrete
                     Id = currentUserId,
                     Mail = user.Mail,
                     Name = user.Name
-
                 };
                 var add = new GetGroupMessage
                 {

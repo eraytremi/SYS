@@ -48,7 +48,10 @@
                                                                     @foreach (var member in item.GetGroupMessages)
                                                                     {
                                                                         <div class="alert alert-dark" role="alert">
-                                                                            <p><b>@member.Sender.Name</b>: @member.MessageText</p>
+                                                                            <p>
+                                                                                <b>@member.Sender.Name</b>: @member.MessageText
+                                                                                <span style="float: right;">@member.CreatedDate</span>
+                                                                            </p>
                                                                         </div>
                                                                     }
                                                                 </div>

@@ -203,13 +203,16 @@ namespace Business.Concrete
                 var groupMessages = await _messageRepository.GetAllAsync(p => p.GroupId == item.Id && p.IsActive == true);
                 foreach (var member in getMembers)
                 {
+
                     var user = await _userRepository.GetAsync(p => p.Id == member.UserId && p.IsActive == true);
+
                     var mappingUser = new GetUser
                     {
                         Id = user.Id,
                         Mail = user.Mail,
                         Name = user.Name
                     };
+
                     var addMember = new GetGroupMember
                     {
                         GroupId = member.Id,
@@ -217,7 +220,9 @@ namespace Business.Concrete
                         UserId = member.Id,
                         GetUser = mappingUser
                     };
+
                     listMembers.Add(addMember);
+
                 }
                 foreach (var groupMessage in groupMessages)
                 {
@@ -228,6 +233,7 @@ namespace Business.Concrete
                         Mail = user.Mail,
                         Name = user.Name
                     };
+
                     var addList = new GetGroupMessage
                     {
                         GroupId = groupMessage.GroupId,
@@ -235,10 +241,12 @@ namespace Business.Concrete
                         IsSeen = groupMessage.IsSeen,
                         MessageText = groupMessage.MessageText,
                         SenderId = groupMessage.SenderId,
-                        Sender=mappingUser
+                        Sender=mappingUser,
+                        CreatedDate=groupMessage.CreatedDate
                     };
                     listGroupMessages.Add(addList);
                 }
+
                 var add = new GetGroupChat
                 {
                     GroupName = item.GroupName,

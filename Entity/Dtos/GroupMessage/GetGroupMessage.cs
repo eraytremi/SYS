@@ -16,6 +16,7 @@ namespace Entity.Dtos.GroupMessage
         public long? SenderId { get; set; }
         public string MessageText { get; set; }
         public bool IsSeen { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public virtual GetUser Sender { get; set; }
     }
 }

@@ -16,16 +16,15 @@ async function startConnection(groupId) {
             connectionStarted = true;
         }
 
-        // ConnectionId'yi al ve gruba katıl
-        const connectionId = connection.connectionId;
-        await connection.invoke("JoinGroup", connectionId, groupId);
-        console.log(`Connection ID: ${connectionId} ile grup ${groupId}'e katıldı.`);
-
+        // Grup katılımını bağlantı başladıktan sonra çağır
+        await connection.invoke("JoinGroup", connection.connectionId, groupId);
+        console.log(`Connection ID: ${connection.connectionId} ile grup ${groupId}'e katıldı.`);
     } catch (err) {
         console.log("Bağlantı hatası: ", err);
         setTimeout(() => startConnection(groupId), 5000);
     }
 }
+
 
 $(document).on("click", ".clickable-row", function () {
     const groupId = $(this).data("group-id");
@@ -35,16 +34,24 @@ $(document).on("click", ".clickable-row", function () {
 });
 
 // Mesaj alındığında çalışacak event
-connection.on("ReceiveMessage", function (userId, message) {
-    // Mesajı ekranda göster
-    const messageArea = $(`#group-${groupId} #mesajAlani`);
-    const newMessage = `<div class="alert alert-dark" role="alert">
-                            <p><b> ${userId}</b>: ${message}</p>
-                        </div>`;
+connection.on("ReceiveMessage", function (messageData) {
+    const { GroupId, Sender, MessageText, CreatedDate } = messageData;
+
+    const messageArea = $(`#group-${GroupId} #mesajAlani`);
+    const newMessage = `
+        <div class="alert alert-dark" role="alert">
+            <p><b>${Sender}</b>: ${MessageText} <span style="float: right;">${new Date(CreatedDate).toLocaleTimeString()}</span></p>
+        </div>`;
     messageArea.append(newMessage);
     messageArea.scrollTop(messageArea[0].scrollHeight);
-    $(`#group-${groupId} #mesaj-${groupId}`).val('');
+});
 
+$(document).ready(function () {
+    setTimeout(() => {
+        $(".mesajAlani").each(function () {
+            $(this).scrollTop(this.scrollHeight);
+        });
+    }, 100); // Kısa bir gecikme verin
 });
 
 // Gönder butonuna tıklama eventi

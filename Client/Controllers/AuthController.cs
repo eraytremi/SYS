@@ -29,6 +29,10 @@ namespace Client.Controllers
             var response = await _httpApiService.PostDataAsync<ResponseBody<UserGetDto>>("/Users/Login", JsonSerializer.Serialize(loginModel));
 
             var jwtHandler = new JwtSecurityTokenHandler();
+            if (response.Data.Token==null)
+            {
+                return Json(new { IsSuccess = false, Messages = response.ErrorMessages });
+            }
             var jwtToken = jwtHandler.ReadJwtToken(response.Data.Token);
             var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
 

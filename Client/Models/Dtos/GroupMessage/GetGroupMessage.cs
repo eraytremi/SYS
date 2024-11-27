@@ -9,6 +9,7 @@ namespace Client.Models.Dtos.GroupMessages
         public long? GroupId { get; set; }
         public long? SenderId { get; set; }
         public string MessageText { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public bool IsSeen { get; set; }
         public virtual GetGroupChat Group { get; set; }
         public virtual UserGetDto Sender { get; set; }
